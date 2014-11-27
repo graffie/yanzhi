@@ -22,7 +22,7 @@ conf.multipleStatements = true;
 var connection = mysql.createConnection(conf);
 
 // force
-if (process.argv[2] === 'force' && conf.database === 'birdmantest') {
+if (process.argv[2] === 'force' && conf.database === 'crazyapptest') {
   recreateTables();
 } else {
   createTables();

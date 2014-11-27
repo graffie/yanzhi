@@ -11,8 +11,6 @@
 var middlewares = require('koa-middlewares');
 var index = require('./controllers/index');
 var feed = require('./controllers/feed');
-var mount = require('koa-mount');
-var koa = require('koa');
 
 module.exports = function (app) {
   app.use(middlewares.router(app));
@@ -21,17 +19,6 @@ module.exports = function (app) {
   app.get('/', index.home);
 
   // API
-  app.use(mount('/api', API));
+  app.get('/api/feed', feed.index);
+  app.post('/api/feed', feed.create);
 };
-
-/**
- * restful API
- * @type {[type]}
- */
-
-var API = koa();
-
-var Resource = middlewares.ResourceRouter;
-var feedResource = new Resource('feeds', feed, {id: 'feedId'});
-
-API.use(feedResource.middleware());

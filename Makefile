@@ -9,7 +9,6 @@ install:
 
 init-test:
 	@NODE_ENV=test node db/init.js force
-	@NODE_ENV=test node --harmony test/init.js
 
 test: install init-test
 	@NODE_ENV=test ./node_modules/.bin/mocha \
