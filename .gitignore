@@ -26,3 +26,7 @@ node_modules
 
 # Users Environment Variables
 .lock-wscript
+
+.tmp
+.DS_Store
+nohup.out

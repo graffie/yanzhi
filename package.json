@@ -1,0 +1,57 @@
+{
+  "name": "5wk2",
+  "version": "0.0.1",
+  "description": "Location based chatting.",
+  "main": "app.js",
+  "scripts": {
+    "test": "make install && make test"
+  },
+  "dependencies": {
+    "copy-to": "~2.0.1",
+    "error-formatter": "~1.0.3",
+    "graceful": "~1.0.0",
+    "humanize-ms": "~1.0.0",
+    "koa": "~0.13.0",
+    "koa-is-json": "~1.0.0",
+    "koa-methodoverride": "~0.3.1",
+    "koa-middlewares": "~1.7.0",
+    "koa-mount": "~1.3.0",
+    "koa-parameter": "~1.0.0",
+    "mini-logger": "~1.0.0",
+    "mkdirp": "~0.5.0",
+    "multiline": "~1.0.1",
+    "mysql": "~2.5.3",
+    "only": "~0.0.2",
+    "ready": "~0.1.1",
+    "thunkify-wrap": "~1.0.4",
+    "var-style": "~0.0.1"
+  },
+  "devDependencies": {
+    "autod": "1",
+    "co": "~4.0.0",
+    "co-mocha": "~1.1.0",
+    "istanbul-harmony": "~0.3.1",
+    "mm": "~1.0.1",
+    "mocha": "~2.0.1",
+    "pedding": "~1.0.0",
+    "should": "~4.3.0",
+    "should-http": "~0.0.2",
+    "supertest": "~0.15.0"
+  },
+  "homepage": "https://github.com/rockdai/5kw2",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:rockdai/5kw2.git",
+    "web": "https://github.com/rockdai/5kw2"
+  },
+  "bugs": {
+    "url": "https://github.com/rockdai/5kw2/issues",
+    "email": "rockdai321@gmail.com"
+  },
+  "keywords": [
+    "5kw2"
+  ],
+  "engines": {
+    "node": ">= 0.11.14"
+  }
+}
