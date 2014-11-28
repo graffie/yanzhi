@@ -5,7 +5,7 @@
   });
   var geo = new BMap.Geocoder();
   map.disableDoubleClickZoom();
-  // map.disableDragging();
+  map.disableDragging();
   map.disablePinchToZoom();
   map.addEventListener('dragend', function (evt) {
     var bounds = map.getBounds();
@@ -135,6 +135,7 @@
   var postCloseBtnNode = postNode.find('#post-close-btn');
   postUserNode.val(localStorage['userNick'] || '');
   postBtnNode.on('touchend', function () {
+    $(window).scrollTop(0);
     postInputNode.focus();
   });
   postCloseBtnNode.on('touchend', function () {
