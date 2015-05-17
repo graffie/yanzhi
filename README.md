@@ -1,6 +1,3 @@
-5kw2
+颜值俱乐部
 ====
 
-5000万2号
-
-暂用域名：[http://www.crazyapp.net/](http://www.crazyapp.net/)
