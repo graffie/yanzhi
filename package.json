@@ -1,7 +1,7 @@
 {
-  "name": "5wk2",
+  "name": "yanzhi",
   "version": "0.0.1",
-  "description": "Location based chatting.",
+  "description": "A selfie sharing social network.",
   "main": "app.js",
   "scripts": {
     "test": "make install && make test"
@@ -38,18 +38,18 @@
     "should-http": "~0.0.2",
     "supertest": "~0.15.0"
   },
-  "homepage": "https://github.com/rockdai/5kw2",
+  "homepage": "https://github.com/rockdai/yanzhi",
   "repository": {
     "type": "git",
-    "url": "git@github.com:rockdai/5kw2.git",
-    "web": "https://github.com/rockdai/5kw2"
+    "url": "git@github.com:rockdai/yanzhi.git",
+    "web": "https://github.com/rockdai/yanzhi"
   },
   "bugs": {
-    "url": "https://github.com/rockdai/5kw2/issues",
+    "url": "https://github.com/rockdai/yanzhi/issues",
     "email": "rockdai321@gmail.com"
   },
   "keywords": [
-    "5kw2"
+    "yanzhi", "selfie", "social"
   ],
   "engines": {
     "node": ">= 0.11.14"

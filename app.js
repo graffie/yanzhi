@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - app.js
+ * yanzhi - app.js
  */
 
 'use strict';

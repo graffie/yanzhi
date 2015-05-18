@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - worker.js
+ * yanzhi - worker.js
  */
 
 'use strict';

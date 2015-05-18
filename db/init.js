@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - db/init.js
+ * yanzhi - db/init.js
  */
 
 'use strict';

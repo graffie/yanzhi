@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - common/logger.js
+ * yanzhi - common/logger.js
  */
 
 'use strict';

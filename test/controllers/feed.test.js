@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - test/controllers/feed.test.js
+ * yanzhi - test/controllers/feed.test.js
  */
 
 'use strict';

@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - controllers/feed.js
+ * yanzhi - controllers/feed.js
  */
 
 'use strict';

@@ -1,5 +1,5 @@
 /**!
- * 5kw2 - common/mysql.js
+ * yanzhi - common/mysql.js
  */
 
 'use strict';
