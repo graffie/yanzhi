@@ -2,7 +2,7 @@ var React = require('react');
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 
-export default class Stream extends React.Component {
+export default class Explore extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,10 +21,10 @@ export default class Stream extends React.Component {
   }
 }
 
-Stream.propTypes = {
+Explore.propTypes = {
 
 }
 
-Stream.defaultProps = {
+Explore.defaultProps = {
 
 }
