@@ -13,6 +13,24 @@ var db = require('../common/mysql');
 var trans = require('var-style');
 var only = require('only');
 
+var GET_BY_FEED_SQL = multiline(function () {;/*
+  SELECT
+    `comments`.`id`,
+    `comments`.`gmt_create` AS `gmtCreate`,
+    `comments`.`gmt_modified` AS `gmtModified`,
+    `comments`.`user_id` AS `userId`,
+    `users`.`name` AS `userName`,
+    `comments`.`content`
+  FROM `comments`
+  LEFT OUTER JOIN `users`
+  ON `users`.`id` = `comments`.`user_id`
+  WHERE `comments`.`feed_id` = ?
+  ORDER BY `comments`.`gmt_create` ASC
+*/});
+exports.getByFeed = function* (feedId) {
+  return yield db.query(GET_BY_FEED_SQL, [feedId]);
+};
+
 var ADD_SQL = 'INSERT INTO `comments` SET ?';
 exports.add = function* (comment) {
   comment = only(comment, 'feedId userId content');

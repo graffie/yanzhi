@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-
+var Comment = require('../../proxy/comment');
 var User = require('../../proxy/user');
 var Feed = require('../../proxy/feed');
 var request = require('supertest');
@@ -34,7 +34,7 @@ describe('controllers/feed.test.js', function () {
   afterEach(mm.restore);
 
   describe('GET /api/feed', function () {
-    it('should 400 when Feed.getLatest error', function (done) {
+    it('should 500 when Feed.getLatest error', function (done) {
       mm.error(Feed, 'getLatest', 'mock Feed.getLatest error');
       request(app)
       .get('/api/feed')
@@ -47,6 +47,53 @@ describe('controllers/feed.test.js', function () {
       .end(function (err, res) {
         res.body.should.be.an.Array;
         res.body.length.should.above(2);
+        done(err);
+      })
+    });
+  });
+
+  describe('GET /api/feed/:feedId', function () {
+    var comments = [
+      {content: 'unittest mock comment 111'},
+      {content: 'unittest mock comment 222'},
+    ];
+    var feedId;
+
+    before(function* () {
+      feedId = feeds[0].id;
+      for (var i = 0; i < comments.length; i++) {
+        var comment = comments[i];
+        yield Comment.add({
+          userId: user.id,
+          feedId: feedId,
+          content: comment.content,
+        });
+      }
+    });
+
+    it('should 500 when Feed.getById error', function (done) {
+      mm.error(Feed, 'getById', 'mock Feed.getById error');
+      request(app)
+      .get('/api/feed/' + feedId)
+      .expect(500, done);
+    });
+    it('should 500 when Comment.getByFeed error', function (done) {
+      mm.error(Comment, 'getByFeed', 'mock Comment.getByFeed error');
+      request(app)
+      .get('/api/feed/' + feedId)
+      .expect(500, done);
+    });
+    it('should 200', function (done) {
+      request(app)
+      .get('/api/feed/' + feedId)
+      .expect(200)
+      .end(function (err, res) {
+        res.body.feed.should.be.an.Object;
+        res.body.comments.should.be.an.Array;
+        res.body.feed.id.should.equal(feedId);
+        res.body.feed.user_id.should.equal(feeds[0].userId);
+        res.body.feed.user_name.should.be.a.String;
+        res.body.comments.length.should.equal(comments.length);
         done(err);
       })
     });

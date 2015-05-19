@@ -7,7 +7,7 @@
 /**
  * Module dependencies.
  */
-
+var Comment = require('../proxy/comment');
 var Feed = require('../proxy/feed');
 var only = require('only');
 
@@ -20,11 +20,22 @@ var props = [
 ];
 
 exports.index = function* (next) {
+  this.status = 200;
   this.body = yield Feed.getLatest();
 };
 
 exports.show = function* (next) {
+  this.verifyParams({
+    feedId: 'id',
+  });
 
+  var feedId = Number(this.params.feedId);
+  var r = yield {
+    feed: Feed.getById(feedId),
+    comments: Comment.getByFeed(feedId),
+  };
+  this.status = 200;
+  this.body = r;
 };
 
 exports.create = function* (next) {

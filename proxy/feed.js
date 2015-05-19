@@ -64,6 +64,29 @@ exports.getByUser = function* (userId, offset) {
   return yield db.query(GET_BY_USER_SQL, [userId, offset]);
 };
 
+var GET_BY_ID_SQL = multiline(function () {;/*
+  SELECT
+    `feeds`.`id`,
+    `feeds`.`gmt_create` AS `gmtCreate`,
+    `feeds`.`gmt_modified` AS `gmtModified`,
+    `feeds`.`user_id` AS `userId`,
+    `users`.`name` AS `userName`,
+    `feeds`.`lng`,
+    `feeds`.`lat`,
+    `feeds`.`location`,
+    `feeds`.`pic`,
+    `feeds`.`content`,
+    `feeds`.`score`
+  FROM `feeds`
+  LEFT OUTER JOIN `users`
+  ON `users`.`id` = `feeds`.`user_id`
+  WHERE `feeds`.`id` = ?
+  LIMIT 1
+*/});
+exports.getById = function* (feedId) {
+  return yield db.queryOne(GET_BY_ID_SQL, [feedId]);
+};
+
 var ADD_SQL = 'INSERT INTO `feeds` SET ?';
 exports.add = function* (feed) {
   feed = only(feed, 'userId lng lat location pic content');
