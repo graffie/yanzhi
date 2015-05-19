@@ -3,6 +3,18 @@ REPORTER = spec
 TIMEOUT = 30000
 MOCHA_OPTS =
 REGISTRY = --registry=http://registry.npm.taobao.org
+NODE_BIN = node_modules/.bin
+SRC = client/src
+DIST = client/dist
+
+DIST_STATIC = $(DIST)/static
+SASS_DIR = $(SRC)/assets/scss
+JS_DIR = $(SRC)/app
+SASS_OUTPUT = $(DIST_STATIC)/css
+JS_OUTPUT = $(DIST_STATIC)/js
+
+EGGSHELL_ASSETS = node_modules/eggshell/assets
+BOURBON_ASSETS = node_modules/eggshell/node_modules/node-bourbon/assets/stylesheets
 
 install:
 	@npm install $(REGISTRY)
@@ -34,6 +46,34 @@ test-cov cov: install init-test
 		--require co-mocha \
 		$(MOCHA_OPTS) \
 		$(TESTS)
+
+sass:
+	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)
+	@cp $(SRC)/index.html $(DIST)
+	@cp -rf $(SRC)/assets/fonts $(DIST_STATIC)
+
+watch-sass:
+	@$(NODE_BIN)/watch 'make sass' $(SASS_DIR) & \
+	$(NODE_BIN)/http-server $(DIST) -s 
+
+build-js:
+	@$(NODE_BIN)/browserify --require react --require react-router | $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/vendor.js
+	@$(NODE_BIN)/browserify --external react --external react-router $(JS_DIR)/index.js \ 
+		--extension .jsx \
+		--transform babelify \
+		--transform envify \
+		| $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/index.js
+
+watch-js:
+	@mkdir -p client/dist/static/js
+	@$(NODE_BIN)/watchify $(JS_DIR)/index.js \
+		--extension .jsx \
+		--transform babelify \
+		--transform envify \
+		-o $(JS_OUTPUT)/index.js -dv
+
+watch:
+	@make watch-sass & make watch-js
 
 autod: install
 	@./node_modules/.bin/autod -w --prefix="~" \
