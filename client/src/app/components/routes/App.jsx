@@ -18,7 +18,7 @@ export default class App extends React.Component {
     return (
       <div>
         <Header />
-        <RouteHandler />
+          <RouteHandler user={this.state.user}/>
         <Footer />
       </div>
     )

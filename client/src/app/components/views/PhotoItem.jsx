@@ -16,19 +16,19 @@ export default class PhotoItem extends React.Component {
       <div className='item' onClick={this.handleClick}>
         <img src={this.props.url} />
         <div className='score'>
-          <span>{this.props.score}</span>
+          <span className='icon-h'>{this.props.score.toFixed(1)}</span>
         </div>
       </div>
     )
   }
 }
 
-App.propTypes = {
-  id: React.PropType.number,
-  url: React.PropType.string,
-  score: React.PropType.number
+PhotoItem.propTypes = {
+  id: React.PropTypes.number,
+  url: React.PropTypes.string,
+  score: React.PropTypes.number
 }
 
-App.defaultProps = {
+PhotoItem.defaultProps = {
 
 }

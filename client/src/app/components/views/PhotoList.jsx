@@ -10,11 +10,11 @@ export default class PhotoList extends React.Component {
   }
 
   render() {
-    let ls = this.props.photos.map((p) => {
-        return <PhotoItem {...p} />
+    let ls = this.props.photos.map((p, i) => {
+        return <PhotoItem {...p} key={i}/>
     })
     return (
-      <div class='photos'>
+      <div className='photos'>
         {ls}
       </div>
     )
