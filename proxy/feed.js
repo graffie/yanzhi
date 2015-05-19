@@ -10,58 +10,74 @@
 
 var multiline = require('multiline');
 var db = require('../common/mysql');
+var trans = require('var-style');
+var only = require('only');
 
-var GET_SQL = multiline(function () {;/*
+var GET_LATEST_SQL = multiline(function () {;/*
   SELECT
     `feeds`.`id`,
-    `feeds`.`gmt_create`,
-    `feeds`.`gmt_modified`,
-    `feeds`.`content`,
-    `feeds`.`user_nick`,
+    `feeds`.`gmt_create` AS `gmtCreate`,
+    `feeds`.`gmt_modified` AS `gmtModified`,
+    `feeds`.`user_id` AS `userId`,
+    `users`.`name` AS `userName`,
     `feeds`.`lng`,
     `feeds`.`lat`,
-    `feeds`.`geo_info`
+    `feeds`.`location`,
+    `feeds`.`pic`,
+    `feeds`.`content`,
+    `feeds`.`score`
+  FROM `feeds`
+  LEFT OUTER JOIN `users`
+  ON `users`.`id` = `feeds`.`user_id`
+  ORDER BY `feeds`.`gmt_create` ASC
+  LIMIT ?, 100
+*/});
+exports.getLatest = function* (offset) {
+  if (typeof offset !== 'number') {
+    offset = 0;
+  }
+  return yield db.query(GET_LATEST_SQL, [offset]);
+};
+
+var GET_BY_USER_SQL = multiline(function () {;/*
+  SELECT
+    `feeds`.`id`,
+    `feeds`.`gmt_create` AS `gmtCreate`,
+    `feeds`.`gmt_modified` AS `gmtModified`,
+    `feeds`.`lng`,
+    `feeds`.`lat`,
+    `feeds`.`location`,
+    `feeds`.`pic`,
+    `feeds`.`content`,
+    `feeds`.`score`
   FROM
     `feeds`
   WHERE
-    `feeds`.`lng` >= ? AND
-    `feeds`.`lng` <= ? AND
-    `feeds`.`lat` >= ? AND
-    `feeds`.`lat` <= ?
+    `feeds`.`user_id` = ?
   ORDER BY `feeds`.`gmt_create` ASC
-  LIMIT 100
+  LIMIT ?, 100
 */});
-exports.get = function* (obj) {
-  var values = [
-    obj.lngmin,
-    obj.lngmax,
-    obj.latmin,
-    obj.latmax
-  ];
-  return yield db.query(GET_SQL, values);
+exports.getByUser = function* (userId, offset) {
+  if (typeof offset !== 'number') {
+    offset = 0;
+  }
+  return yield db.query(GET_BY_USER_SQL, [userId, offset]);
 };
 
-var ADD_SQL = multiline(function () {;/*
-  INSERT INTO `feeds`
-  ( `feeds`.`content`,
-    `feeds`.`user_nick`,
-    `feeds`.`user_info`,
-    `feeds`.`lng`,
-    `feeds`.`lat`,
-    `feeds`.`geo_info`,
-    `feeds`.`gmt_create`,
-    `feeds`.`gmt_modified`)
-  VALUES
-  (?, ?, ?, ?, ?, ?, NOW(), NOW())
-*/});
+var ADD_SQL = 'INSERT INTO `feeds` SET ?';
 exports.add = function* (feed) {
-  var values = [
-    feed.content,
-    feed.userNick,
-    feed.userInfo,
-    feed.lng,
-    feed.lat,
-    feed.geoInfo,
-  ];
-  return yield db.query(ADD_SQL, values);
+  feed = only(feed, 'userId lng lat location pic content');
+  feed.gmtCreate = new Date();
+  feed.gmtModified = feed.gmtCreate;
+  feed = trans.camelToSnake(feed);
+
+  return yield db.query(ADD_SQL, [feed]);
+};
+
+var REMOVE_SQL = multiline(function () {;/*
+  DELETE FROM `feeds`
+  WHERE `feeds`.`id` = ? AND `feeds`.`user_id` = ?
+*/});
+exports.remove = function* (feedId, userId) {
+  return yield db.query(REMOVE_SQL, [feedId, userId]);
 };

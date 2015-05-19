@@ -9,16 +9,40 @@
  */
 
 var middlewares = require('koa-middlewares');
-var index = require('./controllers/index');
+var account = require('./controllers/account');
+var comment = require('./controllers/comment');
+var pages = require('./controllers/pages');
 var feed = require('./controllers/feed');
+var user = require('./controllers/user');
+// var file = require('./controllers/file');
+var auth = require('./middlewares/auth');
 
 module.exports = function (app) {
   app.use(middlewares.router(app));
 
-  // Pages
-  app.get('/', index.home);
+  // 页面
+  app.get('/', pages.index);
+  app.get('/home', pages.home);
+  app.get('/login', pages.login);
+
+  // 登录相关的接口
+  // app.post('/verify_code', account.verifyCode);
+  app.post('/login', account.login);
+  app.post('/logout', account.logout);
+  app.post('/join', account.join);
 
   // API
+  app.get('/api/user/:userId', user.show);
+
   app.get('/api/feed', feed.index);
-  app.post('/api/feed', feed.create);
+  app.get('/api/feed/:feedId', feed.show);
+  app.post('/api/feed', auth, feed.create);
+  app.delete('/api/feed/:feedId', auth, feed.destroy);
+
+  // app.post('/api/feed/:feedId/vote', vote.create);
+
+  app.post('/api/feed/:feedId/comment', comment.create);
+  app.delete('/api/feed/:feedId/comment/:commentId', auth, comment.destroy);
+
+  // app.post('/api/file/upload', auth, file.upload);
 };

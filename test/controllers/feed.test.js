@@ -8,68 +8,100 @@
  * Module dependencies.
  */
 
+var User = require('../../proxy/user');
 var Feed = require('../../proxy/feed');
-var app = require('../../app');
 var request = require('supertest');
+var app = require('../../app');
+var should = require('should');
+var mock = require('../mock');
 var mm = require('mm');
 
-var agent;
+var user;
+var feeds = mock.feeds;
 
 describe('controllers/feed.test.js', function () {
-  beforeEach(function () {
-    agent = request.agent(app);
+
+  before(function* () {
+    user = yield User.getByName(mock.users[0].name);
+
+    for (var i = 0; i < feeds.length; i++) {
+      feeds[i].userId = user.id;
+      var res = yield Feed.add(feeds[i]);
+      feeds[i].id = res.insertId;
+    }
   });
 
-  afterEach(function () {
-    mm.restore();
-  });
+  afterEach(mm.restore);
+
   describe('GET /api/feed', function () {
-    var QUERY = '?lngmin=120.106671&lngmax=120.112421&latmin=30.281781&latmax=30.288';
-    it('should 500 when Feed.get error', function (done) {
-      mm.error(Feed, 'get', 'mock Feed.get error');
-      agent
-      .get('/api/feed' + QUERY)
+    it('should 400 when Feed.getLatest error', function (done) {
+      mm.error(Feed, 'getLatest', 'mock Feed.getLatest error');
+      request(app)
+      .get('/api/feed')
       .expect(500, done);
     });
-    it('should 200 when succeed', function (done) {
-      mm.data(Feed, 'get', [{id: 1}, {id: 2}]);
-      agent
-      .get('/api/feed' + QUERY)
+    it('should 200', function (done) {
+      request(app)
+      .get('/api/feed')
       .expect(200)
       .end(function (err, res) {
-        res.body.length.should.equal(2);
+        res.body.should.be.an.Array;
+        res.body.length.should.above(2);
         done(err);
-      });
+      })
     });
   });
+
   describe('POST /api/feed', function () {
-    var MOCK_FEED = {
-      content: 'mock feed',
-      lng: 12.346,
-      lat: 78.901,
-      user_nick: 'unittest'
-    };
+
+    var agent;
+
+    before(function (done) {
+      agent = request.agent(app);
+      agent.post('/login')
+      .send(mock.users[0]).end(done);
+    });
+
     it('should 500 when Feed.add error', function (done) {
       mm.error(Feed, 'add', 'mock Feed.add error');
       agent
       .post('/api/feed')
-      .send(MOCK_FEED)
+      .send(feeds[0])
       .expect(500, done);
     });
-    it('should 201 when succeed', function (done) {
-      mm.data(Feed, 'add', {insertId: 1});
+
+    it('should 201', function (done) {
       agent
       .post('/api/feed')
-      .send(MOCK_FEED)
+      .send(feeds[0])
       .expect(201)
       .end(function (err, res) {
-        res.body.user_nick.should.equal(MOCK_FEED.user_nick);
-        res.body.content.should.equal(MOCK_FEED.content);
-        res.body.lng.should.equal(MOCK_FEED.lng);
-        res.body.lat.should.equal(MOCK_FEED.lat);
-        res.body.id.should.equal(1);
+        res.body.id.should.above(0);
+        res.body.user_id.should.equal(user.id);
         done(err);
-      });
+      })
+    });
+  });
+  describe('DELETE /api/feed/:feedId', function () {
+    var agent;
+
+    before(function (done) {
+      agent = request.agent(app);
+      agent.post('/login')
+      .send(mock.users[0]).end(done);
+    });
+
+    it('should 500 when Feed.remove error', function (done) {
+      mm.error(Feed, 'remove', 'mock Feed.remove error');
+      agent
+      .delete('/api/feed/' + feeds[0].id)
+      .expect(500, done);
+    });
+    it('should 200', function (done) {
+      agent
+      .delete('/api/feed/' + feeds[0].id)
+      .expect(200)
+      .expect({id: feeds[0].id}, done);
     });
   });
 });

@@ -31,6 +31,12 @@ app.use(middlewares.bodyParser());
 app.use(override());
 app.use(parameter(app));
 
+app.use(middlewares.session({
+  key: config.sessionKey,
+  maxAge: ms('1d'),
+  path: '/'
+}));
+
 var locals = {
   version: config.version
 };
@@ -66,6 +72,11 @@ if (config.debug) {
 
 app.use(transform());
 
+app.use(function* ensureUser(next) {
+  this.user = this.session.user || {};
+  yield next;
+});
+
 /**
  * Routes
  */
@@ -73,6 +84,7 @@ routes(app);
 
 app.on('error', function (err) {
   if (isTest) {
+    console.error(err);
     return;
   }
   logger.error(err);

@@ -9,47 +9,53 @@
  */
 
 var Feed = require('../proxy/feed');
+var only = require('only');
+
+var props = [
+  'pic',
+  'content',
+  'lng',
+  'lat',
+  'location',
+];
 
 exports.index = function* (next) {
-  var params = ['lngmin', 'latmin', 'lngmax', 'latmax'];
-  var query = {};
-  for (var i = 0; i < params.length; i++) {
-    var p = params[i];
-    this.query[p] = Number(this.query[p]);
-    if (!this.query[p]) {
-      this.status = 422;
-      return this.body = [];
-    }
-    query[p] = this.query[p];
-  }
-  if (query['lngmax'] < query['lngmin'] ||
-      query['latmax'] < query['latmin']) {
-    this.status = 422;
-    return this.body = [];
-  }
-  this.body = yield Feed.get(query);
+  this.body = yield Feed.getLatest();
+};
+
+exports.show = function* (next) {
+
 };
 
 exports.create = function* (next) {
   this.verifyParams({
-    content: 'string',
-    userNick: {type: 'string', required: false},
-    userInfo: {type: 'string', required: false},
-    lng: 'number',
-    lat: 'number',
-    geoInfo: {type: 'string', required: false},
+    pic: 'string',
+    content: {type: 'string', required: false},
+    lng: {type: 'string', required: false},
+    lat: {type: 'string', required: false},
+    location: {type: 'string', required: false},
   });
 
-  var feed = {};
-  feed.content = this.request.body.content;
-  feed.userNick = this.request.body.userNick || '';
-  feed.userInfo = this.request.body.userInfo || '';
-  feed.lng = this.request.body.lng;
-  feed.lat = this.request.body.lat;
-  feed.geoInfo = this.request.body.geoInfo || '';
+  var feed = only(this.request.body, props);
+  feed.userId = this.user.id;
 
   var res = yield Feed.add(feed);
   feed.id = res.insertId;
-  this.body = feed;
   this.status = 201;
+  this.body = feed;
+};
+
+exports.destroy = function* (next) {
+  this.verifyParams({
+    feedId: 'id',
+  });
+
+  var feedId = Number(this.params.feedId);
+  var userId = this.user.id;
+
+  yield Feed.remove(feedId, userId);
+  this.status = 200;
+  this.body = {
+    id: feedId
+  };
 };
