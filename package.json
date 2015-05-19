@@ -28,21 +28,24 @@
   },
   "devDependencies": {
     "autod": "1",
+    "babelify": "^6.1.1",
+    "browserify": "^10.2.0",
     "co": "~4.0.0",
     "co-mocha": "~1.1.0",
+    "eggshell": "^0.1.22",
+    "envify": "^3.4.0",
+    "http-server": "^0.8.0",
     "istanbul-harmony": "~0.3.12",
     "mm": "~1.1.0",
     "mocha": "~2.2.5",
+    "node-sass": "^3.1.1",
     "pedding": "~1.0.0",
+    "react": "^0.13.3",
+    "react-router": "^0.13.3",
     "should": "~6.0.3",
     "should-http": "~0.0.3",
     "supertest": "~1.0.1",
-    "eggshell": "^0.1.22",
-    "http-server": "^0.8.0",
-    "node-sass": "^3.1.1",
-    "react": "^0.13.3",
-    "react-router": "^0.13.3",
-    "reactify": "^1.1.1",
+    "uglifyjs": "^2.4.10",
     "watch": "^0.16.0",
     "watchify": "^3.2.1"
   },
@@ -57,7 +60,9 @@
     "email": "rockdai321@gmail.com"
   },
   "keywords": [
-    "yanzhi", "selfie", "social"
+    "yanzhi",
+    "selfie",
+    "social"
   ],
   "engines": {
     "node": ">= 0.11.14"
