@@ -91,7 +91,10 @@ exports.create = function* (next) {
 
   var fileName = uid() + utils.base64encode(part.filename);
   var userId = this.user.id;
-  var object = yield Store.put(userId + '/' + fileName, buf);
+  var object = yield Store.put(userId + '/' + fileName, buf, {
+    mime: part.mime,
+    meta: { uid: userId }
+  });
 
   var picUrl = 'http://' +
                 Store.options.bucket + '.' + Store.options.host +
