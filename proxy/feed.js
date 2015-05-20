@@ -104,3 +104,17 @@ var REMOVE_SQL = multiline(function () {;/*
 exports.remove = function* (feedId, userId) {
   return yield db.query(REMOVE_SQL, [feedId, userId]);
 };
+
+var UPDATE_SQL = multiline(function () {;/*
+  UPDATE
+    `feeds`
+  SET
+    ?
+  WHERE `feeds`.`id` = ?
+*/});
+exports.update = function* (feedId, feed) {
+  feed = only(feed, 'score');
+  feed.gmtModified = new Date();
+  feed = trans.camelToSnake(feed);
+  return yield db.query(UPDATE_SQL, [feed, feedId]);
+};

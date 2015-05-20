@@ -220,4 +220,50 @@ describe('controllers/feed.test.js', function () {
       .expect({id: feeds[0].id}, done);
     });
   });
+  describe('POST /api/feed/:feedId/vote', function () {
+
+    it('should 422 when invalid vote type', function (done) {
+      request.agent(app)
+      .post('/api/feed/' + feeds[1].id + '/vote')
+      .send({type: 'invalid'})
+      .expect(422, done);
+    });
+    it('should 500 when Feed.getById error', function (done) {
+      mm.error(Feed, 'getById', 'mock Feed.getById error');
+      request.agent(app)
+      .post('/api/feed/' + feeds[1].id + '/vote')
+      .send({type: 'up'})
+      .expect(500, done);
+    });
+    it('should 400 when feed not found', function (done) {
+      mm.empty(Feed, 'getById');
+      request.agent(app)
+      .post('/api/feed/' + feeds[1].id + '/vote')
+      .send({type: 'up'})
+      .expect(400)
+      .expect({message: 'feed not found'}, done);
+    });
+    it('should 500 when Feed.update error', function (done) {
+      mm.error(Feed, 'update', 'mock Feed.update error');
+      request.agent(app)
+      .post('/api/feed/' + feeds[1].id + '/vote')
+      .send({type: 'up'})
+      .expect(500, done);
+    });
+    it('should 200', function (done) {
+      request.agent(app)
+      .post('/api/feed/' + feeds[1].id + '/vote')
+      .send({type: 'down'})
+      .expect(200)
+      .end(function (err, res) {
+        res.body.id.should.equal(feeds[1].id);
+        res.body.score.should.equal(-5);
+        require('co')(function* () {
+          var feed = yield Feed.getById(res.body.id);
+          feed.score.should.equal(-5);
+          done(err);
+        });
+      });
+    });
+  });
 });
