@@ -1,5 +1,4 @@
 import React from 'react'
-import Mixin from 'react-mixin'
 import { Navigation, State } from 'react-router'
 
 

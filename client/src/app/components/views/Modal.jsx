@@ -1,6 +1,6 @@
 import React from 'react'
 import cx from 'classnames'
-import { Navigation, State } from 'react-router'
+import { Navigation, State, History } from 'react-router'
 
 let Modal = React.createClass({
 
@@ -18,12 +18,37 @@ let Modal = React.createClass({
 
   mixins: [Navigation, State],
 
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.show) {
+      document.body.style.overflowY = 'hidden'
+    } else {
+      document.body.style.overflowY = 'scroll'
+    }
+  },
+
+  componentDidMount() {
+    if(this.props.show) {
+      document.body.style.overflowY = 'hidden'
+    }
+  },
+
+  componentWillUpdate(nextProps, nextState) {
+    document.body.style.overflowY = 'scroll'
+  },
+
   handleClose(e) {
     e.preventDefault()
     this.setState({
       show: false
     })
-    this.transitionTo('tab', this.getParams())
+
+    if(History.length > 1) {
+      this.goBack()
+    } else {
+        this.transitionTo('tab', this.getParams())
+    }
+
+    document.body.style.overflowY = 'scroll'
   },
 
   render() {

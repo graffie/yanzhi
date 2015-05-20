@@ -1,6 +1,5 @@
 import React from 'react'
 import {Navigation} from 'react-router'
-import Mixin from 'react-mixin'
 
 let Footer = React.createClass({
 
