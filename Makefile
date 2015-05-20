@@ -47,6 +47,20 @@ test-cov cov: install init-test
 		$(MOCHA_OPTS) \
 		$(TESTS)
 
+test-travis: install init-test
+	@NODE_ENV=test node --harmony \
+		node_modules/.bin/istanbul cover --preserve-comments \
+		./node_modules/.bin/_mocha \
+		--report lcovonly \
+		-- -u exports \
+		--reporter dot \
+		--timeout $(TIMEOUT) \
+		--require should \
+		--require should-http \
+		--require co-mocha \
+		$(MOCHA_OPTS) \
+		$(TESTS)
+
 sass:
 	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)
 	@cp $(SRC)/index.html $(DIST)
