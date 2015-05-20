@@ -4,4 +4,4 @@ node_js:
   - '0.12'
 script: 'make test-travis'
 before_script:
-  - mysql -e 'create database yanzhi_test;'
+  - mysql -uroot -e 'create database yanzhi_test;'
