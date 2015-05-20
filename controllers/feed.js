@@ -107,6 +107,27 @@ exports.create = function* (next) {
   this.body = feed;
 };
 
+exports.vote = function* (next) {
+  this.verifyParams({
+    feedId: 'id',
+    type: ['up', 'down'],
+  });
+  var feedId = this.params.feedId;
+  var feed = yield Feed.getById(feedId);
+  if (!feed) {
+    this.status = 400;
+    this.body = {
+      message: 'feed not found',
+    };
+    return;
+  }
+  var score = this.request.body.type === 'up' ? 5 : -5;
+  feed.score = feed.score + score;
+  var res = yield Feed.update(feedId, {score: feed.score});
+  this.status = 200;
+  this.body = feed;
+};
+
 exports.destroy = function* (next) {
   this.verifyParams({
     feedId: 'id',

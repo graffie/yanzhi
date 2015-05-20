@@ -37,8 +37,7 @@ module.exports = function (app) {
   app.get('/api/feed/:feedId', feed.show);
   app.post('/api/feed', auth, feed.create);
   app.delete('/api/feed/:feedId', auth, feed.destroy);
-
-  // app.post('/api/feed/:feedId/vote', vote.create);
+  app.post('/api/feed/:feedId/vote', feed.vote);
 
   app.post('/api/feed/:feedId/comment', comment.create);
   app.delete('/api/feed/:feedId/comment/:commentId', auth, comment.destroy);
