@@ -8,16 +8,24 @@
  * Module dependencies.
  */
 var Comment = require('../../proxy/comment');
+var Store = require('../../common/oss');
 var User = require('../../proxy/user');
 var Feed = require('../../proxy/feed');
 var request = require('supertest');
 var app = require('../../app');
 var should = require('should');
 var mock = require('../mock');
+var bytes = require('bytes');
+var path = require('path');
+var fs = require('fs');
 var mm = require('mm');
 
 var user;
 var feeds = mock.feeds;
+
+var MOCK_GIF = path.join(__dirname, '../fixtures/test.gif');
+var MOCK_PNG = path.join(__dirname, '../fixtures/test.png');
+var MOCK_JPG = path.join(__dirname, '../fixtures/test.jpeg');
 
 describe('controllers/feed.test.js', function () {
 
@@ -102,29 +110,90 @@ describe('controllers/feed.test.js', function () {
   describe('POST /api/feed', function () {
 
     var agent;
+    var tmpFilePath = path.join(__dirname, '../fixtures/tmp_large.jpg');
 
     before(function (done) {
+      // Generate a very large file.
+      if (fs.existsSync(tmpFilePath)) {
+        fs.unlinkSync(tmpFilePath);
+      }
+      fs.writeFileSync(tmpFilePath, new Buffer(bytes('11mb')));
+
       agent = request.agent(app);
       agent.post('/login')
       .send(mock.users[0]).end(done);
     });
 
+    after(function () {
+      fs.unlinkSync(tmpFilePath);
+    });
+
+    it('should 422 when invalid params', function (done) {
+      agent
+      .post('/api/feed')
+      .send({foo: 'bar'})
+      .expect(422)
+      .expect({error: 'Unprocessable entity'}, done);
+    });
+    it('should 400 when invalid image type', function (done) {
+      agent
+      .post('/api/feed')
+      .attach('upload', MOCK_GIF)
+      .expect(400)
+      .expect({error: 'Invalid image type'}, done);
+    });
+    it('should 400 when image too large', function (done) {
+      agent
+      .post('/api/feed')
+      .attach('upload', tmpFilePath)
+      .expect(413)
+      .expect({error: 'Image too large'}, done);
+    });
+    it('should 500 when oss.put error', function (done) {
+      mm.error(Store, 'put', 'mock oss.put error');
+      agent
+      .post('/api/feed')
+      .field('content', 'unittest_feed_01')
+      .attach('upload', MOCK_PNG)
+      .expect(500, done);
+    });
     it('should 500 when Feed.add error', function (done) {
       mm.error(Feed, 'add', 'mock Feed.add error');
       agent
       .post('/api/feed')
-      .send(feeds[0])
+      .field('content', 'unittest_feed_01')
+      .attach('upload', MOCK_PNG)
       .expect(500, done);
     });
-
-    it('should 201', function (done) {
+    it('should 201 when png', function (done) {
       agent
       .post('/api/feed')
-      .send(feeds[0])
+      .field('content', 'unittest_feed_01')
+      .field('location', '杭州市西湖区')
+      .attach('upload', MOCK_PNG)
       .expect(201)
       .end(function (err, res) {
         res.body.id.should.above(0);
         res.body.user_id.should.equal(user.id);
+        res.body.content.should.equal('unittest_feed_01');
+        res.body.location.should.equal('杭州市西湖区');
+        res.body.pic.should.be.a.String;
+        done(err);
+      })
+    });
+    it('should 201 when jpg', function (done) {
+      agent
+      .post('/api/feed')
+      .field('content', 'unittest_feed_02')
+      .field('lat', '123.321')
+      .attach('upload', MOCK_JPG)
+      .expect(201)
+      .end(function (err, res) {
+        res.body.id.should.above(0);
+        res.body.user_id.should.equal(user.id);
+        res.body.content.should.equal('unittest_feed_02');
+        res.body.lat.should.equal('123.321');
+        res.body.pic.should.be.a.String;
         done(err);
       })
     });

@@ -9,7 +9,7 @@
  */
 
 exports.index = function* (next) {
-  yield this.render('home', {
+  yield this.render('upload', {
     current: new Date(),
   });
 };
