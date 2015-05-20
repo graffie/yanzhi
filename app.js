@@ -41,32 +41,22 @@ var locals = {
   version: config.version
 };
 
-middlewares.ejs(app, {
-  root: path.join(config.rootdir, 'views'),
-  layout: false,
-  cache: config.viewCache,
-  debug: config.debug,
-  locals: locals,
-  open: '{%',
-  close: '%}'
-});
-
 if (config.debug) {
   if (!isTest) {
     app.use(middlewares.logger());
   }
 
-  app.use(middlewares.staticCache(path.join(config.rootdir, 'assets'), {
+  app.use(middlewares.staticCache(path.join(config.rootdir, 'client/dist/static'), {
     buffer: false,
     gzip: false,
-    prefix: '/assets'
+    prefix: '/static'
   }));
 } else {
-  app.use(middlewares.staticCache(path.join(config.rootdir, 'assets'), {
+  app.use(middlewares.staticCache(path.join(config.rootdir, 'client/dist/static'), {
     buffer: true,
     gzip: true,
     maxAge: ms('1d'),
-    prefix: '/assets'
+    prefix: '/static'
   }));
 }
 

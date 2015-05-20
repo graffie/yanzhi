@@ -7,11 +7,12 @@
 /**
  * Module dependencies.
  */
+var config = require('../config');
+var path = require('path');
+var send = require('koa-send')
 
 exports.index = function* (next) {
-  yield this.render('upload', {
-    current: new Date(),
-  });
+  yield send(this, path.join(config.rootdir, 'client/dist/index.html'));
 };
 
 exports.home = function* (next) {
