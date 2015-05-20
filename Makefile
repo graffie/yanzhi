@@ -61,6 +61,10 @@ test-travis: install init-test
 		$(MOCHA_OPTS) \
 		$(TESTS)
 
+vendor:
+	@cp $(src)/assets/css/* $(DIST_STATIC)/css
+	@cp $(src)/assets/js/* $(DIST_STATIC)/js
+
 sass:
 	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)
 	@cp $(SRC)/index.html $(DIST)
@@ -77,6 +81,7 @@ build-js:
 		--transform babelify \
 		--transform envify \
 		| $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/index.js
+	@make vendor
 
 watch-js:
 	@mkdir -p client/dist/static/js
@@ -87,6 +92,7 @@ watch-js:
 		-o $(JS_OUTPUT)/index.js -dv
 
 watch:
+	@make vendor
 	@make watch-sass & make watch-js
 
 autod: install

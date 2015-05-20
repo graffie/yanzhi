@@ -12,6 +12,8 @@ var Promise = require('es6-promise').Promise;
 
 module.exports = {
 
+  _xhr: xhr,
+
   _request: function (method, uri, body, headers) {
     return new Promise(function (resolve, reject) {
       headers = headers || {};
@@ -35,8 +37,8 @@ module.exports = {
     return this._request('GET', uri);
   },
 
-  post: function (uri, body) {
-    return this._request('POST', uri, body);
+  post: function (uri, body, headers) {
+    return this._request('POST', uri, body, headers);
   },
 
   put: function (uri, body) {

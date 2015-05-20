@@ -5,6 +5,7 @@ import { RouteHandler } from 'react-router'
 // Our code
 import Header from '../views/Header'
 import Footer from '../views/Footer'
+import Crouton from '../views/Crouton'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -20,6 +21,7 @@ export default class App extends React.Component {
         <Header />
           <RouteHandler user={this.state.user}/>
         <Footer />
+        <Crouton />
       </div>
     )
   }

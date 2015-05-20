@@ -21,6 +21,7 @@ let PhotoItem = React.createClass({
   handleClick(e) {
     let obj = this.getParams()
     obj.id = this.props.id
+    obj.tab = obj.tab || 'explore'
     this.transitionTo('item', obj)
   },
 
