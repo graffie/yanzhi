@@ -1,0 +1,7 @@
+language: node_js
+node_js:
+  - 'iojs-1.2'
+  - '0.12'
+script: 'make test-travis'
+before_script:
+  - mysql -e 'create database yanzhi_test;'
