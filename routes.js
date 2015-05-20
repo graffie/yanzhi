@@ -14,7 +14,6 @@ var comment = require('./controllers/comment');
 var pages = require('./controllers/pages');
 var feed = require('./controllers/feed');
 var user = require('./controllers/user');
-// var file = require('./controllers/file');
 var auth = require('./middlewares/auth');
 
 module.exports = function (app) {
@@ -43,6 +42,4 @@ module.exports = function (app) {
 
   app.post('/api/feed/:feedId/comment', comment.create);
   app.delete('/api/feed/:feedId/comment/:commentId', auth, comment.destroy);
-
-  // app.post('/api/file/upload', auth, file.upload);
 };

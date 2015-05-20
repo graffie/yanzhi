@@ -8,7 +8,13 @@
  * Module dependencies.
  */
 var Comment = require('../proxy/comment');
+var toArray = require('stream-to-array');
+var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
+var parse = require('co-busboy');
+var utils = require('utility');
+var bytes = require('bytes');
+var path = require('path');
 var only = require('only');
 
 var props = [
@@ -18,6 +24,7 @@ var props = [
   'lat',
   'location',
 ];
+var fileTypes = ['.jpg', '.png', '.jpeg'];
 
 exports.index = function* (next) {
   this.status = 200;
@@ -38,17 +45,61 @@ exports.show = function* (next) {
   this.body = r;
 };
 
-exports.create = function* (next) {
-  this.verifyParams({
-    pic: 'string',
-    content: {type: 'string', required: false},
-    lng: {type: 'string', required: false},
-    lat: {type: 'string', required: false},
-    location: {type: 'string', required: false},
-  });
+function uid() {
+  return Math.random().toString(36).slice(2);
+}
 
-  var feed = only(this.request.body, props);
-  feed.userId = this.user.id;
+exports.create = function* (next) {
+  var parts;
+  try {
+    parts = parse(this, {
+      autoFields: true,
+      headers: this.headers,
+      defCharset: 'utf8',
+      limits: {
+        fileSize: bytes('20mb'),
+        files: 1,
+      },
+      checkFile: function (fieldname, file, filename) {
+        if (fileTypes.indexOf(path.extname(filename)) < 0) {
+          var err = new Error('Invalid image type');
+          err.status = 400;
+          return err;
+        }
+      },
+    });
+  } catch (ex) {
+    this.status = 422;
+    this.body = {error: 'Unprocessable entity'};
+    return;
+  }
+
+  var part;
+  try {
+    part = yield parts;
+  } catch (ex) {
+    this.status = ex.status || 422;
+    this.body = {error: ex.message};
+    return;
+  }
+  var buf = Buffer.concat(yield toArray(part));
+  if (buf.length > bytes('10mb')) {
+    this.status = 413;
+    this.body = {error: 'Image too large'};
+    return;
+  }
+
+  var fileName = uid() + utils.base64encode(part.filename);
+  var userId = this.user.id;
+  var object = yield Store.put(userId + '/' + fileName, buf);
+
+  var picUrl = 'http://' +
+                Store.options.bucket + '.' + Store.options.host +
+                '/' + object.name;
+
+  var feed = only(parts.field, props);
+  feed.pic = picUrl;
+  feed.userId = userId;
 
   var res = yield Feed.add(feed);
   feed.id = res.insertId;

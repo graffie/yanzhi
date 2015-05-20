@@ -54,11 +54,11 @@ sass:
 
 watch-sass:
 	@$(NODE_BIN)/watch 'make sass' $(SASS_DIR) & \
-	$(NODE_BIN)/http-server $(DIST) -s 
+	$(NODE_BIN)/http-server $(DIST) -s
 
 build-js:
 	@$(NODE_BIN)/browserify --require react --require react-router | $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/vendor.js
-	@$(NODE_BIN)/browserify --external react --external react-router $(JS_DIR)/index.js \ 
+	@$(NODE_BIN)/browserify --external react --external react-router $(JS_DIR)/index.js \
 		--extension .jsx \
 		--transform babelify \
 		--transform envify \
@@ -77,8 +77,8 @@ watch:
 
 autod: install
 	@./node_modules/.bin/autod -w --prefix="~" \
-	-e assets,views \
-	-t test \
+	-e assets,views,client \
+	-t test,client/src \
 	-D istanbul-harmony,mocha,should,should-http,co-mocha
 	@$(MAKE) install
 
