@@ -3,14 +3,20 @@ var Router = require('react-router');
 var {Routes, Route, Link, DefaultRoute, NotFoundRoute} = Router;
 
 var App = require('./components/routes/App')
-var Explore = require('./components/routes/Explore')
+var Tab = require('./components/routes/Tab')
 var Detail = require('./components/routes/Detail')
+var Login = require('./components/routes/Login')
+var Logout = require('./components/routes/Logout')
+var Signup = require('./components/routes/Signup')
 
 var routes = (
   <Route name='app' path='/' handler={App}>
-    <DefaultRoute handler={Explore} />
-    <Route name='list' path='photos' handler={Explore}>
-      <Route name='item' path='photos/:id' handler={Detail} />
+    <DefaultRoute handler={Tab} />
+    <Route name='tab' path=':tab' handler={Tab}>
+      <Route name='item' path='photo/:id' handler={Detail} />
+      <Route name='login' path='login' handler={Login} />
+      <Route name='signup' path='signup' handler={Signup} />
+      <Route name='logout' path='logout' handler={Logout}/>
     </Route>
   </Route>
 );

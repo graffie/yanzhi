@@ -1,11 +1,12 @@
 // Their code
 import React  from 'react'
-import { RouteHandler } from 'react-router'
+import { RouteHandler, Navigation, State } from 'react-router'
 
 // Our code
 import PhotoList from '../views/PhotoList'
+import User from '../views/User'
 
-export default class Explore extends React.Component {
+export default class Tab extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -14,22 +15,32 @@ export default class Explore extends React.Component {
   }
 
   render() {
+    var section = <PhotoList photos={this.state.photos}/>
+
+    let { router } = this.context
+    let {tab} = router.getCurrentParams()
+    if(tab == 'user') {
+      section= <User user={user} />
+    }
+
     return (
       <div>
-        <section id='main'>
-          <PhotoList photos={this.state.photos}/>
-        </section>
+        <div id='main'>{section}</div>
         <RouteHandler />
       </div>
     )
   }
 }
 
-Explore.propTypes = {
+Tab.contextTypes = {
+  router: React.PropTypes.func
+};
+
+Tab.propTypes = {
 
 }
 
-Explore.defaultProps = {
+Tab.defaultProps = {
 
 }
 
@@ -74,3 +85,9 @@ var photos = [{
   score: 7.0,
   id: 10
 }]
+
+var user = {
+  name:'xeodou',
+  avatar: 'https://avatars1.githubusercontent.com/u/914595?v=3',
+  photos: photos
+}

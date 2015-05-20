@@ -1,15 +1,29 @@
 import React from 'react'
+import Mixin from 'react-mixin'
+import { Navigation, State } from 'react-router'
 
-export default class PhotoItem extends React.Component {
 
-  constructor(props) {
-    super(props)
+let PhotoItem = React.createClass({
 
-  }
+  propTypes: {
+    id: React.PropTypes.number,
+    url: React.PropTypes.string,
+    score: React.PropTypes.number
+  },
 
-  handleClick() {
+  getDefaultProps() {
+    return {
 
-  }
+    }
+  },
+
+  mixins: [Navigation, State],
+
+  handleClick(e) {
+    let obj = this.getParams()
+    obj.id = this.props.id
+    this.transitionTo('item', obj)
+  },
 
   render() {
     return (
@@ -21,14 +35,6 @@ export default class PhotoItem extends React.Component {
       </div>
     )
   }
-}
+})
 
-PhotoItem.propTypes = {
-  id: React.PropTypes.number,
-  url: React.PropTypes.string,
-  score: React.PropTypes.number
-}
-
-PhotoItem.defaultProps = {
-
-}
+export default PhotoItem

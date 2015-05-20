@@ -7,7 +7,9 @@ var request = require('./request');
 
 module.exports = function (projectId) {
 
-  var api = {};
+  var api = {
 
-  return api;
-};
+  }
+
+ return api
+}

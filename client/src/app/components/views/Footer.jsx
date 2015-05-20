@@ -1,28 +1,37 @@
 import React from 'react'
+import {Navigation} from 'react-router'
+import Mixin from 'react-mixin'
 
-export default class Header extends React.Component {
+let Footer = React.createClass({
 
-  constructor(props) {
-    super(props)
+  mixins: [Navigation],
 
-  }
+  handleClick(type, e) {
+    this.transitionTo('tab', {tab: type})
+  },
+
+  handlePhotoUpload() {
+
+  },
 
   render() {
     return (
       <footer id='footer'>
         <div className='items'>
           <div className='item first'>
-            <a href='#'><span className='icon-f'></span></a>
+            <a href='javascript:;' onClick={this.handleClick.bind(null, 'explore')}><span className='icon-f'></span></a>
           </div>
           <div className='item second'>
-            <a href='#'><span className='icon-i'></span></a>
+            <a href='javascript:;' ><span className='icon-i'></span></a>
             <input type='file' accept='image/*' capture='camera'/>
           </div>
           <div className='item third'>
-            <a href='#'><span className='icon-u'></span></a>
+            <a href='javascript:;' onClick={this.handleClick.bind(null, 'user')}><span className='icon-u'></span></a>
           </div>
         </div>
       </footer>
     )
   }
-}
+})
+
+export default Footer
