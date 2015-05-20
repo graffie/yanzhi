@@ -2,10 +2,12 @@ import React from 'react'
 import { Navigation, State } from 'react-router'
 
 import Modal from '../views/Modal'
+import cache from '../../utils/cache'
 
 let Login  = React.createClass({
 
   propTypes: {
+
   },
 
   getDefaultProps() {
@@ -13,11 +15,20 @@ let Login  = React.createClass({
   },
 
   getInitialState() {
-    return {}
+    return {
+      file: cache.get()
+    }
   },
 
   mixins: [Navigation, State],
 
+  componentWillMount() {
+
+  },
+
+  componentWillUnmount() {
+    cache.set()
+  },
 
   render() {
     return (
@@ -25,7 +36,7 @@ let Login  = React.createClass({
        <div className='upload'>
         <div className='header'>
           <div className='image'>
-            <div><img src='http://www.it.com.cn/games/image/news/2011/01/27/14/meinv012708.jpg' /></div>
+            <div><img src={URL.createObjectURL(this.state.file)} /></div>
           </div>
         </div>
         <button className='button primary'>我要上传</button>

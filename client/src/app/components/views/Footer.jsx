@@ -1,16 +1,27 @@
 import React from 'react'
-import {Navigation} from 'react-router'
+import {Navigation, State} from 'react-router'
+
+import cache from '../../utils/cache'
 
 let Footer = React.createClass({
 
-  mixins: [Navigation],
+  mixins: [Navigation, State],
 
   handleClick(type, e) {
+    e.preventDefault()
     this.transitionTo('tab', {tab: type})
   },
 
-  handlePhotoUpload() {
+  handlePhotoUpload(e) {
+    e.preventDefault()
 
+    let file = e.target.files[0]
+    if (!file) return
+    cache.set(file)
+
+    let obj = this.getParams()
+    obj.tab = obj.tab || 'explore'
+    this.transitionTo('upload', obj)
   },
 
   render() {
@@ -22,7 +33,7 @@ let Footer = React.createClass({
           </div>
           <div className='item second'>
             <a href='javascript:;' ><span className='icon-i'></span></a>
-            <input type='file' accept='image/*' capture='camera'/>
+            <input type='file' accept='image/*' capture='camera' onChange={this.handlePhotoUpload}/>
           </div>
           <div className='item third'>
             <a href='javascript:;' onClick={this.handleClick.bind(null, 'user')}><span className='icon-u'></span></a>
