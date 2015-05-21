@@ -11,10 +11,7 @@ var Comment = require('../proxy/comment');
 var toArray = require('stream-to-array');
 var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
-var parse = require('co-busboy');
-var utils = require('utility');
 var bytes = require('bytes');
-var path = require('path');
 var only = require('only');
 
 var props = [
@@ -50,49 +47,29 @@ function uid() {
 }
 
 exports.create = function* (next) {
-  var parts;
-  try {
-    parts = parse(this, {
-      autoFields: true,
-      headers: this.headers,
-      defCharset: 'utf8',
-      limits: {
-        fileSize: bytes('20mb'),
-        files: 1,
-      },
-      checkFile: function (fieldname, file, filename) {
-        if (fileTypes.indexOf(path.extname(filename)) < 0) {
-          var err = new Error('Invalid image type');
-          err.status = 400;
-          return err;
-        }
-      },
-    });
-  } catch (ex) {
-    this.status = 422;
-    this.body = {error: 'Unprocessable entity'};
-    return;
+  this.verifyParams({
+    attachment: 'string',
+    contentType: ['image/png', 'image/jpg', 'image/jpeg'],
+    content: {type: 'string', required: false},
+    lng: {type: 'string', required: false},
+    lat: {type: 'string', required: false},
+    location: {type: 'string', required: false},
+  });
+
+  var body = this.request.body;
+  var attachment = body.attachment;
+  var contentType = body.contentType;
+  var header = 'data:' + contentType + ';base64,';
+
+  if (attachment.substring(0, header.length) === header) {
+    attachment = attachment.slice(header.length);
   }
 
-  var part;
-  try {
-    part = yield parts;
-  } catch (ex) {
-    this.status = ex.status || 422;
-    this.body = {error: ex.message};
-    return;
-  }
-  var buf = Buffer.concat(yield toArray(part));
-  if (buf.length > bytes('10mb')) {
-    this.status = 413;
-    this.body = {error: 'Image too large'};
-    return;
-  }
-
-  var fileName = uid() + utils.base64encode(part.filename, true);
+  var buf = new Buffer(attachment, 'base64');
+  var fileName = Date.now() + uid();
   var userId = this.user.id;
   var object = yield Store.put(userId + '/' + fileName, buf, {
-    mime: part.mime,
+    mime: contentType,
     meta: { uid: userId }
   });
 
@@ -100,7 +77,7 @@ exports.create = function* (next) {
                 Store.options.bucket + '.' + Store.options.host +
                 '/' + object.name;
 
-  var feed = only(parts.field, props);
+  var feed = only(body, props);
   feed.pic = picUrl;
   feed.userId = userId;
 
