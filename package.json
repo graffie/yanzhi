@@ -9,8 +9,7 @@
   "dependencies": {
     "ali-oss": "~2.2.0",
     "bcrypt": "~0.8.3",
-    "bytes": "~2.0.1",
-    "co-busboy": "~1.3.0",
+    "bytes": "~2.0.2",
     "copy-to": "~2.0.1",
     "error-formatter": "~1.0.3",
     "graceful": "~1.0.0",
@@ -20,7 +19,7 @@
     "koa-methodoverride": "~0.4.2",
     "koa-middlewares": "~3.1.0",
     "koa-parameter": "~2.0.0",
-    "koa-send": "^1.3.1",
+    "koa-send": "~1.3.1",
     "mini-logger": "~1.0.0",
     "mkdirp": "~0.5.1",
     "multiline": "~1.0.2",
@@ -29,7 +28,6 @@
     "ready": "~0.1.1",
     "stream-to-array": "~2.0.2",
     "thunkify-wrap": "~1.0.4",
-    "utility": "~1.3.2",
     "var-style": "~0.0.1"
   },
   "devDependencies": {

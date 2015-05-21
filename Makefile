@@ -101,7 +101,7 @@ watch:
 autod: install
 	@./node_modules/.bin/autod -w --prefix="~" \
 	-e assets,views,client \
-	-t test,client/src \
+	-t test,client/src/app \
 	-D istanbul-harmony,mocha,should,should-http,co-mocha
 	@$(MAKE) install
 
