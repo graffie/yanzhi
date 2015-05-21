@@ -23,9 +23,9 @@ var mm = require('mm');
 var user;
 var feeds = mock.feeds;
 
-var MOCK_GIF = path.join(__dirname, '../fixtures/test.gif');
-var MOCK_PNG = path.join(__dirname, '../fixtures/test.png');
-var MOCK_JPG = path.join(__dirname, '../fixtures/test.jpeg');
+var MOCK_PNG = fs.readFileSync(path.join(__dirname, '../fixtures/test.png'), 'base64');
+var MOCK_JPG = fs.readFileSync(path.join(__dirname, '../fixtures/test.jpeg'), 'base64');
+var MOCK_BASE64 = fs.readFileSync(path.join(__dirname, '../fixtures/test.base64'), 'utf8');
 
 describe('controllers/feed.test.js', function () {
 
@@ -110,67 +110,67 @@ describe('controllers/feed.test.js', function () {
   describe('POST /api/feed', function () {
 
     var agent;
-    var tmpFilePath = path.join(__dirname, '../fixtures/tmp_large.jpg');
 
     before(function (done) {
-      // Generate a very large file.
-      if (fs.existsSync(tmpFilePath)) {
-        fs.unlinkSync(tmpFilePath);
-      }
-      fs.writeFileSync(tmpFilePath, new Buffer(bytes('11mb')));
-
       agent = request.agent(app);
       agent.post('/login')
       .send(mock.users[0]).end(done);
-    });
-
-    after(function () {
-      fs.unlinkSync(tmpFilePath);
     });
 
     it('should 422 when invalid params', function (done) {
       agent
       .post('/api/feed')
       .send({foo: 'bar'})
-      .expect(422)
-      .expect({error: 'Unprocessable entity'}, done);
+      .expect(422, done);
     });
     it('should 400 when invalid image type', function (done) {
       agent
       .post('/api/feed')
-      .attach('upload', MOCK_GIF)
-      .expect(400)
-      .expect({error: 'Invalid image type'}, done);
+      .send({
+        attachment: MOCK_JPG,
+        contentType: 'image/gif',
+      })
+      .expect(422, done);
     });
-    it('should 400 when image too large', function (done) {
+    it.skip('should 400 when image too large', function (done) {
+      var tmpLargeFile = new Buffer(bytes('11mb')).toString('base64');
       agent
       .post('/api/feed')
-      .attach('upload', tmpFilePath)
-      .expect(413)
-      .expect({error: 'Image too large'}, done);
+      .send({
+        attachment: tmpLargeFile,
+        contentType: 'image/jpg',
+      })
+      .expect(413, done);
     });
     it('should 500 when oss.put error', function (done) {
       mm.error(Store, 'put', 'mock oss.put error');
       agent
       .post('/api/feed')
-      .field('content', 'unittest_feed_01')
-      .attach('upload', MOCK_PNG)
+      .send({
+        attachment: MOCK_JPG,
+        contentType: 'image/jpg',
+      })
       .expect(500, done);
     });
     it('should 500 when Feed.add error', function (done) {
       mm.error(Feed, 'add', 'mock Feed.add error');
       agent
       .post('/api/feed')
-      .field('content', 'unittest_feed_01')
-      .attach('upload', MOCK_PNG)
+      .send({
+        attachment: MOCK_JPG,
+        contentType: 'image/jpg',
+      })
       .expect(500, done);
     });
     it('should 201 when png', function (done) {
       agent
       .post('/api/feed')
-      .field('content', 'unittest_feed_01')
-      .field('location', '杭州市西湖区')
-      .attach('upload', MOCK_PNG)
+      .send({
+        attachment: MOCK_PNG,
+        contentType: 'image/png',
+        content: 'unittest_feed_01',
+        location: '杭州市西湖区',
+      })
       .expect(201)
       .end(function (err, res) {
         res.body.id.should.above(0);
@@ -184,15 +184,41 @@ describe('controllers/feed.test.js', function () {
     it('should 201 when jpg', function (done) {
       agent
       .post('/api/feed')
-      .field('content', 'unittest_feed_02')
-      .field('lat', '123.321')
-      .attach('upload', MOCK_JPG)
+      .send({
+        attachment: MOCK_JPG,
+        contentType: 'image/jpg',
+        content: 'unittest_feed_02',
+        lat: '32.321',
+        location: '杭州市江干区',
+      })
       .expect(201)
       .end(function (err, res) {
         res.body.id.should.above(0);
         res.body.user_id.should.equal(user.id);
         res.body.content.should.equal('unittest_feed_02');
-        res.body.lat.should.equal('123.321');
+        res.body.lat.should.equal('32.321');
+        res.body.location.should.equal('杭州市江干区');
+        res.body.pic.should.be.a.String;
+        done(err);
+      })
+    });
+    it('should 201 and remove image base64 header', function (done) {
+      agent
+      .post('/api/feed')
+      .send({
+        attachment: MOCK_BASE64,
+        contentType: 'image/jpeg',
+        content: 'unittest_feed_03',
+        lat: '32.123',
+        location: '长沙市开福区',
+      })
+      .expect(201)
+      .end(function (err, res) {
+        res.body.id.should.above(0);
+        res.body.user_id.should.equal(user.id);
+        res.body.content.should.equal('unittest_feed_03');
+        res.body.lat.should.equal('32.123');
+        res.body.location.should.equal('长沙市开福区');
         res.body.pic.should.be.a.String;
         done(err);
       })

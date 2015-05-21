@@ -25,9 +25,8 @@ var isTest = process.env.NODE_ENV === 'test';
 var app = koa();
 
 app.keys = config.keys;
-
 middlewares.onerror(app);
-app.use(middlewares.bodyParser());
+app.use(middlewares.bodyParser({jsonLimit: config.jsonLimit}));
 app.use(override());
 app.use(parameter(app));
 
@@ -72,10 +71,8 @@ app.use(function* ensureUser(next) {
  */
 routes(app);
 
-app.on('error', function (err) {
-  if (isTest) {
-    return;
-  }
+app.on('error', function (err, ctx) {
+  err.url = err.url || ctx.request.url;
   logger.error(err);
   this.status = err.status || 500;
 });
