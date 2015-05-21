@@ -65,7 +65,8 @@ vendor:
 	@mkdir -p $(DIST_STATIC)/css && mkdir -p $(DIST_STATIC)/js
 	@cp $(SRC)/assets/css/* $(DIST_STATIC)/css
 	@cp $(SRC)/assets/js/* $(DIST_STATIC)/js/
-	@cp -r $(SRC)/assets/fonts $(DIST_STATIC)/
+	@cp -rf $(SRC)/assets/fonts $(DIST_STATIC)/
+	@cp -rf $(SRC)/assets/images $(DIST_STATIC)/
 
 sass:
 	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)

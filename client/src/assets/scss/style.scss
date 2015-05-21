@@ -568,6 +568,7 @@ img.avatar {
     }
     .modal--content {
         width: 700px;
+        height: 99.99%;
         position: absolute;
         z-index: 50;
         top: 0px;
@@ -583,16 +584,53 @@ img.avatar {
         }
 
         .upload {
-          button {
-            width: 240px;
-            height: $header;
-            margin: 0 auto;
-            margin-top: 30px;
-            display: block;
-            text-align: center;
-            padding-right: 20px;
-            padding-left: 20px;
-            padding-bottom: 5px;
+          height: 100%;
+          .header {
+            height: 10%;
+            background-color: #1E1E1E;
+            max-height: 80px;
+            @media (max-height: 360px) {
+                height: 20%;
+            }
+            @media (max-height: 500px) and (min-width: 360px) {
+                height: 12%;
+            }
+            button {
+              float: right;
+              margin-right: 20px;
+              font-weight: bolder;
+              background-color: rgba(0, 0, 0, 0.13);
+              height: $header;
+              margin-top: 1%;
+              display: block;
+              text-align: center;
+              padding-right: 3px;
+              padding-left: 3px;
+            }
+          }
+          .editor {
+            height: 90%;
+            width: 100%;
+            overflow: hidden;
+             @media (max-height: 360px) {
+                height: 80%;
+            }
+            @media (max-height: 500px) and (min-width: 360px) {
+                height: 88%;
+            }
+            .imglykit-container {
+              -moz-border-radius: initial;
+              -webkit-border-radius: initial;
+              border-radius: initial;
+              .imglykit-header {
+                display: none;
+              }
+              .imglykit-top-controls {
+                &.imglykit-header-padding {
+                  top: 0;
+                }
+              }
+            }
           }
         }
 
@@ -875,7 +913,7 @@ img.avatar {
             }
             &.v-close {
               left: 20px;
-              top: 20px
+              top: 15px
             }
         }
     }
