@@ -89,7 +89,7 @@ exports.create = function* (next) {
     return;
   }
 
-  var fileName = uid() + utils.base64encode(part.filename);
+  var fileName = uid() + utils.base64encode(part.filename, true);
   var userId = this.user.id;
   var object = yield Store.put(userId + '/' + fileName, buf, {
     mime: part.mime,
