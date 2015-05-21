@@ -62,8 +62,8 @@ test-travis: install init-test
 		$(TESTS)
 
 vendor:
-	@cp $(src)/assets/css/* $(DIST_STATIC)/css
-	@cp $(src)/assets/js/* $(DIST_STATIC)/js
+	@cp $(SRC)/assets/css/* $(DIST_STATIC)/css
+	@cp $(SRC)/assets/js/* $(DIST_STATIC)/js
 
 sass:
 	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)
