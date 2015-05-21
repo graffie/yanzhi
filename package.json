@@ -26,7 +26,6 @@
     "mysql": "~2.6.2",
     "only": "~0.0.2",
     "ready": "~0.1.1",
-    "stream-to-array": "~2.0.2",
     "thunkify-wrap": "~1.0.4",
     "var-style": "~0.0.1"
   },

@@ -8,7 +8,6 @@
  * Module dependencies.
  */
 var Comment = require('../proxy/comment');
-var toArray = require('stream-to-array');
 var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
 var bytes = require('bytes');
