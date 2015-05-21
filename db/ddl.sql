@@ -35,6 +35,17 @@ CREATE TABLE `feeds` (
   KEY `feeds.user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Feed 表';
 
+CREATE TABLE `feeds_score` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `gmt_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `feed_id` bigint(20) unsigned NOT NULL COMMENT 'Feed ID',
+  `user_id` bigint(20) unsigned NOT NULL COMMENT '用户 ID',
+  `score` int(10) NOT NULL DEFAULT 0 COMMENT '评分',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `feeds_score.feed_id-user_id` (`feed_id`, `user_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Feed 评分表';
+
 CREATE TABLE `comments` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '评论 ID',
   `gmt_create` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
