@@ -54,7 +54,7 @@ test-travis: install init-test
 		--report lcovonly \
 		-- -u exports \
 		--reporter dot \
-		--timeout $(TIMEOUT) \
+		--timeout 60000 \
 		--require should \
 		--require should-http \
 		--require co-mocha \
