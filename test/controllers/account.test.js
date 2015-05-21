@@ -67,7 +67,15 @@ describe('controllers/account.test.js', function () {
         password: user.password,
       })
       .expect(200)
-      .expect({status: 200, redirect: '/'}, done);
+      .end(function (err, res) {
+        res.body.status.should.equal(200);
+        res.body.redirect.should.equal('/');
+        res.body.user.id.should.above(0);
+        res.body.user.name.should.equal(user.name);
+        should.not.exist(res.body.user.password);
+        should.not.exist(res.body.user.mobile);
+        done(err);
+      });
     });
     it('should 200 with invalid redirect', function (done) {
       request(app)
@@ -78,7 +86,15 @@ describe('controllers/account.test.js', function () {
         redirect: 'http://www.taobao.com/hehe'
       })
       .expect(200)
-      .expect({status: 200, redirect: '/'}, done);
+      .end(function (err, res) {
+        res.body.status.should.equal(200);
+        res.body.redirect.should.equal('/');
+        res.body.user.id.should.above(0);
+        res.body.user.name.should.equal(user.name);
+        should.not.exist(res.body.user.password);
+        should.not.exist(res.body.user.mobile);
+        done(err);
+      });
     });
     it('should 200 with redirect', function (done) {
       request(app)
@@ -89,7 +105,15 @@ describe('controllers/account.test.js', function () {
         redirect: '/user/123'
       })
       .expect(200)
-      .expect({status: 200, redirect: '/user/123'}, done);
+      .end(function (err, res) {
+        res.body.status.should.equal(200);
+        res.body.redirect.should.equal('/user/123');
+        res.body.user.id.should.above(0);
+        res.body.user.name.should.equal(user.name);
+        should.not.exist(res.body.user.password);
+        should.not.exist(res.body.user.mobile);
+        done(err);
+      });
     });
   });
 

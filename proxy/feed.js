@@ -33,7 +33,8 @@ var GET_LATEST_SQL = multiline(function () {;/*
   LIMIT ?, 100
 */});
 exports.getLatest = function* (offset) {
-  if (typeof offset !== 'number') {
+  offset = Number(offset);
+  if (isNaN(offset)) {
     offset = 0;
   }
   return yield db.query(GET_LATEST_SQL, [offset]);
@@ -58,7 +59,8 @@ var GET_BY_USER_SQL = multiline(function () {;/*
   LIMIT ?, 100
 */});
 exports.getByUser = function* (userId, offset) {
-  if (typeof offset !== 'number') {
+  offset = Number(offset);
+  if (isNaN(offset)) {
     offset = 0;
   }
   return yield db.query(GET_BY_USER_SQL, [userId, offset]);
