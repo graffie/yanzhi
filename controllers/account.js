@@ -38,6 +38,7 @@ exports.login = function* () {
   this.session.user = user;
   this.body = {
     status: 200,
+    user: user,
     redirect: redirect,
   };
 };

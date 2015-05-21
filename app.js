@@ -74,10 +74,10 @@ routes(app);
 
 app.on('error', function (err) {
   if (isTest) {
-    console.error(err);
     return;
   }
   logger.error(err);
+  this.status = err.status || 500;
 });
 
 app = http.createServer(app.callback());

@@ -32,6 +32,7 @@ module.exports = function (app) {
 
   // API
   app.get('/api/user/:userId', user.show);
+  app.get('/api/me', auth, user.me);
 
   app.get('/api/feed', feed.index);
   app.get('/api/feed/:feedId', feed.show);
