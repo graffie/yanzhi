@@ -65,7 +65,7 @@ let Modal = React.createClass({
               </svg>
            </a>
            {this.props.children}
-           <Loading loading={this.props.loading} />
+           <Loading loading={this.props.loading} position={'absolute'}/>
         </div>
       </div>
     )
