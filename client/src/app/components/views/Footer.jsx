@@ -24,16 +24,16 @@ let Footer = React.createClass({
 
     let file = e.target.files[0]
     if (!file) return
-    cache.set(file)
+    cache.file = file
 
     this.transitionTo('upload', this.getRoute())
     e.target.value = null
   },
 
   handleFileClick(e) {
-    e.preventDefault()
 
     if (!Store.getUser()) {
+    e.preventDefault()
       return this.transitionTo('login', this.getRoute())
     }
 

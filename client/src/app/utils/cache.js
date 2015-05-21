@@ -7,3 +7,5 @@ exports.set = function (data) {
 exports.get = function () {
     return cache
 }
+
+exports.file = null

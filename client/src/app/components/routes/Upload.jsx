@@ -10,7 +10,7 @@ let Login  = React.createClass({
 
   statics: {
     willTransitionFrom(transition, component) {
-      cache.set()
+      cache.file = null
     }
   },
 
@@ -49,7 +49,7 @@ let Login  = React.createClass({
       this.kit.ui.selectOperations({ only: 'filters, crop, rotation, stickers' });
     }
 
-    if (cache.get()) {
+    if (cache.file) {
       let reader = new FileReader();
       reader.onloadstart = function(e) {
 
@@ -64,7 +64,7 @@ let Login  = React.createClass({
           loading: false
         })
       }.bind(this)
-      reader.readAsDataURL(cache.get());
+      reader.readAsDataURL(cache.file);
     }
   },
 
@@ -76,7 +76,7 @@ let Login  = React.createClass({
   },
 
   componentWillUnmount() {
-    cache.set()
+    cache.file = null
   },
 
   handleImageUpload(e) {
