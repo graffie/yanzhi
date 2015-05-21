@@ -8,8 +8,12 @@ var CHANGE_EVENT = 'change'
 var CROUTON_EVENT = 'crouton'
 var SIGNUP_EVENT = 'signup'
 var LOGIN_EVENT = 'login'
+var FEEDS_EVENT = 'feeds'
+var USER_EVENT = 'user'
 
 var crouton = null
+var feeds = []
+var user = null
 
 var AppStore = assign({}, EventEmitter.prototype, {
   emitChange: function () {
@@ -24,7 +28,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CHANGE_EVENT, cb)
   },
 
-  emitCrouton: function() {
+  emitCrouton: function () {
     this.emit(CROUTON_EVENT)
   },
 
@@ -40,7 +44,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     return crouton
   },
 
-  emitSignup: function() {
+  emitSignup: function () {
     this.emit(SIGNUP_EVENT)
   },
 
@@ -52,7 +56,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(SIGNUP_EVENT, cb)
   },
 
-  emitLogin: function() {
+  emitLogin: function () {
     this.emit(LOGIN_EVENT)
   },
 
@@ -63,6 +67,39 @@ var AppStore = assign({}, EventEmitter.prototype, {
   removeLoginListener: function (cb) {
     this.removeListener(LOGIN_EVENT, cb)
   },
+
+  emitFeeds: function () {
+    this.emit(FEEDS_EVENT)
+  },
+
+  addFeedsListener: function (cb) {
+    this.on(FEEDS_EVENT, cb)
+  },
+
+  removeFeedsListener: function (cb) {
+    this.removeListener(FEEDS_EVENT, cb)
+  },
+
+  getFeeds: function () {
+    return feeds
+  },
+
+  emitUser: function () {
+    this.emit(USER_EVENT)
+  },
+
+  addUserListener: function (cb) {
+    this.on(USER_EVENT, cb)
+  },
+
+  removeUserListener: function (cb) {
+    this.removeListener(USER_EVENT, cb)
+  },
+
+  getUser: function () {
+    return user
+  }
+
 })
 
 AppStore.dispatchToken = AppDispatcher.register(function (playload) {
@@ -77,10 +114,12 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
       return AppStore.emitSignup()
     case ActionTypes.USER_LOGIN_SUCCESS:
       return AppStore.emitLogin()
-    case ActionTypes.ALERT_DEL:
-      delAlert(action.idx)
-      AppStore.emitChange()
-      break
+    case ActionTypes.GET_FEEDS_SUCCESS:
+      feeds = feeds.concat(action.data)
+      return AppStore.emitFeeds()
+    case ActionTypes.GET_SELF_SUCCESS:
+      user = action.data
+      return AppStore.emitUser()
   }
 })
 

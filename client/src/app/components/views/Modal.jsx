@@ -2,6 +2,8 @@ import React from 'react'
 import cx from 'classnames'
 import { Navigation, State, History } from 'react-router'
 
+import Loading from './Loading'
+
 let Modal = React.createClass({
 
   getDefaultProps() {
@@ -63,6 +65,7 @@ let Modal = React.createClass({
               </svg>
            </a>
            {this.props.children}
+           <Loading loading={this.props.loading} />
         </div>
       </div>
     )

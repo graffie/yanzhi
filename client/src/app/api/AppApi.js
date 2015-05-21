@@ -10,6 +10,9 @@ var api = {}
 
 api['user'] = function (uid) {
   return {
+    me: function() {
+      return request.get('/api/me')
+    },
     get: function () {
       return request.get(`/api/user/${uid}`)
     },
@@ -26,11 +29,18 @@ api['user'] = function (uid) {
 
 api['feed'] = function (fid) {
   return {
-    explore: request.get('/api/feed'),
+    explore: function() {
+      return request.get('/api/feed')
+    },
 
-    get: request(`/api/feed/${fid}`),
+    get: function() {
+      console.log('get')
+      return request.get(`/api/feed/${fid}`)
+    },
 
-    create: '',
+    create: function(data) {
+      return request.post('/api/feed', data, {'Content-Type': 'multipart/form-data'})
+    },
 
     vote: function (data) {
       return request.post(`/api/feed/${fid}/vote`, data)
@@ -38,7 +48,7 @@ api['feed'] = function (fid) {
 
     comment: {
       create: function (data) {
-        request(`/api/feed/${fid}/comment`, data)
+        return request.get(`/api/feed/${fid}/comment`, data)
       }
     }
   }

@@ -6,31 +6,40 @@ import { RouteHandler } from 'react-router'
 import Header from '../views/Header'
 import Footer from '../views/Footer'
 import Crouton from '../views/Crouton'
+import {me} from '../../actions/AppActionCreator'
 
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+let App = React.createClass({
 
+  statics: {
+    willTransitionTo: function (transition, params, query, callback) {
+      me().then(() => {
+        callback()
+      }).catch((err) => {
+        callback()
+      })
     }
-  }
+  },
+
+  getInitialState: function() {
+    return {
+      user: {}
+    };
+  },
+
+  componentWillMount() {
+
+  },
 
   render() {
     return (
       <div>
         <Header />
-          <RouteHandler user={this.state.user}/>
+        <RouteHandler />
         <Footer />
         <Crouton />
       </div>
     )
   }
-}
+})
 
-App.propTypes = {
-
-}
-
-App.defaultProps = {
-
-}
+export default App

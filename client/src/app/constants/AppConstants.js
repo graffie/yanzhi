@@ -11,6 +11,8 @@ module.exports = {
   ActionTypes: keyMirror({
 
     // App actions.
+    GET_SELF_SUCCESS: null,
+
     USER_LOGIN: null,
     USER_LOGIN_SUCCESS: null,
     USER_LOGIN_FAILED: null,
@@ -18,6 +20,8 @@ module.exports = {
     USER_SIGNUP: null,
     USER_SIGNUP_SUCCESS: null,
     USER_SIGNUP_FAILED: null,
+
+    GET_FEEDS_SUCCESS: null,
 
     // Crouton
     SHOW_CROUTON: null

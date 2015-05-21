@@ -1,8 +1,11 @@
 var assign = require('react/lib/Object.assign')
+
 var AppConstants = require('../constants/AppConstants')
 var AppDispatcher = require('../dispatchers/AppDispatcher')
 var AppAPI = require('../api/AppAPI')
 var ActionTypes = AppConstants.ActionTypes
+var lang = require('../constants/lang')
+lang = lang[process.env.LANG || 'zh-cn']
 
 var Crouton = {
   showInfo: function (data) {
@@ -12,7 +15,7 @@ var Crouton = {
         type: 'info'
       }
     }
-    this.setCrouton(data);
+    this.show(data);
   },
 
   show: function (data) {
@@ -31,17 +34,29 @@ var Crouton = {
 
 var AppActionCreator = {
 
+  me: function () {
+    return AppAPI.user().me().then(function (res) {
+      if (res.statusCode == 200 && res.body) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.GET_SELF_SUCCESS,
+          data: res.body
+        })
+      }
+      return {}
+    })
+  },
+
   login: function (data) {
     AppAPI.user().login(data).then(function (res) {
       if (res.body && res.body.status != 200) {
-        return Crouton.show("用户名或密码错误")
+        return Crouton.show(lang.user.login_failed)
       }
       AppDispatcher.handleServerAction({
         type: ActionTypes.USER_LOGIN_SUCCESS,
         data: res
       })
     }).catch((err) => {
-      Crouton.show(err.msg)
+      Crouton.show(err.message)
     })
   },
 
@@ -49,12 +64,13 @@ var AppActionCreator = {
     AppAPI.user().signup(data).then(function (res) {
       if (res.body && res.body.status != 200) {
         return Crouton.show({
-          message: '注册失败',
+          message: lang.user.signup_failed,
+          autoMiss: false,
           buttons: [{
-            name: '重试',
-            listener: AppActionCreator.signup.bind(this, data)
+            name: lang.button.retry,
+            listener: AppActionCreator.signup.bind(null, data)
           }, {
-            name: '忽略'
+            name: lang.button.ignore
           }]
         })
       }
@@ -63,10 +79,54 @@ var AppActionCreator = {
         data: res.body
       })
     }).catch((err) => {
-      Crouton.show(err.msg)
+      Crouton.show(err.message)
+    })
+  },
+
+  getFeeds: function () {
+    AppAPI.feed().explore().then(function (res) {
+      if (!res.body) {
+        return Crouton.show({
+          message: lang.feed.list_feed_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.getFeeds
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.GET_FEEDS_SUCCESS,
+        data: res.body
+      })
+    }).catch((err) => {
+      Crouton.show(err.message)
+    })
+  },
+
+  uploadPhoto: function (data) {
+    AppAPI.feed().create(data).then(function (res) {
+      if (res.body) {
+        return Crouton.show({
+          message: lang.feed.upload_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.uploadPhoto.bind(null, data)
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }
+    }).catch((err) => {
+      Crouton.show(err.message)
     })
   }
 
 }
+
+AppActionCreator.Crouton = Crouton
 
 module.exports = AppActionCreator

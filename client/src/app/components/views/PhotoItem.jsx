@@ -1,18 +1,25 @@
 import React from 'react'
 import { Navigation, State } from 'react-router'
-
+let {PropTypes} = React
 
 let PhotoItem = React.createClass({
 
   propTypes: {
-    id: React.PropTypes.number,
-    url: React.PropTypes.string,
-    score: React.PropTypes.number
+    content: PropTypes.string,
+    gmt_create: PropTypes.string,
+    gmt_modified: PropTypes.string,
+    id: PropTypes.number,
+    // lat: null
+    // lng: null
+    // location: null
+    pic: PropTypes.string,
+    score: PropTypes.number,
+    user_id: PropTypes.number,
+    user_name: PropTypes.string
   },
 
   getDefaultProps() {
     return {
-
     }
   },
 
@@ -28,7 +35,7 @@ let PhotoItem = React.createClass({
   render() {
     return (
       <div className='item' onClick={this.handleClick}>
-        <img src={this.props.url} />
+        <img src={this.props.pic} />
         <div className='score'>
           <span className='icon-h'>{this.props.score.toFixed(1)}</span>
         </div>

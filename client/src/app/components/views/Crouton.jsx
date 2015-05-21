@@ -8,7 +8,7 @@ export default React.createClass({
   getInitialState() {
     return {
       crouton: {
-        id: 1,
+        id: 0,
         message: '',
         type: ''
       }
@@ -23,6 +23,10 @@ export default React.createClass({
     Store.removeListener(this.onChange)
   },
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.crouton.id > this.state.crouton.id
+  },
+
   onChange() {
     let obj = Store.getCrouton()
     obj.id = Date.now()
@@ -33,6 +37,7 @@ export default React.createClass({
   },
 
   render() {
+    if (this.state.crouton.id <= 0) return <div />
     return (
       <Crouton
            id={this.state.crouton.id}
@@ -40,7 +45,7 @@ export default React.createClass({
            type={this.state.crouton.type}
            buttons={this.state.crouton.buttons}
            hidden={this.state.crouton.hidden}
-        />
+           autoMiss={this.state.crouton.autoMiss}/>
     )
   }
 })
