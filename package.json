@@ -44,6 +44,7 @@
     "istanbul-harmony": "~0.3.12",
     "mm": "~1.1.0",
     "mocha": "~2.2.5",
+    "moment": "^2.10.3",
     "node-sass": "^3.1.1",
     "object-assign": "~2.0.0",
     "pedding": "~1.0.0",

@@ -22,6 +22,7 @@ module.exports = {
     USER_SIGNUP_FAILED: null,
 
     GET_FEEDS_SUCCESS: null,
+    GET_FEED_SUCCESS: null,
 
     // Crouton
     SHOW_CROUTON: null

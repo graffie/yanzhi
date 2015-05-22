@@ -1,10 +1,23 @@
 import React from 'react'
-import { Navigation, State } from 'react-router'
+import { Navigation, State, Link } from 'react-router'
+import moment from 'moment'
 
 import Modal from '../views/Modal'
-
+import Comment from '../views/Comment'
+import Store from '../../stores/AppStore'
+import {Crouton, getFeed} from '../../actions/AppActionCreator'
 
 let Detail  = React.createClass({
+
+  statics: {
+    willTransitionTo: function (transition, params) {
+      if(!Store.getFeedById(params.id)) {
+        transition.redirect('tab', params)
+      } else {
+        getFeed(params.id)
+      }
+    }
+  },
 
   propTypes: {
     // id: React.PropTypes.number,
@@ -13,19 +26,39 @@ let Detail  = React.createClass({
   },
 
   getDefaultProps() {
-    return {}
+    return {
+    }
   },
 
   getInitialState() {
-    return {}
+    return {
+      loading: true,
+      feed: Store.getFeedById(this.props.params.id),
+      comments: Store.getCommentById(this.props.params.id) || []
+    }
   },
 
   mixins: [Navigation, State],
 
+  componentWillMount() {
+    Store.addFeedListener(this.onFeedChange)
+  },
+
+  componentWillUnmount() {
+    Store.removeFeedListener(this.onFeedChange)
+  },
+
+  onFeedChange() {
+    this.setState({
+      loading: false,
+      comments: Store.getCommentById(this.props.params.id)
+    });
+  },
+
   handleClick(type, e) {
     e.preventDefault()
 
-    this.transitionTo('login', this.getParams())
+    this.transitionTo('login', this.props.params)
 
     if(type == 'up') {
 
@@ -35,11 +68,20 @@ let Detail  = React.createClass({
   },
 
   render() {
+    let cts = this.state.comments.map((c, i) => {
+      return <Comment {...c} key={i} />
+    })
+    let feed = this.state.feed
+    let {params} = this.props
+    params.uid = feed.user_id
+
+    let date = moment(feed.gmt_create).locale('zh-cn').startOf('day').fromNow()
+
     return (
-      <Modal show>
+      <Modal show loading={this.state.loading}>
         <div className='header'>
         <div className='image'>
-          <div><img src='http://www.it.com.cn/games/image/news/2011/01/27/14/meinv012708.jpg' /></div>
+          <div><img src={feed.pic} /></div>
         </div>
         <div className='share'>
           <a className='modal--control'><span className='icon-s'></span></a>
@@ -52,31 +94,13 @@ let Detail  = React.createClass({
         </div>
       </div>
       <div className='author'>
-            <a href='#'><span>xeodou</span></a>
-            <span>1 天前</span>
+            <Link to='user' params={params}>
+              <span>{feed.user_name}</span>
+            </Link>
+            <span>{date}</span>
       </div>
       <div className='comments'>
-        <div className='comment'>
-          <a>
-            <img className='avatar' src='https://avatars1.githubusercontent.com/u/914595?v=3&s=460'/>
-            <span>xeodou</span>
-          </a>
-          <div className='body'>
-            App Store Launch Stories are handpicked interviews with world leading app entrepreneurs. I’m the host, Paul Kemp and its very exciting being on Product Hunt. I have an archive of over 400 app founder interviews, so I know how to get the best from guests.
-          </div>
-        </div>
-        <div className='comment'>
-          <a>
-            <img className='avatar' src='https://avatars1.githubusercontent.com/u/914595?v=3&s=460' />
-          </a>
-          <p>hahahhahahahahhahahaha</p>
-        </div>
-        <div className='comment'>
-          <a>
-            <img className='avatar' src='https://avatars1.githubusercontent.com/u/914595?v=3&s=460' />
-          </a>
-          <p>hahahhahahahahhahahaha</p>
-        </div>
+        {cts}
       </div>
       <div className='footer'>
         <div className='input'>

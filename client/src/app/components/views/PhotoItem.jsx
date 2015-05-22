@@ -35,7 +35,7 @@ let PhotoItem = React.createClass({
   render() {
     return (
       <div className='item' onClick={this.handleClick}>
-        <img src={this.props.pic} />
+        <div><img src={this.props.pic} /></div>
         <div className='score'>
           <span className='icon-h'>{this.props.score.toFixed(1)}</span>
         </div>

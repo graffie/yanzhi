@@ -85,7 +85,7 @@ var AppActionCreator = {
 
   getFeeds: function () {
     AppAPI.feed().explore().then(function (res) {
-      if (!res.body) {
+      if (res.statusCode != 200 || !res.body) {
         return Crouton.show({
           message: lang.feed.list_feed_failed,
           autoMiss: false,
@@ -106,9 +106,33 @@ var AppActionCreator = {
     })
   },
 
+  getFeed: function (fid) {
+    AppAPI.feed(fid).get().then(function (res) {
+      if (res.statusCode != 200 || !res.body) {
+        return Crouton.show({
+          message: lang.feed.get_feed_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.getFeeds
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.GET_FEED_SUCCESS,
+        data: res.body.comments || [],
+        id: fid
+      })
+    }).catch((err) => {
+      Crouton.show(err.message)
+    })
+  },
+
   uploadPhoto: function (data) {
     AppAPI.feed().create(data).then(function (res) {
-      if (res.body) {
+      if (res.statusCode != 200 || !res.body) {
         return Crouton.show({
           message: lang.feed.upload_failed,
           autoMiss: false,

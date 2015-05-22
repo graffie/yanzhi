@@ -35,7 +35,7 @@ let Modal = React.createClass({
   },
 
   componentWillUpdate(nextProps, nextState) {
-    document.body.style.overflowY = 'scroll'
+    // document.body.style.overflowY = 'scroll'
   },
 
   handleClose(e) {

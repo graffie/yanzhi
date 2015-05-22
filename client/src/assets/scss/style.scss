@@ -56,6 +56,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -moz-font-feature-settings: "liga" on;
+  max-width: 100%;
+  overflow-x: hidden;
   .no-scroll {
     overflow-y: hidden !important;
   }
@@ -373,6 +375,8 @@ img.avatar {
     margin-left: 8px;
     margin-right: 18px;
     .item {
+      height: 160px;
+      width: 160px;
       margin: 6px 0 0 8px;
       border-radius: $radius 0 0 $radius;
       border-color: rgba(0, 0, 0, 0.15);
@@ -380,12 +384,22 @@ img.avatar {
       border-style: solid;
       padding: 3px;
       position: relative;
+      div {
+        left: 50%;
+        height: 100%;
+        float: left;
+        position: relative;
+      }
       img {
-        max-height: 240px;
-        max-width: 93px;
+        display: block;
+        position: relative;
+        left: -50%;
+        max-height: 100%;
+        max-width: 100%;
       }
       .score {
         // display: none;
+        height: 20px;
         position: absolute;
         left: 0;
         margin: 8px;
@@ -415,7 +429,7 @@ img.avatar {
 
   .person {
     .header {
-      padding-bottom: 45px;
+      // padding-bottom: 45px;
       width: 100%;
       overflow: hidden;
       *position: relative;
@@ -437,6 +451,7 @@ img.avatar {
         top: 0;
         margin-left: -45px;
         margin-top: 75px;
+        display: none;
         img {
           margin-right: $gutter/4;
           width: 90px;
@@ -768,7 +783,7 @@ img.avatar {
             border-width: 1.5px;
             border-style: solid;
             position: absolute;
-            top: 270px;
+            top: 240px;
             text-align: center;
             span {
               font-weight: bold;
@@ -807,6 +822,14 @@ img.avatar {
                 right: 33%;
               }
             }
+            @media (max-width:400px) {
+              &.up {
+                left: 23%;
+              }
+              &.down {
+                right: 23%;
+              }
+            }
             @media (max-height: 360px) {
                 top: 120px;
             }
@@ -822,6 +845,15 @@ img.avatar {
             border-bottom-width: 1px;
             padding-bottom: 10px;
             margin-top: 5px;
+
+            span {
+              margin-left: 1.2em;
+            }
+            a {
+              span {
+                margin-left: 0;
+              }
+            }
         }
 
         .comments {

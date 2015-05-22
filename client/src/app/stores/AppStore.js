@@ -4,16 +4,32 @@ var EventEmitter = require('events').EventEmitter
 var assign = require('object-assign')
 
 var ActionTypes = AppConstants.ActionTypes
-var CHANGE_EVENT = 'change'
-var CROUTON_EVENT = 'crouton'
-var SIGNUP_EVENT = 'signup'
-var LOGIN_EVENT = 'login'
-var FEEDS_EVENT = 'feeds'
-var USER_EVENT = 'user'
+const CHANGE_EVENT = 'change'
+const CROUTON_EVENT = 'crouton'
+const SIGNUP_EVENT = 'signup'
+const LOGIN_EVENT = 'login'
+const FEEDS_EVENT = 'feeds'
+const FEED_EVENT = 'feed'
+const USER_EVENT = 'user'
 
 var crouton = null
 var feeds = []
+var comments = {}
 var user = null
+
+function getFeedById(fid) {
+  for (let i = feeds.length - 1; i >= 0; i--) {
+    let f = feeds[i]
+    if (fid == f.id) {
+      return f
+    }
+  }
+  return null
+}
+
+function getCommentById(fid) {
+  return comments[fid]
+}
 
 var AppStore = assign({}, EventEmitter.prototype, {
   emitChange: function () {
@@ -84,6 +100,22 @@ var AppStore = assign({}, EventEmitter.prototype, {
     return feeds
   },
 
+  getFeedById: getFeedById,
+
+  emitFeed: function () {
+    this.emit(FEED_EVENT)
+  },
+
+  addFeedListener: function (cb) {
+    this.on(FEED_EVENT, cb)
+  },
+
+  removeFeedListener: function (cb) {
+    this.removeListener(FEED_EVENT, cb)
+  },
+
+  getCommentById: getCommentById,
+
   emitUser: function () {
     this.emit(USER_EVENT)
   },
@@ -120,6 +152,9 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.GET_SELF_SUCCESS:
       user = action.data
       return AppStore.emitUser()
+    case ActionTypes.GET_FEED_SUCCESS:
+      comments[action.id] = action.data
+      return AppStore.emitFeed()
   }
 })
 

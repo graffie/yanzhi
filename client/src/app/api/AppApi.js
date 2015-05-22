@@ -34,7 +34,6 @@ api['feed'] = function (fid) {
     },
 
     get: function() {
-      console.log('get')
       return request.get(`/api/feed/${fid}`)
     },
 

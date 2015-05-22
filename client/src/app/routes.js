@@ -9,6 +9,7 @@ var Login = require('./components/routes/Login')
 var Logout = require('./components/routes/Logout')
 var Signup = require('./components/routes/Signup')
 var Upload = require('./components/routes/Upload')
+var User = require('./components/routes/User')
 
 var routes = (
   <Route name='app' path='/' handler={App}>
@@ -19,6 +20,7 @@ var routes = (
       <Route name='signup' path='signup' handler={Signup} />
       <Route name='logout' path='logout' handler={Logout}/>
       <Route name='upload' path='upload' handler={Upload}/>
+      <Route name='user' path=':uid' handler={User} />
     </Route>
   </Route>
 );

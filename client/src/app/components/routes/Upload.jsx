@@ -50,13 +50,27 @@ let Login  = React.createClass({
     }
 
     if (cache.file) {
-      let reader = new FileReader();
+      console.log(cache.file)
+      let reader = new FileReader()
       reader.onloadstart = function(e) {
 
       }
       reader.onload = function (e) {
         if (this.refs.image) {
-          this.refs.image.getDOMNode().src = e.target.result;
+          let img = this.refs.image.getDOMNode()
+          img.src = e.target.result
+          // let exif = EXIF.readFromBinaryFile(e.target.result)
+          // let ori = exif.Orientation
+          // switch (ori) {
+          //   case 6:
+          //     break;
+          //   case 3:
+          //     Rotate(img, '180deg');
+          //     break;
+          //   case 8:
+          //     Rotate(img, '270deg');
+          //     break;
+          // }
         }
       }.bind(this)
       reader.onloadend = function (e) {

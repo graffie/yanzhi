@@ -32,10 +32,10 @@ let Footer = React.createClass({
 
   handleFileClick(e) {
 
-    if (!Store.getUser()) {
-    e.preventDefault()
-      return this.transitionTo('login', this.getRoute())
-    }
+    // if (!Store.getUser()) {
+    // e.preventDefault()
+    //   return this.transitionTo('login', this.getRoute())
+    // }
 
   },
 
