@@ -8,7 +8,6 @@
  * Module dependencies.
  */
 var xhr = require('xhr');
-var Promise = require('es6-promise').Promise;
 
 module.exports = {
 

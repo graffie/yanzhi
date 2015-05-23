@@ -34,7 +34,7 @@ let App = React.createClass({
     return (
       <div>
         <Header />
-        <RouteHandler />
+        <RouteHandler preRoute={this.props.preRoute}/>
         <Footer />
         <Crouton />
       </div>

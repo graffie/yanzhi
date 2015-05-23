@@ -22,6 +22,5 @@ export default class PhotoList extends React.Component {
 }
 
 PhotoList.defaultProps = {
-  photos: [],
   feeds: []
 }

@@ -10,12 +10,14 @@ const SIGNUP_EVENT = 'signup'
 const LOGIN_EVENT = 'login'
 const FEEDS_EVENT = 'feeds'
 const FEED_EVENT = 'feed'
+const SELF_EVENT = 'selt'
 const USER_EVENT = 'user'
 
 var crouton = null
 var feeds = []
 var comments = {}
-var user = null
+var selfobj = null
+var user = {}
 
 function getFeedById(fid) {
   for (let i = feeds.length - 1; i >= 0; i--) {
@@ -24,11 +26,13 @@ function getFeedById(fid) {
       return f
     }
   }
-  return null
+  let c = comments[fid]
+  return c ? c.feed : null
 }
 
 function getCommentById(fid) {
-  return comments[fid]
+  let c = comments[fid]
+  return c ? c.comments : null
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -116,6 +120,22 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   getCommentById: getCommentById,
 
+  emitSelf: function () {
+    this.emit(SELF_EVENT)
+  },
+
+  addSelfListener: function (cb) {
+    this.on(SELF_EVENT, cb)
+  },
+
+  removeSelfListener: function (cb) {
+    this.removeListener(SELF_EVENT, cb)
+  },
+
+  getSelf: function () {
+    return selfobj
+  },
+
   emitUser: function () {
     this.emit(USER_EVENT)
   },
@@ -128,8 +148,8 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(USER_EVENT, cb)
   },
 
-  getUser: function () {
-    return user
+  getUser: function (uid) {
+    return user[uid]
   }
 
 })
@@ -150,11 +170,14 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
       feeds = feeds.concat(action.data)
       return AppStore.emitFeeds()
     case ActionTypes.GET_SELF_SUCCESS:
-      user = action.data
-      return AppStore.emitUser()
+      selfobj = action.data
+      return AppStore.emitSelf()
     case ActionTypes.GET_FEED_SUCCESS:
       comments[action.id] = action.data
       return AppStore.emitFeed()
+    case ActionTypes.GET_USER_SUCCESS:
+      user[action.uid] = action.data
+      return AppStore.emitUser()
   }
 })
 

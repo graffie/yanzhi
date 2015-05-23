@@ -17,6 +17,7 @@ let Signup  = React.createClass({
 
   getInitialState() {
     return {
+      loading: false,
       name: '',
       password: ''
     }
@@ -26,14 +27,22 @@ let Signup  = React.createClass({
 
   componentWillMount() {
     Store.addSignupListener(this.onListener)
+    Store.addSelfListener(this.onSeflListener)
   },
 
   componentWillUnmount() {
     Store.removeSignupListener(this.onListener)
+    Store.removeSelfListener(this.onSeflListener)
+  },
+
+  onSeflListener() {
+    // this.replaceWith('login', this.getParams())
   },
 
   onListener() {
-    this.replaceWith('login', this.getParams())
+    this.setState({
+      loading: false
+    })
   },
 
   goToLogin(e) {
@@ -64,13 +73,16 @@ let Signup  = React.createClass({
   handleSubmit(e) {
     e.preventDefault()
     if (this.state.name.length >= 0 && this.state.password.length >= 0) {
+      this.setState({
+        loading: true
+      })
       AppActionCreator.signup(this.state)
     }
   },
 
   render() {
     return (
-      <Modal show>
+      <Modal show loading={this.state.loading}>
         <div className='login'>
           <div className='form'>
             <div className='field'>
@@ -86,7 +98,7 @@ let Signup  = React.createClass({
               <div className='control'>
                 <span>密  码</span>
               </div>
-              <input type='text' name='password'
+              <input type='password' name='password'
                 value={this.state.password}
                 onChange={this.handleOnChange} />
             </div>

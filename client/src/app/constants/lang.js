@@ -2,7 +2,9 @@ module.exports = {
   'zh-cn': {
     user: {
       login_failed: '用户名或密码错误',
-      signup_failed : '注册失败'
+      signup_failed : '注册失败',
+      get_user_failed: '获取用户信息失败',
+      get_self_failed: '获取账户信息失败'
     },
 
     feed: {

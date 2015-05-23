@@ -1,6 +1,7 @@
 import React from 'react'
 
 import PhotoList from './PhotoList'
+import NoPhotos from './NoPhotos'
 
 export default class User extends React.Component {
 
@@ -11,6 +12,12 @@ export default class User extends React.Component {
 
   render() {
     let {user} = this.props
+    let feeds = null
+    if (user.feeds.length > 0 ) {
+      feeds = <PhotoList feeds={user.feeds} />
+    } else {
+      feeds = <NoPhotos />
+    }
     return (
       <div className='person '>
         <div className='header'>
@@ -20,7 +27,7 @@ export default class User extends React.Component {
             <img src={user.avatar} />
           </div>
         </div>
-       <PhotoList photos={user.photos} />
+        {feeds}
       </div>
     )
   }

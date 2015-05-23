@@ -15,14 +15,12 @@ let Tab = React.createClass({
     willTransitionTo: function (transition, params) {
       switch (params.tab) {
         case 'user':
-          if (!Store.getUser()) {
+          if (!Store.getSelf()) {
             transition.redirect('login', {tab: 'explore'})
           }
           break;
         default:
-          if (Store.getFeeds().length <= 0) {
-            getFeeds()
-          }
+
           break;
       }
     }
@@ -30,15 +28,25 @@ let Tab = React.createClass({
 
   getInitialState: function() {
     return {
-      loading: true,
-      user: {},
+      loading: false,
+      user: Store.getSelf(),
       feeds: Store.getFeeds()
     }
   },
 
   mixins: [Navigation, State],
 
+  setloading(b) {
+    this.setState({
+      loading: b
+    });
+  },
+
   componentWillMount() {
+    if (Store.getFeeds().length <= 0) {
+      getFeeds()
+      this.setloading(true)
+    }
     Store.addFeedsListener(this.onFeedsChange)
   },
 
@@ -64,7 +72,7 @@ let Tab = React.createClass({
     return (
       <div>
         <div id='main'>{section}</div>
-        <RouteHandler />
+        <RouteHandler preRoute={this.props.preRoute}/>
         <Loading loading={this.state.loading}/>
       </div>
     )
