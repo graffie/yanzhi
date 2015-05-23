@@ -356,116 +356,121 @@ img.avatar {
   h3 {
       @include font-size($large);
   }
-  .photos {
-    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-    display: -ms-flexbox;      /* TWEENER - IE 10 */
-    display: -webkit-flex;     /* NEW - Chrome */
-    display: flex;
-    -webkit-flex-wrap:wrap; /* 容器内元素可换行 */
-    -moz-flex-wrap:wrap; /* 容器内元素可换行 */
-    -ms-flex-wrap:wrap; /* 容器内元素可换行 */
-    -ms-justify-content: space-between; /* 间距平分 */
-    -moz-justify-content: space-between; /* 间距平分 */
-	  -webkit-justify-content: space-between; /* 间距平分 */
-    justify-content:space-between;
-    padding-top: 12px;
-    // width: 99.9%;
-    // margin: 0 auto;
-    margin-left: 8px;
-    margin-right: 18px;
-    .item {
-      height: 160px;
-      width: 160px;
-      margin: 6px 0 0 8px;
-      border-radius: $radius 0 0 $radius;
-      border-color: rgba(0, 0, 0, 0.15);
-      border-width: thin;
-      border-style: solid;
-      padding: 3px;
-      position: relative;
-      div {
-        left: 50%;
-        height: 100%;
-        float: left;
-        position: relative;
-      }
-      img {
-        display: block;
-        position: relative;
-        left: -50%;
-        max-height: 100%;
-        max-width: 100%;
-      }
-      .score {
-        // display: none;
-        height: 20px;
-        position: absolute;
-        left: 0;
-        margin: 8px;
-        text-align: left;
-        span {
-          height: 100%;
-          width: 100%;
-          line-height: normal;
-          color: $red;
-          font-size: 0.89em;
-          letter-spacing: 0.1em;
-        }
-        .icon-h:before {
-          content: "\e601";
-          padding-right: $gutter/10;
-        }
-      }
-      div {
-        bottom: 0;
-        text-align: center;
-      }
-    }
-    // .item:hover .score {
-    //   display: block;
-    // }
-  }
-
-  .person {
-    .header {
-      // padding-bottom: 45px;
-      width: 100%;
-      overflow: hidden;
-      *position: relative;
-      text-align: center;
-      display: inline-block;
-      h2 {
-        color: $blue;
-        margin-top: 15px;
-      }
-      .line {
-        height: 1px;
-        margin-top: 40px;
-        background-color: rgba(0,0,0,0.12);
-      }
-      .avatar {
-        position: absolute;
-        z-index: 2;
-        left: 50%;
-        top: 0;
-        margin-left: -45px;
-        margin-top: 75px;
-        display: none;
-        img {
-          margin-right: $gutter/4;
-          width: 90px;
-          height: 90px;
-          border-radius:50%;
-          margin-right:$gutter/2;
-          display: block;
-          position: relative;
-        }
-      }
-    }
-  }
 
 }
+
+.photos {
+  display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
+  display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
+  display: -ms-flexbox;      /* TWEENER - IE 10 */
+  display: -webkit-flex;     /* NEW - Chrome */
+  display: flex;
+  -webkit-flex-wrap:wrap; /* 容器内元素可换行 */
+  -moz-flex-wrap:wrap; /* 容器内元素可换行 */
+  -ms-flex-wrap:wrap; /* 容器内元素可换行 */
+  -ms-justify-content: space-between; /* 间距平分 */
+  -moz-justify-content: space-between; /* 间距平分 */
+  -webkit-justify-content: space-between; /* 间距平分 */
+  justify-content:space-between;
+  padding-top: 12px;
+  // width: 99.9%;
+  // margin: 0 auto;
+  margin-left: 8px;
+  margin-right: 18px;
+  .no {
+    margin: 0 auto;
+  }
+  .item {
+    height: 160px;
+    width: 160px;
+    margin: 6px 0 0 8px;
+    border-radius: $radius 0 0 $radius;
+    border-color: rgba(0, 0, 0, 0.15);
+    border-width: thin;
+    border-style: solid;
+    padding: 3px;
+    position: relative;
+    div {
+      left: 50%;
+      height: 100%;
+      float: left;
+      position: relative;
+    }
+    img {
+      display: block;
+      position: relative;
+      left: -50%;
+      max-height: 100%;
+      max-width: 100%;
+    }
+    .score {
+      // display: none;
+      height: 20px;
+      position: absolute;
+      left: 0;
+      margin: 8px;
+      text-align: left;
+      span {
+        height: 100%;
+        width: 100%;
+        line-height: normal;
+        color: $red;
+        font-size: 0.89em;
+        letter-spacing: 0.1em;
+      }
+      .icon-h:before {
+        content: "\e601";
+        padding-right: $gutter/10;
+      }
+    }
+    div {
+      bottom: 0;
+      text-align: center;
+    }
+  }
+  // .item:hover .score {
+  //   display: block;
+  // }
+}
+
+.person {
+  .header {
+    // padding-bottom: 45px;
+    width: 100%;
+    overflow: hidden;
+    *position: relative;
+    text-align: center;
+    display: inline-block;
+    h2 {
+      color: $blue;
+      margin-top: 15px;
+    }
+    .line {
+      height: 1px;
+      margin-top: 40px;
+      background-color: rgba(0,0,0,0.12);
+    }
+    .avatar {
+      position: absolute;
+      z-index: 2;
+      left: 50%;
+      top: 0;
+      margin-left: -45px;
+      margin-top: 75px;
+      display: none;
+      img {
+        margin-right: $gutter/4;
+        width: 90px;
+        height: 90px;
+        border-radius:50%;
+        margin-right:$gutter/2;
+        display: block;
+        position: relative;
+      }
+    }
+  }
+}
+
 /*footer*/
 #footer {
   position: fixed;
@@ -877,7 +882,7 @@ img.avatar {
               color: #000;
               .avatar {
                 margin: 0 auto;
-                display: block;
+                display: none;
                 float: none;
               }
               span {
