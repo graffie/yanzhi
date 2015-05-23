@@ -72,7 +72,7 @@ let Tab = React.createClass({
     return (
       <div>
         <div id='main'>{section}</div>
-        <RouteHandler preRoute={this.props.preRoute}/>
+        <RouteHandler />
         <Loading loading={this.state.loading}/>
       </div>
     )
