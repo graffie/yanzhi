@@ -7,13 +7,7 @@ import cache from '../../utils/cache'
 import {Crouton, createFeed} from '../../actions/AppActionCreator'
 import Store from '../../stores/AppStore'
 
-let Login  = React.createClass({
-
-  statics: {
-    willTransitionFrom(transition, component) {
-      cache.file = null
-    }
-  },
+let Upload  = React.createClass({
 
   propTypes: {
 
@@ -36,6 +30,7 @@ let Login  = React.createClass({
   },
 
   componentWillUnmount() {
+    cache.file = null
     Store.removeCreateListener(this.onUploadChange)
   },
 
@@ -98,10 +93,6 @@ let Login  = React.createClass({
     }
   },
 
-  componentWillUnmount() {
-    cache.file = null
-  },
-
   handleImageUpload(e) {
     if (!this.kit) {
       return Crouton.showInfo('您尚未选择任何照片，请点击关闭后重试')
@@ -138,4 +129,4 @@ let Login  = React.createClass({
   }
 })
 
-export default Login
+export default Upload

@@ -346,6 +346,7 @@ img.avatar {
 #main {
   margin-top: $header;
   margin-bottom: $header;
+  overflow-x: hidden;
   h1 {
       @include font-size($gigantic);
       line-height: 120%;
@@ -377,6 +378,7 @@ img.avatar {
   // margin: 0 auto;
   margin-left: 8px;
   margin-right: 8px;
+  max-width: 99.9%;
   .no {
     margin: 0 auto;
   }
