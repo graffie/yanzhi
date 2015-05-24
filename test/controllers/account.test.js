@@ -165,15 +165,25 @@ describe('controllers/account.test.js', function () {
       })
       .expect(500, done);
     });
-    it('should 200', function (done) {
+    it('should 200 with redirect', function (done) {
+      var userName = 'unittest' + Date.now();
       request(app)
       .post('/join')
       .send({
-        name: 'unittest' + Date.now(),
+        name: userName,
         password: '123',
+        redirect: '/user/123'
       })
       .expect(200)
-      .expect({status: 200}, done);
+      .end(function (err, res) {
+        res.body.status.should.equal(200);
+        res.body.redirect.should.equal('/user/123');
+        res.body.user.id.should.above(0);
+        res.body.user.name.should.equal(userName);
+        should.not.exist(res.body.user.password);
+        should.not.exist(res.body.user.mobile);
+        done(err);
+      });
     });
   });
 });

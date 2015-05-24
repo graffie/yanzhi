@@ -11,6 +11,15 @@
 var User = require('../proxy/user');
 var parse = require('url').parse;
 
+function parseRedirect(redirect) {
+  redirect = redirect || '/';
+  var result = parse(redirect);
+  result = (result.host || result.protocol)
+    ? '/'
+    : (result.path || '/');
+  return result;
+}
+
 exports.login = function* () {
   if (!this.request.body.name || !this.request.body.password) {
     return this.body = {
@@ -27,11 +36,6 @@ exports.login = function* () {
     };
   }
 
-  var redirect = parse(this.request.body.redirect || '/');
-  redirect = redirect.host || redirect.protocol
-    ? '/'
-    : (redirect.path || '/');
-
   // Set session
   delete user.password;
   delete user.mobile;
@@ -39,7 +43,7 @@ exports.login = function* () {
   this.body = {
     status: 200,
     user: user,
-    redirect: redirect,
+    redirect: parseRedirect(this.request.body.redirect),
   };
 };
 
@@ -68,8 +72,14 @@ exports.join = function* () {
     throw err;
   }
 
-  this.session.user = yield User.getByName(this.request.body.name);
+  var user = yield User.getByName(this.request.body.name);
+  // Set session
+  delete user.password;
+  delete user.mobile;
+  this.session.user = user;
   this.body = {
-    status: 200
+    status: 200,
+    user: user,
+    redirect: parseRedirect(this.request.body.redirect),
   };
 };
