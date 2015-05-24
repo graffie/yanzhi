@@ -173,6 +173,7 @@ describe('controllers/feed.test.js', function () {
       .end(function (err, res) {
         res.body.id.should.above(0);
         res.body.user_id.should.equal(user.id);
+        res.body.user_name.should.equal(user.name);
         res.body.content.should.equal('unittest_feed_01');
         res.body.location.should.equal('杭州市西湖区');
         res.body.pic.should.be.a.String;
@@ -193,6 +194,7 @@ describe('controllers/feed.test.js', function () {
       .end(function (err, res) {
         res.body.id.should.above(0);
         res.body.user_id.should.equal(user.id);
+        res.body.user_name.should.equal(user.name);
         res.body.content.should.equal('unittest_feed_02');
         res.body.lat.should.equal('32.321');
         res.body.location.should.equal('杭州市江干区');
@@ -214,6 +216,7 @@ describe('controllers/feed.test.js', function () {
       .end(function (err, res) {
         res.body.id.should.above(0);
         res.body.user_id.should.equal(user.id);
+        res.body.user_name.should.equal(user.name);
         res.body.content.should.equal('unittest_feed_03');
         res.body.lat.should.equal('32.123');
         res.body.location.should.equal('长沙市开福区');
