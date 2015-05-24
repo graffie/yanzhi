@@ -7,6 +7,7 @@
 /**
  * Module dependencies.
  */
+var FeedsScore = require('../proxy/feeds_score');
 var Comment = require('../proxy/comment');
 var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
@@ -36,6 +37,7 @@ exports.show = function* (next) {
   var r = yield {
     feed: Feed.getById(feedId),
     comments: Comment.getByFeed(feedId),
+    scores: FeedsScore.getByFeed(feedId),
   };
   this.status = 200;
   this.body = r;
@@ -79,6 +81,7 @@ exports.create = function* (next) {
   var feed = only(body, props);
   feed.pic = picUrl;
   feed.userId = userId;
+  feed.userName = this.user.name;
 
   var res = yield Feed.add(feed);
   feed.id = res.insertId;
@@ -103,6 +106,14 @@ exports.vote = function* (next) {
   var score = this.request.body.type === 'up' ? 5 : -5;
   feed.score = feed.score + score;
   var res = yield Feed.update(feedId, {score: feed.score});
+  if (this.user.id) {
+    yield FeedsScore.add({
+      feedId: feedId,
+      userId: this.user.id,
+      userName: this.user.name,
+      score: feed.score,
+    });
+  }
   this.status = 200;
   this.body = feed;
 };
@@ -116,6 +127,7 @@ exports.destroy = function* (next) {
   var userId = this.user.id;
 
   yield Feed.remove(feedId, userId);
+
   this.status = 200;
   this.body = {
     id: feedId
