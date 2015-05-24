@@ -28,6 +28,10 @@ module.exports = {
     GET_FEEDS_SUCCESS: null,
     GET_FEED_SUCCESS: null,
 
+    CREATE_FEED: null,
+    CREATE_FEED_SUCCESS: null,
+    CREATE_FEED_FAILED: null,
+
     // Crouton
     SHOW_CROUTON: null
   }),

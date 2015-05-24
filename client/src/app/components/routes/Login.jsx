@@ -33,6 +33,9 @@ let Login  = React.createClass({
   },
 
   onListener() {
+    this.setState({
+      loading: false
+    });
     if(History.length > 1) {
       this.goBack()
     } else {
@@ -74,7 +77,7 @@ let Login  = React.createClass({
 
   render() {
     return (
-      <Modal show>
+      <Modal show loading={this.state.loading}>
         <div className='login'>
           <div className='form'>
             <div className='field'>

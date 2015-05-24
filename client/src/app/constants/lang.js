@@ -9,6 +9,7 @@ module.exports = {
 
     feed: {
       upload_failed: '上传图片失败',
+      upload_success: '上传图片成功',
       list_feed_failed: '获取图片流错误',
       get_feed_failed: '获取评论失败'
     },

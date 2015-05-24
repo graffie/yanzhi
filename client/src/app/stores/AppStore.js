@@ -12,6 +12,7 @@ const FEEDS_EVENT = 'feeds'
 const FEED_EVENT = 'feed'
 const SELF_EVENT = 'selt'
 const USER_EVENT = 'user'
+const CREATE_EVENT = 'create'
 
 var crouton = null
 var feeds = []
@@ -150,7 +151,19 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   getUser: function (uid) {
     return user[uid]
-  }
+  },
+
+  emitCreate: function () {
+    this.emit(CREATE_EVENT)
+  },
+
+  addCreateListener: function (cb) {
+    this.on(CREATE_EVENT, cb)
+  },
+
+  removeCreateListener: function (cb) {
+    this.removeListener(CREATE_EVENT, cb)
+  },
 
 })
 
@@ -160,11 +173,11 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
   switch (action.type) {
     case ActionTypes.SHOW_CROUTON:
       crouton = action.data
-      AppStore.emitCrouton()
-      break
+      return AppStore.emitCrouton()
     case ActionTypes.USER_SIGNUP_SUCCESS:
       return AppStore.emitSignup()
     case ActionTypes.USER_LOGIN_SUCCESS:
+    case ActionTypes.USER_LOGIN_FAILED:
       return AppStore.emitLogin()
     case ActionTypes.GET_FEEDS_SUCCESS:
       feeds = feeds.concat(action.data)
@@ -178,6 +191,9 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.GET_USER_SUCCESS:
       user[action.uid] = action.data
       return AppStore.emitUser()
+    case ActionTypes.CREATE_FEED_SUCCESS:
+    case ActionTypes.CREATE_FEED_FAILED:
+      return AppStore.emitCreate()
   }
 })
 

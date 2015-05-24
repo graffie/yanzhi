@@ -6,7 +6,7 @@ import { RouteHandler, Navigation, State } from 'react-router'
 import PhotoList from '../views/PhotoList'
 import User from '../views/User'
 import Loading from '../views/Loading'
-import {Crouton, getFeeds} from '../../actions/AppActionCreator'
+import {Crouton, getFeeds, me} from '../../actions/AppActionCreator'
 import Store from '../../stores/AppStore'
 
 let Tab = React.createClass({
@@ -17,10 +17,9 @@ let Tab = React.createClass({
         case 'user':
           if (!Store.getSelf()) {
             transition.redirect('login', {tab: 'explore'})
+          } else {
+            me()
           }
-          break;
-        default:
-
           break;
       }
     }
@@ -48,10 +47,18 @@ let Tab = React.createClass({
       this.setloading(true)
     }
     Store.addFeedsListener(this.onFeedsChange)
+    Store.addSelfListener(this.onSelfChange)
   },
 
   componentWillUnmount() {
     Store.removeFeedsListener(this.onFeedsChange)
+    Store.removeSelfListener(this.onSelfChange)
+  },
+
+  onSelfChange() {
+    this.setState({
+      user: Store.getSelf()
+    });
   },
 
   onFeedsChange() {

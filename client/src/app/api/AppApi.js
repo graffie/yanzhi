@@ -38,7 +38,7 @@ api['feed'] = function (fid) {
     },
 
     create: function(data) {
-      return request.post('/api/feed', data, {'Content-Type': 'multipart/form-data'})
+      return request.post('/api/feed', data)
     },
 
     vote: function (data) {

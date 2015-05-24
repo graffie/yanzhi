@@ -57,6 +57,9 @@ var AppActionCreator = {
       })
     }).catch((err) => {
       Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.USER_LOGIN_FAILED
+      })
     })
   },
 
@@ -173,22 +176,32 @@ var AppActionCreator = {
     })
   },
 
-  uploadPhoto(data) {
+  createFeed(data) {
     AppAPI.feed().create(data).then(function (res) {
-      if (res.statusCode != 200 || !res.body) {
+      if (res.statusCode != 201 || !res.body) {
         return Crouton.show({
           message: lang.feed.upload_failed,
           autoMiss: false,
           buttons: [{
             name: lang.button.retry,
-            listener: AppActionCreator.uploadPhoto.bind(null, data)
+            listener: AppActionCreator.createFeed.bind(null, data)
           }, {
             name: lang.button.ignore
           }]
         })
+      }else {
+        Crouton.showInfo(lang.feed.upload_success)
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.CREATE_FEED_SUCCESS,
+          data: res.body
+        })
       }
     }).catch((err) => {
+      console.log(err.stack)
       Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+          type: ActionTypes.CREATE_FEED_FAILED
+      })
     })
   }
 

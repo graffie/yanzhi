@@ -4,7 +4,8 @@ import cx from 'classnames'
 
 import Modal from '../views/Modal'
 import cache from '../../utils/cache'
-import {Crouton, uploadPhoto} from '../../actions/AppActionCreator'
+import {Crouton, createFeed} from '../../actions/AppActionCreator'
+import Store from '../../stores/AppStore'
 
 let Login  = React.createClass({
 
@@ -31,7 +32,11 @@ let Login  = React.createClass({
   mixins: [Navigation, State],
 
   componentWillMount() {
+    Store.addCreateListener(this.onUploadChange)
+  },
 
+  componentWillUnmount() {
+    Store.removeCreateListener(this.onUploadChange)
   },
 
   componentDidMount() {
@@ -48,12 +53,9 @@ let Login  = React.createClass({
       })
       this.kit.ui.selectOperations({ only: 'filters, crop, rotation, stickers' });
     }
-
     if (cache.file) {
-      console.log(cache.file)
       let reader = new FileReader()
       reader.onloadstart = function(e) {
-
       }
       reader.onload = function (e) {
         if (this.refs.image) {
@@ -82,9 +84,16 @@ let Login  = React.createClass({
     }
   },
 
+  onUploadChange() {
+    this.setState({
+      loading: false
+    });
+  },
+
   handleImageLoad() {
     if (this.kit) {
       this.kit.run()
+      this.kit.ui.controls.crop.addRatio('square', '1', true);
       this.kit.ui.controls.crop.selectRatios({ only: 'square'})
     }
   },
@@ -99,7 +108,13 @@ let Login  = React.createClass({
     }
     this.kit.render('data-url', 'image/png')
       .then((data) => {
-        uploadPhoto(data)
+        this.setState({
+          loading: true
+        });
+        createFeed({
+           attachment: data,
+           contentType: 'image/png'
+        })
       }).catch((err) => {
         console.log(err)
       })

@@ -21,7 +21,7 @@ module.exports = {
         method: method,
         json: body || {},
         uri: uri,
-        timeout: 10 * 1000,
+        timeout: 100 * 1000,
         headers: headers
       }, function (err, res) {
         if (err) {
