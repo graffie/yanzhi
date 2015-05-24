@@ -368,10 +368,10 @@ img.avatar {
   -webkit-flex-wrap:wrap; /* 容器内元素可换行 */
   -moz-flex-wrap:wrap; /* 容器内元素可换行 */
   -ms-flex-wrap:wrap; /* 容器内元素可换行 */
-  -ms-justify-content: space-between; /* 间距平分 */
-  -moz-justify-content: space-between; /* 间距平分 */
-  -webkit-justify-content: space-between; /* 间距平分 */
-  justify-content:space-between;
+  -ms-justify-content: flex-start; /* 间距平分 */
+  -moz-justify-content: flex-start; /* 间距平分 */
+  -webkit-justify-content: flex-start; /* 间距平分 */
+  justify-content:flex-start;
   padding-top: 12px;
   // width: 99.9%;
   // margin: 0 auto;
@@ -381,8 +381,8 @@ img.avatar {
     margin: 0 auto;
   }
   .item {
-    height: 160px;
-    width: 160px;
+    height: 130px;
+    width: 130px;
     margin: 6px 0 0 8px;
     border-radius: $radius 0 0 $radius;
     border-color: rgba(0, 0, 0, 0.15);
@@ -390,6 +390,36 @@ img.avatar {
     border-style: solid;
     padding: 3px;
     position: relative;
+    //iphone6
+    @media (max-width: 400px) and (min-width: 350px) {
+      height: 155px;
+      width: 155px;
+      margin-left: 4px;
+    }
+    // horizontal 6
+    @media (max-width: 675px) and (min-width: 650px) {
+      height: 148px;
+      width: 148px;
+      margin-left: 4px;
+    }
+    // iphone 6plus
+    @media (max-width: 450px) and (min-width: 400px) {
+      height: 113px;
+      width: 113px;
+    }
+    // horizontal 6plus
+    @media (max-width: 750px) and (min-width: 700px) {
+      height: 125px;
+      width: 125px;
+    }
+    @media (max-width: 300px) and (min-width: 200px) {
+      height: 110px;
+      width: 110px;
+    }
+    @media (max-width: 200px){
+      height: 110px;
+      width: 100%;
+    }
     div {
       left: 50%;
       height: 100%;
