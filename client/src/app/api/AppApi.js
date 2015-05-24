@@ -10,7 +10,7 @@ var api = {}
 
 api['user'] = function (uid) {
   return {
-    me: function() {
+    me: function () {
       return request.get('/api/me')
     },
     get: function () {
@@ -27,17 +27,25 @@ api['user'] = function (uid) {
   }
 }
 
+api['sys'] = function () {
+  return {
+    wxtoken: function () {
+      return request.get('/sys/weixin/token')
+    }
+  }
+}
+
 api['feed'] = function (fid) {
   return {
-    explore: function() {
+    explore: function () {
       return request.get('/api/feed')
     },
 
-    get: function() {
+    get: function () {
       return request.get(`/api/feed/${fid}`)
     },
 
-    create: function(data) {
+    create: function (data) {
       return request.post('/api/feed', data)
     },
 

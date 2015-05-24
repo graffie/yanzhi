@@ -97,14 +97,14 @@ let Upload  = React.createClass({
     if (!this.kit) {
       return Crouton.showInfo('您尚未选择任何照片，请点击关闭后重试')
     }
-    this.kit.render('data-url', 'image/png')
+    this.kit.render('data-url', 'image/jpeg')
       .then((data) => {
         this.setState({
           loading: true
         });
         createFeed({
            attachment: data,
-           contentType: 'image/png'
+           contentType: 'image/jpeg'
         })
       }).catch((err) => {
         console.log(err)

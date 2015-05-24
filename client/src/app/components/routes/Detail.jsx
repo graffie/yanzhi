@@ -5,6 +5,7 @@ import moment from 'moment'
 import Modal from '../views/Modal'
 import Comment from '../views/Comment'
 import Store from '../../stores/AppStore'
+import bio from '../../utils/bio'
 import {Crouton, getFeed, createComment, voteFeed} from '../../actions/AppActionCreator'
 
 import '../../utils/zh-cn'
@@ -108,6 +109,27 @@ let Detail  = React.createClass({
     }
     this.setLoading(true)
     createComment(this.props.params.id, obj)
+  },
+
+  handleShare(e) {
+    e.preventDefault()
+    if (typeof wx != undefined) {
+      wx.onMenuShareTimeline({
+        title: bio(this.state.feed.score),
+        link: window.location.href,
+        imgUrl: this.state.feed.pic,
+        trigger: function (res) {
+
+        },
+        success: function (res) {
+          Crouton.showInfo('分享成功')
+        },
+        cancel: function (res) {
+        },
+        fail: function (res) {
+        }
+      })
+    }
   },
 
   goToAuthor(e) {

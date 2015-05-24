@@ -16,7 +16,7 @@ export default class Loading extends React.Component {
     return (
       <div id='loading'
       style={style}
-      className={this.props.loading ? 'flower-loader' : ''} />
+      className={this.props.loading ? 'show heartbeat-loader' : ''} />
     )
   }
 }

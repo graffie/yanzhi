@@ -32,8 +32,8 @@ export default {
     });
   },
 
-  get(uri) {
-    return this._request('GET', uri);
+  get(uri, headers) {
+    return this._request('GET', uri, null, headers);
   },
 
   post(uri, body, headers) {

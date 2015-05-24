@@ -10,7 +10,7 @@ export default class NoPhotos extends React.Component {
   render() {
     return (
       <div className='photos'>
-          <div className='no'>您尚未发送任何照片\-(o_o)-/</div>
+          <div className='no'>您尚未上传任何照片\-(o_o)-/</div>
       </div>
     )
   }
