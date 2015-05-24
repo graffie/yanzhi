@@ -23,26 +23,31 @@ var GET_BY_FEED_SQL = multiline(function () {;/*
     `feeds_score`.`score`
   FROM `feeds_score`
   WHERE `feeds_score`.`feed_id` = ?
-  ORDER BY `feeds_score`.`id` DESC
-  LIMIT 100
+  ORDER BY `feeds_score`.`id` ASC
+  LIMIT 100;
 */});
 exports.getByFeed = function* (feedId) {
-  return yield db.queryOne(GET_BY_FEED_SQL, [feedId]);
+  return yield db.query(GET_BY_FEED_SQL, [feedId]);
 };
 
-var ADD_SQL = 'INSERT INTO `feeds_score` SET ?';
+var ADD_SQL = multiline(function () {;/*
+  INSERT INTO `feeds_score` SET ?
+  ON DUPLICATE KEY UPDATE ?;
+*/});
 exports.add = function* (feedScore) {
   feedScore = only(feedScore, 'feedId userId userName score');
   feedScore.gmtCreate = new Date();
   feedScore.gmtModified = feedScore.gmtCreate;
   feedScore = trans.camelToSnake(feedScore);
 
-  return yield db.query(ADD_SQL, [feedScore]);
+  var updateObj = only(feedScore, 'score gmtModified');
+
+  return yield db.query(ADD_SQL, [feedScore, updateObj]);
 };
 
 var REMOVE_SQL = multiline(function () {;/*
   DELETE FROM `feeds_score`
-  WHERE `feeds_score`.`feed_id` = ? AND `feeds_score`.`user_id` = ?
+  WHERE `feeds_score`.`feed_id` = ? AND `feeds_score`.`user_id` = ?;
 */});
 exports.remove = function* (feedId, userId) {
   return yield db.query(REMOVE_SQL, [feedId, userId]);

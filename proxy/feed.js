@@ -19,7 +19,7 @@ var GET_LATEST_SQL = multiline(function () {;/*
     `feeds`.`gmt_create` AS `gmtCreate`,
     `feeds`.`gmt_modified` AS `gmtModified`,
     `feeds`.`user_id` AS `userId`,
-    `users`.`name` AS `userName`,
+    `feeds`.`user_name` AS `userName`,
     `feeds`.`lng`,
     `feeds`.`lat`,
     `feeds`.`location`,
@@ -27,9 +27,7 @@ var GET_LATEST_SQL = multiline(function () {;/*
     `feeds`.`content`,
     `feeds`.`score`
   FROM `feeds`
-  LEFT OUTER JOIN `users`
-  ON `users`.`id` = `feeds`.`user_id`
-  ORDER BY `feeds`.`gmt_create` ASC
+  ORDER BY `feeds`.`id` ASC
   LIMIT ?, 100
 */});
 exports.getLatest = function* (offset) {
@@ -55,7 +53,7 @@ var GET_BY_USER_SQL = multiline(function () {;/*
     `feeds`
   WHERE
     `feeds`.`user_id` = ?
-  ORDER BY `feeds`.`gmt_create` ASC
+  ORDER BY `feeds`.`id` ASC
   LIMIT ?, 100
 */});
 exports.getByUser = function* (userId, offset) {
@@ -72,7 +70,7 @@ var GET_BY_ID_SQL = multiline(function () {;/*
     `feeds`.`gmt_create` AS `gmtCreate`,
     `feeds`.`gmt_modified` AS `gmtModified`,
     `feeds`.`user_id` AS `userId`,
-    `users`.`name` AS `userName`,
+    `feeds`.`user_name` AS `userName`,
     `feeds`.`lng`,
     `feeds`.`lat`,
     `feeds`.`location`,
@@ -80,8 +78,6 @@ var GET_BY_ID_SQL = multiline(function () {;/*
     `feeds`.`content`,
     `feeds`.`score`
   FROM `feeds`
-  LEFT OUTER JOIN `users`
-  ON `users`.`id` = `feeds`.`user_id`
   WHERE `feeds`.`id` = ?
   LIMIT 1
 */});
@@ -91,7 +87,7 @@ exports.getById = function* (feedId) {
 
 var ADD_SQL = 'INSERT INTO `feeds` SET ?';
 exports.add = function* (feed) {
-  feed = only(feed, 'userId lng lat location pic content');
+  feed = only(feed, 'userId userName lng lat location pic content');
   feed.gmtCreate = new Date();
   feed.gmtModified = feed.gmtCreate;
   feed = trans.camelToSnake(feed);

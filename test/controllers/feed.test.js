@@ -7,6 +7,7 @@
 /**
  * Module dependencies.
  */
+var FeedsScore = require('../../proxy/feeds_score');
 var Comment = require('../../proxy/comment');
 var Store = require('../../common/oss');
 var User = require('../../proxy/user');
@@ -17,11 +18,13 @@ var should = require('should');
 var mock = require('../mock');
 var bytes = require('bytes');
 var path = require('path');
+var co = require('co');
 var fs = require('fs');
 var mm = require('mm');
 
 var user;
 var feeds = mock.feeds;
+var agent;
 
 var MOCK_PNG = fs.readFileSync(path.join(__dirname, '../fixtures/test.png'), 'base64');
 var MOCK_JPG = fs.readFileSync(path.join(__dirname, '../fixtures/test.jpeg'), 'base64');
@@ -29,7 +32,7 @@ var MOCK_BASE64 = fs.readFileSync(path.join(__dirname, '../fixtures/test.base64'
 
 describe('controllers/feed.test.js', function () {
 
-  before(function* () {
+  before(function* (done) {
     user = yield User.getByName(mock.users[0].name);
 
     for (var i = 0; i < feeds.length; i++) {
@@ -37,6 +40,10 @@ describe('controllers/feed.test.js', function () {
       var res = yield Feed.add(feeds[i]);
       feeds[i].id = res.insertId;
     }
+
+    agent = request.agent(app);
+    agent.post('/login')
+    .send(mock.users[0]).end(done);
   });
 
   afterEach(mm.restore);
@@ -108,15 +115,6 @@ describe('controllers/feed.test.js', function () {
   });
 
   describe('POST /api/feed', function () {
-
-    var agent;
-
-    before(function (done) {
-      agent = request.agent(app);
-      agent.post('/login')
-      .send(mock.users[0]).end(done);
-    });
-
     it('should 422 when invalid params', function (done) {
       agent
       .post('/api/feed')
@@ -225,14 +223,6 @@ describe('controllers/feed.test.js', function () {
     });
   });
   describe('DELETE /api/feed/:feedId', function () {
-    var agent;
-
-    before(function (done) {
-      agent = request.agent(app);
-      agent.post('/login')
-      .send(mock.users[0]).end(done);
-    });
-
     it('should 500 when Feed.remove error', function (done) {
       mm.error(Feed, 'remove', 'mock Feed.remove error');
       agent
@@ -249,21 +239,21 @@ describe('controllers/feed.test.js', function () {
   describe('POST /api/feed/:feedId/vote', function () {
 
     it('should 422 when invalid vote type', function (done) {
-      request.agent(app)
+      request(app)
       .post('/api/feed/' + feeds[1].id + '/vote')
       .send({type: 'invalid'})
       .expect(422, done);
     });
     it('should 500 when Feed.getById error', function (done) {
       mm.error(Feed, 'getById', 'mock Feed.getById error');
-      request.agent(app)
+      request(app)
       .post('/api/feed/' + feeds[1].id + '/vote')
       .send({type: 'up'})
       .expect(500, done);
     });
     it('should 400 when feed not found', function (done) {
       mm.empty(Feed, 'getById');
-      request.agent(app)
+      request(app)
       .post('/api/feed/' + feeds[1].id + '/vote')
       .send({type: 'up'})
       .expect(400)
@@ -271,22 +261,43 @@ describe('controllers/feed.test.js', function () {
     });
     it('should 500 when Feed.update error', function (done) {
       mm.error(Feed, 'update', 'mock Feed.update error');
-      request.agent(app)
+      request(app)
       .post('/api/feed/' + feeds[1].id + '/vote')
       .send({type: 'up'})
       .expect(500, done);
     });
-    it('should 200', function (done) {
-      request.agent(app)
+    it('should 200 when no login', function (done) {
+      request(app)
       .post('/api/feed/' + feeds[1].id + '/vote')
       .send({type: 'down'})
       .expect(200)
       .end(function (err, res) {
         res.body.id.should.equal(feeds[1].id);
         res.body.score.should.equal(-5);
-        require('co')(function* () {
+        co(function* () {
           var feed = yield Feed.getById(res.body.id);
           feed.score.should.equal(-5);
+          var feedScores = yield FeedsScore.getByFeed(res.body.id);
+          feedScores.length.should.equal(0);
+          done(err);
+        });
+      });
+    });
+    it('should 200 when login', function (done) {
+      agent
+      .post('/api/feed/' + feeds[2].id + '/vote')
+      .send({type: 'down'})
+      .expect(200)
+      .end(function (err, res) {
+        res.body.id.should.equal(feeds[2].id);
+        res.body.score.should.equal(-5);
+        co(function* () {
+          var feed = yield Feed.getById(res.body.id);
+          feed.score.should.equal(-5);
+          var feedScores = yield FeedsScore.getByFeed(res.body.id);
+          feedScores.length.should.equal(1);
+          feedScores[0].userId.should.equal(user.id);
+          feedScores[0].score.should.equal(-5);
           done(err);
         });
       });
