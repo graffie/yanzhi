@@ -11,6 +11,7 @@
 var middlewares = require('koa-middlewares');
 var account = require('./controllers/account');
 var comment = require('./controllers/comment');
+var weixin = require('./controllers/weixin');
 var pages = require('./controllers/pages');
 var feed = require('./controllers/feed');
 var user = require('./controllers/user');
@@ -29,6 +30,8 @@ module.exports = function (app) {
   app.post('/login', account.login);
   app.post('/logout', account.logout);
   app.post('/join', account.join);
+
+  app.get('/sys/weixin/token', weixin.token);
 
   // API
   app.get('/api/user/:userId', user.show);

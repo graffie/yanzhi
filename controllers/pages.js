@@ -9,7 +9,7 @@
  */
 var config = require('../config');
 var path = require('path');
-var send = require('koa-send')
+var send = require('koa-send');
 
 exports.index = function* (next) {
   yield send(this, path.join(config.rootdir, 'client/dist/index.html'));
