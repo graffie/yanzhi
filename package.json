@@ -10,6 +10,7 @@
     "ali-oss": "~2.2.0",
     "bcrypt": "~0.8.3",
     "bytes": "~2.1.0",
+    "co-urllib": "~0.2.3",
     "copy-to": "~2.0.1",
     "error-formatter": "~1.0.3",
     "graceful": "~1.0.0",
