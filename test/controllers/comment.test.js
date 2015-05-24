@@ -64,6 +64,7 @@ describe('controllers/comment.test.js', function () {
         res.body.feed_id.should.equal(feed.id);
         res.body.content.should.equal('unittest mock comment');
         res.body.user_id.should.equal(user.id);
+        res.body.user_name.should.equal(user.name);
         commentId = res.body.id;
         done(err);
       });
@@ -78,6 +79,7 @@ describe('controllers/comment.test.js', function () {
         res.body.feed_id.should.equal(feed.id);
         res.body.content.should.equal('unittest mock comment222');
         res.body.user_id.should.equal(0);
+        res.body.user_name.should.equal('');
         done(err);
       });
     });
