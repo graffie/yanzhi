@@ -1,5 +1,5 @@
 import React from 'react'
-import { Navigation, State } from 'react-router'
+import { Navigation, State, History} from 'react-router'
 import { trim } from 'validator'
 
 import Modal from '../views/Modal'
@@ -23,26 +23,27 @@ let Signup  = React.createClass({
     }
   },
 
-  mixins: [Navigation, State],
+  mixins: [Navigation, State, History],
 
   componentWillMount() {
     Store.addSignupListener(this.onListener)
-    Store.addSelfListener(this.onSeflListener)
   },
 
   componentWillUnmount() {
     Store.removeSignupListener(this.onListener)
-    Store.removeSelfListener(this.onSeflListener)
-  },
-
-  onSeflListener() {
-    // this.replaceWith('login', this.getParams())
   },
 
   onListener() {
     this.setState({
       loading: false
     })
+    if (Store.getSelf()) {
+      if (History.length > 1) {
+        this.goBack()
+      } else {
+        this.transitionTo('tab', this.props.params)
+      }
+    }
   },
 
   goToLogin(e) {

@@ -66,8 +66,15 @@ var AppActionCreator = {
   signup(data) {
     AppAPI.user().signup(data).then(function (res) {
       if (res.body && res.body.status != 200) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.USER_SIGNUP_FAILED
+        })
+        let msg = lang.user.signup_failed
+        if (res.body.message == 'duplicate error')  {
+          msg = lang.user.signup_duplicate_failed
+        }
         return Crouton.show({
-          message: lang.user.signup_failed,
+          message: msg,
           autoMiss: false,
           buttons: [{
             name: lang.button.retry,
@@ -78,9 +85,9 @@ var AppActionCreator = {
         })
       }
       AppActionCreator.me().then(() => {
+        Crouton.showInfo(lang.user.signup_success)
         AppDispatcher.handleServerAction({
-          type: ActionTypes.USER_SIGNUP_SUCCESS,
-          data: res.body
+            type: ActionTypes.USER_SIGNUP_SUCCESS
         })
       }).catch((err) => {
         Crouton.show({
@@ -96,6 +103,9 @@ var AppActionCreator = {
       })
     }).catch((err) => {
       Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+          type: ActionTypes.USER_SIGNUP_FAILED
+      })
     })
   },
 

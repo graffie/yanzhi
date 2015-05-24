@@ -201,6 +201,7 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
       crouton = action.data
       return AppStore.emitCrouton()
     case ActionTypes.USER_SIGNUP_SUCCESS:
+    case ActionTypes.USER_SIGNUP_FAILED:
       return AppStore.emitSignup()
     case ActionTypes.USER_LOGIN_SUCCESS:
     case ActionTypes.USER_LOGIN_FAILED:

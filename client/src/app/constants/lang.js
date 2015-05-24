@@ -3,6 +3,8 @@ export default {
     user: {
       login_failed: '用户名或密码错误',
       signup_failed : '注册失败',
+      signup_duplicate_failed: '用户名已存在',
+      signup_success: '注册成功',
       get_user_failed: '获取用户信息失败',
       get_self_failed: '获取账户信息失败'
     },
