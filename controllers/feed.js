@@ -61,10 +61,10 @@ exports.create = function* (next) {
   var body = this.request.body;
   var attachment = body.attachment;
   var contentType = body.contentType;
-  var header = 'data:' + contentType + ';base64,';
+  var meta = 'data:' + contentType + ';base64,';
 
-  if (attachment.substring(0, header.length) === header) {
-    attachment = attachment.slice(header.length);
+  if (attachment.substring(0, meta.length) === meta) {
+    attachment = attachment.slice(meta.length);
   }
 
   var buf = new Buffer(attachment, 'base64');
