@@ -12,6 +12,7 @@ var Comment = require('../../proxy/comment');
 var Store = require('../../common/oss');
 var User = require('../../proxy/user');
 var Feed = require('../../proxy/feed');
+var config = require('../../config');
 var request = require('supertest');
 var app = require('../../app');
 var should = require('should');
@@ -176,7 +177,7 @@ describe('controllers/feed.test.js', function () {
         res.body.user_name.should.equal(user.name);
         res.body.content.should.equal('unittest_feed_01');
         res.body.location.should.equal('杭州市西湖区');
-        res.body.pic.should.be.a.String;
+        res.body.pic.should.startWith('http://' + config.imageStore);
         done(err);
       })
     });
@@ -198,7 +199,7 @@ describe('controllers/feed.test.js', function () {
         res.body.content.should.equal('unittest_feed_02');
         res.body.lat.should.equal('32.321');
         res.body.location.should.equal('杭州市江干区');
-        res.body.pic.should.be.a.String;
+        res.body.pic.should.startWith('http://' + config.imageStore);
         done(err);
       })
     });
@@ -220,7 +221,7 @@ describe('controllers/feed.test.js', function () {
         res.body.content.should.equal('unittest_feed_03');
         res.body.lat.should.equal('32.123');
         res.body.location.should.equal('长沙市开福区');
-        res.body.pic.should.be.a.String;
+        res.body.pic.should.startWith('http://' + config.imageStore);
         done(err);
       })
     });

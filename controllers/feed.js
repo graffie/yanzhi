@@ -11,6 +11,7 @@ var FeedsScore = require('../proxy/feeds_score');
 var Comment = require('../proxy/comment');
 var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
+var config = require('../config');
 var bytes = require('bytes');
 var only = require('only');
 
@@ -74,12 +75,8 @@ exports.create = function* (next) {
     meta: { uid: userId }
   });
 
-  var picUrl = 'http://' +
-                Store.options.bucket + '.' + Store.options.host +
-                '/' + object.name;
-
   var feed = only(body, props);
-  feed.pic = picUrl;
+  feed.pic = 'http://' + config.imageStore + '/' + object.name;
   feed.userId = userId;
   feed.userName = this.user.name;
 
