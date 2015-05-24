@@ -47,7 +47,7 @@ api['feed'] = function (fid) {
 
     comment: {
       create: function (data) {
-        return request.get(`/api/feed/${fid}/comment`, data)
+        return request.post(`/api/feed/${fid}/comment`, data)
       }
     }
   }

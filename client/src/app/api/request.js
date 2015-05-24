@@ -9,11 +9,11 @@
  */
 var xhr = require('xhr');
 
-module.exports = {
+export default {
 
   _xhr: xhr,
 
-  _request: function (method, uri, body, headers) {
+  _request(method, uri, body, headers) {
     return new Promise(function (resolve, reject) {
       headers = headers || {};
       headers['Content-Type'] = 'application/json';
@@ -32,23 +32,23 @@ module.exports = {
     });
   },
 
-  get: function (uri) {
+  get(uri) {
     return this._request('GET', uri);
   },
 
-  post: function (uri, body, headers) {
+  post(uri, body, headers) {
     return this._request('POST', uri, body, headers);
   },
 
-  put: function (uri, body) {
+  put(uri, body) {
     return this._request('PUT', uri, body);
   },
 
-  patch: function (uri, body) {
+  patch(uri, body) {
     return this._request('PATCH', uri, body);
   },
 
-  delete: function (uri) {
+  delete(uri) {
     return this._request('DELETE', uri);
   },
 };

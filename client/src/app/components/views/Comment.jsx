@@ -26,7 +26,7 @@ let PhotoItem = React.createClass({
     return (
       <div className='comment'>
         <Link to='user' params={obj}>
-          // <img className='avatar' src=''/>
+          <img className='avatar'/>
           <span>{this.props.user_name}</span>
         </Link>
         <div className='body'>{this.props.content}</div>

@@ -376,7 +376,7 @@ img.avatar {
   // width: 99.9%;
   // margin: 0 auto;
   margin-left: 8px;
-  margin-right: 18px;
+  margin-right: 8px;
   .no {
     margin: 0 auto;
   }
@@ -883,10 +883,12 @@ img.avatar {
 
             span {
               margin-left: 1.2em;
+              float: right;
             }
             a {
               span {
                 margin-left: 0;
+                float: none;
               }
             }
         }
@@ -900,7 +902,7 @@ img.avatar {
           }
           .comment {
             margin: 0 0 10px;
-            padding: 10px 0 10px 45px;
+            padding: 10px 0 10px 65px;
             position: relative;
             border-bottom-color: rgba(0, 0, 0, 0.08);
             border-bottom-width: 1px;
@@ -909,15 +911,17 @@ img.avatar {
               left: 1px;
               position: absolute;
               top: 11px;
-              color: #000;
+              font-size: 0.9em;
+              max-width: 60px;
+              // color: #000;
               .avatar {
+                display: none;
                 margin: 0 auto;
                 display: none;
                 float: none;
               }
               span {
-                color: $black;
-                font-size: 0.6em;
+                display: block;
               }
             }
             body {
@@ -962,9 +966,7 @@ img.avatar {
             }
 
             button {
-              background-color: $blue;
               border-radius: 3px;
-              color: $white;
               margin-left: 5%;
               text-align: center;
               padding-right: 10px;

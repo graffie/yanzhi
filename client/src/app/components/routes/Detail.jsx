@@ -5,7 +5,7 @@ import moment from 'moment'
 import Modal from '../views/Modal'
 import Comment from '../views/Comment'
 import Store from '../../stores/AppStore'
-import {Crouton, getFeed} from '../../actions/AppActionCreator'
+import {Crouton, getFeed, createComment} from '../../actions/AppActionCreator'
 
 import '../../utils/zh-cn'
 
@@ -37,7 +37,8 @@ let Detail  = React.createClass({
     return {
       loading: !c,
       feed: Store.getFeedById(this.props.params.id),
-      comments:  c || []
+      comments:  c || [],
+      comment: null
     }
   },
 
@@ -45,10 +46,12 @@ let Detail  = React.createClass({
 
   componentWillMount() {
     Store.addFeedListener(this.onFeedChange)
+    Store.addCreateCommentListener(this.onCreateComment)
   },
 
   componentWillUnmount() {
     Store.removeFeedListener(this.onFeedChange)
+    Store.removeCreateCommentListener(this.onCreateComment)
   },
 
   onFeedChange() {
@@ -56,6 +59,13 @@ let Detail  = React.createClass({
       loading: false,
       feed: Store.getFeedById(this.props.params.id),
       comments: Store.getCommentById(this.props.params.id)
+    })
+  },
+
+  onCreateComment() {
+    this.setState({
+      loading: false,
+      comment: null
     })
   },
 
@@ -71,6 +81,34 @@ let Detail  = React.createClass({
     }
   },
 
+  setLoading(obj) {
+    this.setState({
+      loading: !!obj
+    })
+  },
+
+  handleComment(e) {
+    this.setState({
+      comment: e.target.value
+    })
+  },
+
+  sendComment(e) {
+    e.preventDefault()
+    let obj = {
+      content: this.state.comment
+    }
+    this.setLoading(true)
+    createComment(this.props.params.id, obj)
+  },
+
+  goToAuthor(e) {
+    e.preventDefault()
+    let obj = this.props.params
+
+    this.transitionTo('user', {uid: this.state.feed.user_id, tab: obj.tab})
+  },
+
   render() {
     let cts = null
     if (this.state.comments.length <= 0) {
@@ -82,9 +120,6 @@ let Detail  = React.createClass({
     }
 
     let feed = this.state.feed || {}
-
-    let {params} = this.props
-    params.uid = feed.user_id || 'me'
     let date = moment(feed.gmt_create).locale('zh-cn').startOf('day').fromNow()
 
     return (
@@ -104,9 +139,9 @@ let Detail  = React.createClass({
           </div>
         </div>
         <div className='author'>
-          <Link to='user' params={params}>
+          <a onClick={this.goToAuthor}>
             <span>{feed.user_name}</span>
-          </Link>
+          </a>
           <span>{date}</span>
         </div>
         <div className='comments'>
@@ -114,8 +149,12 @@ let Detail  = React.createClass({
         </div>
         <div className='footer'>
           <div className='input'>
-            <input type='text' placeholder='输入评论' />
-            <button>发送</button>
+            <input type='text' value={this.state.comment} onChange={this.handleComment}  placeholder='输入评论' />
+            <button
+              className='button primary'
+              disabled={this.state.loading || !this.state.comment}
+              onClick={this.sendComment}
+              >发送</button>
           </div>
         </div>
       </Modal>

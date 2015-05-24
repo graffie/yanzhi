@@ -32,6 +32,10 @@ module.exports = {
     CREATE_FEED_SUCCESS: null,
     CREATE_FEED_FAILED: null,
 
+    CREATE_COMMENT: null,
+    CREATE_COMMENT_SUCCESS: null,
+    CREATE_COMMENT_FAILED: null,
+
     // Crouton
     SHOW_CROUTON: null
   }),

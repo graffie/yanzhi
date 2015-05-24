@@ -13,6 +13,7 @@ const FEED_EVENT = 'feed'
 const SELF_EVENT = 'selt'
 const USER_EVENT = 'user'
 const CREATE_EVENT = 'create'
+const CREATE_COMMENT_EVENT = 'createcomment'
 
 var crouton = null
 var feeds = []
@@ -165,6 +166,18 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CREATE_EVENT, cb)
   },
 
+  emitCreateComment: function () {
+    this.emit(CREATE_COMMENT_EVENT)
+  },
+
+  addCreateCommentListener: function (cb) {
+    this.on(CREATE_COMMENT_EVENT, cb)
+  },
+
+  removeCreateCommentListener: function (cb) {
+    this.removeListener(CREATE_COMMENT_EVENT, cb)
+  },
+
 })
 
 AppStore.dispatchToken = AppDispatcher.register(function (playload) {
@@ -194,6 +207,9 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.CREATE_FEED_SUCCESS:
     case ActionTypes.CREATE_FEED_FAILED:
       return AppStore.emitCreate()
+    case ActionTypes.CREATE_COMMENT_FAILED:
+    case ActionTypes.CREATE_COMMENT_SUCCESS:
+      return AppStore.emitCreateComment()
   }
 })
 

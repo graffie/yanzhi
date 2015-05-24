@@ -147,7 +147,7 @@ var AppActionCreator = {
   },
 
   getFeed(fid) {
-    AppAPI.feed(fid).get().then(function (res) {
+    return AppAPI.feed(fid).get().then(function (res) {
       if (res.statusCode != 200 || !res.body) {
         Crouton.show({
           message: lang.feed.get_feed_failed,
@@ -168,7 +168,6 @@ var AppActionCreator = {
       }
       return {}
     }, (err) => {
-      console.log(err)
       Crouton.show(err.message)
     }).catch((err) => {
       console.log(err)
@@ -197,10 +196,41 @@ var AppActionCreator = {
         })
       }
     }).catch((err) => {
-      console.log(err.stack)
       Crouton.show(err.message)
       AppDispatcher.handleServerAction({
           type: ActionTypes.CREATE_FEED_FAILED
+      })
+    })
+  },
+
+  createComment(fid, data) {
+    AppAPI.feed(fid).comment.create(data).then(function(res) {
+      if (res.statusCode != 201 || !res.body) {
+        Crouton.show({
+          message: lang.feed.create_comment_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.createComment.bind(null, fid, data)
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.CREATE_COMMENT_FAILED
+        })
+      } else {
+        AppActionCreator.getFeed(fid).then(() => {
+          Crouton.showInfo(lang.feed.create_comment_success)
+          AppDispatcher.handleServerAction({
+            type: ActionTypes.CREATE_COMMENT_SUCCESS
+          })
+        })
+      }
+    }).catch((err) => {
+      Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+          type: ActionTypes.CREATE_COMMENT_FAILED
       })
     })
   }
