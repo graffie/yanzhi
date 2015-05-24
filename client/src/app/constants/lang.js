@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   'zh-cn': {
     user: {
       login_failed: '用户名或密码错误',
@@ -13,7 +13,9 @@ module.exports = {
       list_feed_failed: '获取图片流错误',
       get_feed_failed: '获取评论失败',
       create_comment_failed: '评论图片失败',
-      create_comment_success: '评论图片成功'
+      create_comment_success: '评论图片成功',
+      vote_feed_failed: '评分失败',
+      vote_feed_success: '评分成功'
     },
 
     button: {

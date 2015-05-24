@@ -5,7 +5,7 @@ import moment from 'moment'
 import Modal from '../views/Modal'
 import Comment from '../views/Comment'
 import Store from '../../stores/AppStore'
-import {Crouton, getFeed, createComment} from '../../actions/AppActionCreator'
+import {Crouton, getFeed, createComment, voteFeed} from '../../actions/AppActionCreator'
 
 import '../../utils/zh-cn'
 
@@ -47,11 +47,13 @@ let Detail  = React.createClass({
   componentWillMount() {
     Store.addFeedListener(this.onFeedChange)
     Store.addCreateCommentListener(this.onCreateComment)
+    Store.addVoteListener(this.onVoteChange)
   },
 
   componentWillUnmount() {
     Store.removeFeedListener(this.onFeedChange)
     Store.removeCreateCommentListener(this.onCreateComment)
+    Store.removeVoteListener(this.onVoteChange)
   },
 
   onFeedChange() {
@@ -69,16 +71,22 @@ let Detail  = React.createClass({
     })
   },
 
+  onVoteChange() {
+    this.setState({
+      loading: false
+    });
+  },
+
   handleClick(type, e) {
     e.preventDefault()
-
-    this.transitionTo('login', this.props.params)
-
-    if(type == 'up') {
-
-    } else if (type == 'down') {
-
+    if (!Store.getSelf()) {
+      return this.transitionTo('login', this.props.params)
     }
+    this.setLoading(true)
+    let obj = {
+      type: type
+    }
+    voteFeed(this.props.params.id, obj)
   },
 
   setLoading(obj) {

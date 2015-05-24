@@ -203,6 +203,34 @@ var AppActionCreator = {
     })
   },
 
+  voteFeed(fid, data) {
+    AppAPI.feed(fid).vote(data).then(function (res) {
+      if (res.statusCode != 200 || !res.body) {
+        return Crouton.show({
+          message: lang.feed.vote_feed_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.voteFeed.bind(null, fid, data)
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }else {
+        Crouton.showInfo(lang.feed.vote_feed_success)
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.VOTE_FEED_SUCCESS,
+          data: res.body
+        })
+      }
+    }).catch((err) => {
+      Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+          type: ActionTypes.VOTE_FEED_FAILED
+      })
+    })
+  },
+
   createComment(fid, data) {
     AppAPI.feed(fid).comment.create(data).then(function(res) {
       if (res.statusCode != 201 || !res.body) {

@@ -14,6 +14,7 @@ const SELF_EVENT = 'selt'
 const USER_EVENT = 'user'
 const CREATE_EVENT = 'create'
 const CREATE_COMMENT_EVENT = 'createcomment'
+const VOTE_EVENT = 'vote'
 
 var crouton = null
 var feeds = []
@@ -178,6 +179,18 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CREATE_COMMENT_EVENT, cb)
   },
 
+  emitVote: function () {
+    this.emit(VOTE_EVENT)
+  },
+
+  addVoteListener: function (cb) {
+    this.on(VOTE_EVENT, cb)
+  },
+
+  removeVoteListener: function (cb) {
+    this.removeListener(VOTE_EVENT, cb)
+  },
+
 })
 
 AppStore.dispatchToken = AppDispatcher.register(function (playload) {
@@ -210,6 +223,9 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.CREATE_COMMENT_FAILED:
     case ActionTypes.CREATE_COMMENT_SUCCESS:
       return AppStore.emitCreateComment()
+    case ActionTypes.VOTE_FEED_SUCCESS:
+    case ActionTypes.VOTE_FEED_FAILED:
+      return AppStore.emitVote()
   }
 })
 
