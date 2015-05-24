@@ -41,6 +41,7 @@ CREATE TABLE `feeds_score` (
   `gmt_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   `feed_id` bigint(20) unsigned NOT NULL COMMENT 'Feed ID',
   `user_id` bigint(20) unsigned NOT NULL COMMENT '用户 ID',
+  `user_name` varchar(255) NOT NULL NULL COMMENT '用户名',
   `score` int(10) NOT NULL DEFAULT 0 COMMENT '评分',
   PRIMARY KEY (`id`),
   UNIQUE KEY `feeds_score.feed_id-user_id` (`feed_id`, `user_id`) USING BTREE
