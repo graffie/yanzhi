@@ -20,6 +20,7 @@ exports.create = function* (next) {
   comment.feedId = Number(this.params.feedId);
   comment.content = this.request.body.content;
   comment.userId = this.user.id || 0;
+  comment.userName = this.user.name || '';
 
   var res = yield Comment.add(comment);
   comment.id = res.insertId;

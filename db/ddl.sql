@@ -54,6 +54,7 @@ CREATE TABLE `comments` (
   `gmt_modified` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   `feed_id` bigint(20) unsigned NOT NULL COMMENT 'Feed ID',
   `user_id` bigint(20) unsigned NOT NULL COMMENT '用户 ID',
+  `user_name` varchar(255) NOT NULL COMMENT '用户名',
   `content` varchar(255) NOT NULL COMMENT '文字内容',
   PRIMARY KEY (`id`),
   KEY `comments.feed_id` (`feed_id`) USING BTREE
