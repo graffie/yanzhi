@@ -1,11 +1,11 @@
-var assign = require('react/lib/Object.assign')
-
-var AppConstants = require('../constants/AppConstants')
-var AppDispatcher = require('../dispatchers/AppDispatcher')
-var AppAPI = require('../api/AppAPI')
-var ActionTypes = AppConstants.ActionTypes
-var lang = require('../constants/lang')
-lang = lang[process.env.LANG || 'zh-cn']
+var assign = require('react/lib/Object.assign');
+var AppConstants = require('../constants/AppConstants');
+var AppDispatcher = require('../dispatchers/AppDispatcher');
+var AppAPI = require('../api/AppAPI');
+var ActionTypes = AppConstants.ActionTypes;
+var lang = require('../constants/lang');
+lang = typeof lang[process.env.LANG] === 'object' ?
+        lang[process.env.LANG] : lang['zh-cn'];
 
 var Crouton = {
   showInfo(data) {
@@ -13,7 +13,7 @@ var Crouton = {
       data = {
         message: data,
         type: 'info'
-      }
+      };
     }
     this.show(data);
   },
@@ -22,9 +22,9 @@ var Crouton = {
     if (typeof data === 'string') {
       data = {
         message: data
-      }
+      };
     }
-    data.type = data.type || 'error'
+    data.type = data.type || 'error';
     AppDispatcher.handleViewAction({
       type: ActionTypes.SHOW_CROUTON,
       data: data
@@ -40,29 +40,29 @@ var AppActionCreator = {
         AppDispatcher.handleServerAction({
           type: ActionTypes.GET_SELF_SUCCESS,
           data: res.body
-        })
+        });
       }
-      return {}
-    })
+      return {};
+    });
   },
 
   login(data) {
     AppAPI.user().login(data).then(function (res) {
       if (res.body && res.body.status != 200) {
-        return Crouton.show(lang.user.login_failed)
+        return Crouton.show(lang.user.login_failed);
       }
       AppActionCreator.me().then(() => {
         AppDispatcher.handleServerAction({
           type: ActionTypes.USER_LOGIN_SUCCESS,
           data: res.body
-        })
-      })
+        });
+      });
     }).catch((err) => {
-      Crouton.show(err.message)
+      Crouton.show(err.message);
       AppDispatcher.handleServerAction({
         type: ActionTypes.USER_LOGIN_FAILED
-      })
-    })
+      });
+    });
   },
 
   signup(data) {
@@ -70,10 +70,10 @@ var AppActionCreator = {
       if (res.body && res.body.status != 200) {
         AppDispatcher.handleServerAction({
           type: ActionTypes.USER_SIGNUP_FAILED
-        })
-        let msg = lang.user.signup_failed
+        });
+        let msg = lang.user.signup_failed;
         if (res.body.message == 'duplicate error')  {
-          msg = lang.user.signup_duplicate_failed
+          msg = lang.user.signup_duplicate_failed;
         }
         return Crouton.show({
           message: msg,
@@ -84,13 +84,13 @@ var AppActionCreator = {
           }, {
             name: lang.button.ignore
           }]
-        })
+        });
       }
       AppActionCreator.me().then(() => {
-        Crouton.showInfo(lang.user.signup_success)
+        Crouton.showInfo(lang.user.signup_success);
         AppDispatcher.handleServerAction({
-            type: ActionTypes.USER_SIGNUP_SUCCESS
-        })
+          type: ActionTypes.USER_SIGNUP_SUCCESS
+        });
       }).catch((err) => {
         Crouton.show({
           message: lang.user.get_self_failed,
@@ -170,20 +170,19 @@ var AppActionCreator = {
           }, {
             name: lang.button.ignore
           }]
-        })
+        });
       } else {
         AppDispatcher.handleServerAction({
           type: ActionTypes.GET_FEED_SUCCESS,
           data: res.body,
           id: fid
-        })
+        });
       }
-      return {}
+      return {};
     }, (err) => {
-      Crouton.show(err.message)
+      Crouton.show(err.message);
     }).catch((err) => {
-      console.log(err)
-      Crouton.show(err.message)
+      Crouton.show(err.message);
     })
   },
 
@@ -231,19 +230,19 @@ var AppActionCreator = {
             name: lang.button.ignore
           }]
         })
-      }else {
-        Crouton.showInfo(lang.feed.vote_feed_success)
+      } else {
+        Crouton.showInfo(lang.feed.vote_feed_success);
         AppDispatcher.handleServerAction({
           type: ActionTypes.VOTE_FEED_SUCCESS,
           data: res.body
-        })
+        });
       }
     }).catch((err) => {
-      Crouton.show(err.message)
+      Crouton.show(err.message);
       AppDispatcher.handleServerAction({
-          type: ActionTypes.VOTE_FEED_FAILED
-      })
-    })
+        type: ActionTypes.VOTE_FEED_FAILED
+      });
+    });
   },
 
   createComment(fid, data) {
