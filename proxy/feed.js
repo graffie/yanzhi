@@ -27,7 +27,7 @@ var GET_LATEST_SQL = multiline(function () {;/*
     `feeds`.`content`,
     `feeds`.`score`
   FROM `feeds`
-  ORDER BY `feeds`.`id` ASC
+  ORDER BY `feeds`.`id` DESC
   LIMIT ?, 100
 */});
 exports.getLatest = function* (offset) {
@@ -53,7 +53,7 @@ var GET_BY_USER_SQL = multiline(function () {;/*
     `feeds`
   WHERE
     `feeds`.`user_id` = ?
-  ORDER BY `feeds`.`id` ASC
+  ORDER BY `feeds`.`id` DESC
   LIMIT ?, 100
 */});
 exports.getByUser = function* (userId, offset) {
