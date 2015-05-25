@@ -50,6 +50,7 @@ describe('controllers/weixin.test.js', function () {
         res.body.should.have.keys(['app_id', 'ticket', 'expires_in', 'gmt_create']);
         res.body.ticket.should.equal(weixin.current.ticket);
         cachedTicket = weixin.current.ticket;
+        cachedAccessToken = weixin._accessToken;
         done(err);
       });
     });
@@ -59,7 +60,7 @@ describe('controllers/weixin.test.js', function () {
       .expect(200)
       .end(function (err, res) {
         res.body.ticket.should.equal(cachedTicket);
-        cachedAccessToken = weixin._accessToken;
+        weixin._accessToken.should.equal(cachedAccessToken);
         done(err);
       });
     });
