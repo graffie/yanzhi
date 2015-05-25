@@ -1,4 +1,5 @@
-import crypto from 'crypto'
+import rusha from 'rusha'
+import randomString from 'random-string'
 import moment from 'moment'
 
 // weixin
@@ -13,7 +14,12 @@ export default class Wechat {
   config() {
 
     if (typeof window != undefined && window.wx) {
-      let rstr = crypto.randomBytes(8).toString('hex')
+      let rstr = randomString({
+        length: 16,
+        numeric: true,
+        letters: true,
+        special: false
+      })
       let stamp = moment().unix()
       this.getToken((err, token) => {
         if (token) {
@@ -40,7 +46,7 @@ export default class Wechat {
   sign(rstr, stamp, token) {
     let url = window.location.href.split('#')[0]
     let str = `jsapi_ticket=${token}&noncestr=${rstr}&timestamp=${stamp}&url=${url}`
-    return crypto.createHash('sha1').update(str).digest('hex')
+    return (new rusha()).digestFromString(str)
   }
 
   getToken(cb) {
