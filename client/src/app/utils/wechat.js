@@ -19,7 +19,7 @@ export default class Wechat {
         if (token) {
           let signature = this.sign(rstr, stamp, token)
           wx.config({
-            // debug: true,
+            debug: false,
             appId: 'wx7fe16cbf82d218e7',
             timestamp: stamp,
             nonceStr: rstr,
@@ -38,9 +38,8 @@ export default class Wechat {
   }
 
   sign(rstr, stamp, token) {
-    let url = window.location.origin
+    let url = window.location.href.split('#')[0]
     let str = `jsapi_ticket=${token}&noncestr=${rstr}&timestamp=${stamp}&url=${url}`
-    console.log(str)
     return crypto.createHash('sha1').update(str).digest('hex')
   }
 

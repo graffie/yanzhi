@@ -58,10 +58,11 @@ let Detail  = React.createClass({
   },
 
   onFeedChange() {
+    let c = Store.getCommentById(this.props.params.id)
     this.setState({
       loading: false,
       feed: Store.getFeedById(this.props.params.id),
-      comments: Store.getCommentById(this.props.params.id)
+      comments: c || []
     })
   },
 
@@ -80,9 +81,9 @@ let Detail  = React.createClass({
 
   handleClick(type, e) {
     e.preventDefault()
-    if (!Store.getSelf()) {
-      return this.transitionTo('login', this.props.params)
-    }
+    // if (!Store.getSelf()) {
+    //   return this.transitionTo('login', this.props.params)
+    // }
     this.setLoading(true)
     let obj = {
       type: type
@@ -113,16 +114,20 @@ let Detail  = React.createClass({
 
   handleShare(e) {
     e.preventDefault()
+    let str = bio(this.state.feed.score)
+    // if (typeof document != undefined) {
+    //   document.title = str
+    // }
     if (typeof wx != undefined) {
       wx.onMenuShareTimeline({
-        title: bio(this.state.feed.score),
+        title: str,
         link: window.location.href,
         imgUrl: this.state.feed.pic,
         trigger: function (res) {
 
         },
         success: function (res) {
-          Crouton.showInfo('分享成功')
+          // Crouton.showInfo('分享成功')
         },
         cancel: function (res) {
         },
@@ -159,7 +164,7 @@ let Detail  = React.createClass({
            <div><img src={feed.pic} /></div>
          </div>
          <div className='share'>
-           <a className='modal--control'><span className='icon-s'></span></a>
+           <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
          </div>
          <div className='vote up'>
            <a href='#' onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
