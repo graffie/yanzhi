@@ -389,26 +389,29 @@ img.avatar {
     margin: 0 auto;
   }
   .item {
-    height: 130px;
-    width: 130px;
-    margin: 6px 0 0 8px;
+    height: 92px;
+    width: 92px;
+    margin: 1px 0 0 1px;
     border-radius: $radius 0 0 $radius;
     border-color: rgba(0, 0, 0, 0.15);
     border-width: thin;
     border-style: solid;
     padding: 3px;
     position: relative;
+    //galaxy s4
+    @media (max-width: 375px) and (min-width: 350px) {
+      height: 104px;
+      width: 104px;
+    }
     //iphone6
-    @media (max-width: 400px) and (min-width: 350px) {
-      height: 155px;
-      width: 155px;
-      margin-left: 4px;
+    @media (max-width: 400px) and (min-width: 375px) {
+      height: 110px;
+      width: 110px;
     }
     // horizontal 6
     @media (max-width: 675px) and (min-width: 650px) {
       height: 148px;
       width: 148px;
-      margin-left: 4px;
     }
     // iphone 6plus
     @media (max-width: 450px) and (min-width: 400px) {
