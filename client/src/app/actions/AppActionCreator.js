@@ -210,6 +210,7 @@ var AppActionCreator = {
         })
       }
     }).catch((err) => {
+      console.log(err.stack)
       Crouton.show(err.message)
       AppDispatcher.handleServerAction({
           type: ActionTypes.CREATE_FEED_FAILED

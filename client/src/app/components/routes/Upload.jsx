@@ -97,8 +97,10 @@ let Upload  = React.createClass({
   },
 
   handleImageUpload(e) {
-    if (!this.kit) {
-      return Crouton.showInfo('您尚未选择任何照片，请点击关闭后重试')
+    if (!this.kit || !cache.file) {
+      Crouton.showInfo('您尚未选择任何照片')
+      this.transitionTo('tab', this.props.params)
+      return
     }
     this.kit.render('data-url', 'image/jpeg')
       .then((data) => {

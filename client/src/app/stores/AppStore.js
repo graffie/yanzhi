@@ -48,7 +48,7 @@ function replaceFeed(feed) {
 }
 
 function createFeed(data) {
-  feeds.push(action.data)
+  feeds.push(data)
   if (selfobj && selfobj.feeds) {
     selfobj.feeds.push(data)
   }
