@@ -28,7 +28,7 @@ module.exports =  {
     },
 
     share: {
-      prefix: "我的颜值得分 %s :",
+      prefix: "我的颜值得分%s:",
       postfix: "快来给我打分吧！！",
       score: {
         1: [
