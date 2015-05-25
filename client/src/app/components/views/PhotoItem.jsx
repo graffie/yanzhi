@@ -37,7 +37,7 @@ let PhotoItem = React.createClass({
       <div className='item' onClick={this.handleClick}>
         <div><img src={this.props.pic} /></div>
         <div className='score'>
-          <span className='icon-h'>{this.props.score.toFixed(1)}</span>
+          <span className='icon-h'>{(this.props.score / 1000).toFixed(1)}</span>
         </div>
       </div>
     )

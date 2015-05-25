@@ -30,7 +30,7 @@ api['user'] = function (uid) {
 api['sys'] = function () {
   return {
     wxtoken: function () {
-      return request.get('/sys/weixin/token')
+      return request.get('/sys/weixin/ticket')
     }
   }
 }

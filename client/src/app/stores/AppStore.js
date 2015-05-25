@@ -21,6 +21,7 @@ var feeds = []
 var comments = {}
 var selfobj = null
 var user = {}
+var createResult = false
 
 function getFeedById(fid) {
   for (let i = feeds.length - 1; i >= 0; i--) {
@@ -36,6 +37,21 @@ function getFeedById(fid) {
 function getCommentById(fid) {
   let c = comments[fid]
   return c ? c.comments : null
+}
+
+function replaceFeed(feed) {
+  if (feed && feed.id) {
+    feeds = feeds.map((f) => {
+      return f.id == feed.id ? feed : f
+    })
+  }
+}
+
+function createFeed(data) {
+  feeds.push(action.data)
+  if (selfobj && selfobj.feeds) {
+    selfobj.feeds.push(data)
+  }
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -179,6 +195,10 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CREATE_COMMENT_EVENT, cb)
   },
 
+  getCreateResult: function() {
+    return createResult
+  },
+
   emitVote: function () {
     this.emit(VOTE_EVENT)
   },
@@ -218,7 +238,12 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.GET_USER_SUCCESS:
       user[action.uid] = action.data
       return AppStore.emitUser()
+    case ActionTypes.CREATE_FEED:
+      createResult = false
+      return
     case ActionTypes.CREATE_FEED_SUCCESS:
+      createFeed(action.data)
+      createResult = true
     case ActionTypes.CREATE_FEED_FAILED:
       return AppStore.emitCreate()
     case ActionTypes.CREATE_COMMENT_FAILED:
@@ -226,6 +251,8 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
       return AppStore.emitCreateComment()
     case ActionTypes.VOTE_FEED_SUCCESS:
     case ActionTypes.VOTE_FEED_FAILED:
+      replaceFeed(action.data)
+      AppStore.emitFeeds()
       return AppStore.emitVote()
   }
 })

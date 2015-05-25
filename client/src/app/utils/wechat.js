@@ -23,10 +23,10 @@ export default class Wechat {
       let stamp = moment().unix()
       this.getToken((err, token) => {
         if (token) {
-          let signature = this.sign(rstr, stamp, token)
+          let signature = this.sign(rstr, stamp, token.ticket)
           wx.config({
-            debug: false,
-            appId: 'wx7fe16cbf82d218e7',
+            debug: true,
+            appId: token.app_id,
             timestamp: stamp,
             nonceStr: rstr,
             signature: signature,
@@ -50,17 +50,26 @@ export default class Wechat {
   }
 
   getToken(cb) {
-    let expire = window.localStorage.getItem('expires_in')
     let token = window.localStorage.getItem('token')
+    try {
+      token = JSON.parse(token)
+    } catch(err) {
+      return cb(err)
+    }
     let stamp = moment().unix()
-    if (expire && expire > stamp) {
+    if (token && token.expires_in > stamp) {
       return cb(null, token)
     }
     AppAPI.sys().wxtoken().then((res) => {
-      if (res.statusCode && res.body) {
-        window.localStorage.setItem('token', res.body.access_token)
-        window.localStorage.setItem('expires_in', stamp + 6000)
-        cb(null, res.body.ticket)
+      if (res.statusCode == 200 && res.body) {
+        let obj = res.body
+        obj.expires_in = stamp + 6000
+        try {
+          let str = JSON.stringify(obj)
+          window.localStorage.setItem('token', str)
+        }catch(err) {
+          cb(err)
+        }
       }
     }, (err) => {
       cb(err)

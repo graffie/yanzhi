@@ -83,6 +83,9 @@ let Upload  = React.createClass({
     this.setState({
       loading: false
     });
+    if (Store.getCreateResult()) {
+      this.transitionTo('tab', {tab: 'user'})
+    }
   },
 
   handleImageLoad() {
@@ -116,7 +119,7 @@ let Upload  = React.createClass({
       <Modal show loading={this.state.loading}>
         <div className='upload'>
           <div className='header'>
-            <button className='button primary' onClick={this.handleImageUpload}>上传啦</button>
+            <button className='button primary' onClick={this.handleImageUpload}>上传照片</button>
           </div>
           <div className='editor' id='image-container'>
             <div className='image'>

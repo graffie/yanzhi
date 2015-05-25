@@ -37,6 +37,7 @@ let Detail  = React.createClass({
     let c = Store.getCommentById(this.props.params.id)
     return {
       loading: !c,
+      _registwx: false,
       feed: Store.getFeedById(this.props.params.id),
       comments:  c || [],
       comment: null
@@ -46,12 +47,17 @@ let Detail  = React.createClass({
   mixins: [Navigation, State],
 
   componentWillMount() {
+    if (this.state.feed && this.state.feed.pic) {
+      this.insertImg(this.state.feed)
+    }
+
     Store.addFeedListener(this.onFeedChange)
     Store.addCreateCommentListener(this.onCreateComment)
     Store.addVoteListener(this.onVoteChange)
   },
 
   componentWillUnmount() {
+    this.revertTitle()
     Store.removeFeedListener(this.onFeedChange)
     Store.removeCreateCommentListener(this.onCreateComment)
     Store.removeVoteListener(this.onVoteChange)
@@ -59,9 +65,13 @@ let Detail  = React.createClass({
 
   onFeedChange() {
     let c = Store.getCommentById(this.props.params.id)
+    let feed = Store.getFeedById(this.props.params.id)
+    if (c && !this.state._registwx) {
+      this.insertImg(feed)
+    }
     this.setState({
       loading: false,
-      feed: Store.getFeedById(this.props.params.id),
+      feed: feed,
       comments: c || []
     })
   },
@@ -114,28 +124,92 @@ let Detail  = React.createClass({
 
   handleShare(e) {
     e.preventDefault()
-    let str = bio(this.state.feed.score)
     // if (typeof document != undefined) {
     //   document.title = str
     // }
-    if (typeof wx != undefined) {
-      wx.onMenuShareTimeline({
-        title: str,
-        link: window.location.href,
-        imgUrl: this.state.feed.pic,
-        trigger: function (res) {
 
-        },
-        success: function (res) {
-          // Crouton.showInfo('分享成功')
-        },
-        cancel: function (res) {
-        },
-        fail: function (res) {
-        }
-      })
+  },
+
+  revertTitle() {
+    // rollback
+    if (typeof document != undefined) {
+      document.title = '颜值俱乐部'
+      document.getElementById('wx_suck').src = ''
     }
   },
+
+  getScore(score) {
+    return (score / 1000).toFixed(1)
+  },
+
+  // hack to share in wechat
+  insertImg(feed) {
+    if (typeof document != undefined) {
+      this.setState({
+        _registwx: true
+      })
+      document.title = bio(this.getScore(feed.score))
+      document.getElementById('wx_suck').src = feed.pic
+    }
+  },
+
+  // registerWxMenu(feed) {
+    // if (typeof wx != undefined) {
+    //   this.setState({
+    //     _registwx: true
+    //   })
+    //   let str = bio(feed.score)
+    //   console.log('called')
+    //   console.log({
+    //     title: str,
+    //     link: window.location.href,
+    //     imgUrl: feed.pic,
+    //     trigger: function (res) {
+    //       alert('trigger')
+    //     },
+    //     success: function (res) {
+    //       Crouton.showInfo('恭喜你分享成功了')
+    //     },
+    //     cancel: function (res) {
+    //     },
+    //     fail: function (res) {
+    //       Crouton.showInfo('分享失败了再试一次呗')
+    //     }
+    //   })
+    //   // document.title = str
+    //   wx.onMenuShareTimeline({
+    //     title: str,
+    //     link: window.location.href,
+    //     imgUrl: feed.pic,
+    //     trigger: function (res) {
+    //       alert('trigger')
+    //     },
+    //     success: function (res) {
+    //       Crouton.showInfo('恭喜你分享成功了')
+    //     },
+    //     cancel: function (res) {
+    //     },
+    //     fail: function (res) {
+    //       Crouton.showInfo('分享失败了再试一次呗')
+    //     }
+    //   })
+      // wx.onMenuShareAppMessage({
+      //   title: str, // 分享标题
+      //   desc: str, // 分享描述
+      //   link: window.location.href, // 分享链接
+      //   imgUrl: feed.pic, // 分享图标
+      //   success: function () {
+      //     // 用户确认分享后执行的回调函数
+      //   },
+      //   cancel: function () {
+      //     // 用户取消分享后执行的回调函数
+      //   }
+      // })
+      // wx.error(function (res) {
+      //   alert(res.errMsg)
+      // })
+    // }
+  // },
 
   goToAuthor(e) {
     e.preventDefault()
@@ -170,7 +244,7 @@ let Detail  = React.createClass({
            <a href='#' onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
          </div>
         <div className='vote down'>
-           <a href='#' onClick={this.handleClick.bind(null, 'up')}><span>呵</span></a>
+           <a href='#' onClick={this.handleClick.bind(null, 'down')}><span>呵</span></a>
           </div>
         </div>
         <div className='author'>
