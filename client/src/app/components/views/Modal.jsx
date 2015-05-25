@@ -21,15 +21,15 @@ let Modal = React.createClass({
   mixins: [Navigation, State],
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.show) {
-      document.body.style.overflowY = 'hidden'
+    if (nextProps.show) {
+      document.body.style.overflowY = 'hidden';
     } else {
-      document.body.style.overflowY = 'scroll'
+      document.body.style.overflowY = 'scroll';
     }
   },
 
   componentDidMount() {
-    if(this.props.show) {
+    if (this.props.show) {
       document.body.style.overflowY = 'hidden'
     }
   },
@@ -39,18 +39,18 @@ let Modal = React.createClass({
   },
 
   handleClose(e) {
-    e.preventDefault()
+    e.preventDefault();
     this.setState({
       show: false
-    })
+    });
 
-    if(History.length > 1) {
-      this.goBack()
+    if (History.length > 1) {
+      this.goBack();
     } else {
-        this.transitionTo('tab', this.getParams())
+      this.transitionTo('tab', this.getParams());
     }
 
-    document.body.style.overflowY = 'scroll'
+    document.body.style.overflowY = 'scroll';
   },
 
   render() {

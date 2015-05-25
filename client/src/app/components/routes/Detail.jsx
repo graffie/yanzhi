@@ -90,15 +90,15 @@ let Detail  = React.createClass({
   },
 
   handleClick(type, e) {
-    e.preventDefault()
+    e.preventDefault();
     // if (!Store.getSelf()) {
     //   return this.transitionTo('login', this.props.params)
     // }
-    this.setLoading(true)
+    this.setLoading(true);
     let obj = {
       type: type
-    }
-    voteFeed(this.props.params.id, obj)
+    };
+    voteFeed(this.props.params.id, obj);
   },
 
   setLoading(obj) {
