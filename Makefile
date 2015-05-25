@@ -77,14 +77,17 @@ watch-sass:
 	@$(NODE_BIN)/watch 'make sass' $(SASS_DIR) & \
 	$(NODE_BIN)/http-server $(DIST) -s
 
-build-js:
+build-vendor-js:
 	@$(NODE_BIN)/browserify --require react --require react-router --require moment | $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/vendor.js
+
+build-index-js:
 	@$(NODE_BIN)/browserify --external react --external react-router --external moment $(JS_DIR)/index.js \
 		--extension .jsx \
 		--transform babelify \
 		--transform envify \
 		| $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/index.js
-	@make vendor
+
+build: build-vendor-js build-index-js vendor
 
 watch-js:
 	@mkdir -p client/dist/static/js
