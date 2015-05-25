@@ -49,6 +49,7 @@ function* fetchTicket() {
   var url = exports.API_TICKET.replace('{{ACCESS_TOKEN}}', exports._accessToken);
   var ticketResp = yield _request(url, 'ticket');
   exports.current = {
+    appId: config.appId,
     ticket: ticketResp.ticket,
     expiresIn: ticketResp.expiresIn,
     gmtCreate: new Date(),

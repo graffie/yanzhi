@@ -47,7 +47,7 @@ describe('controllers/weixin.test.js', function () {
       .get('/sys/weixin/ticket')
       .expect(200)
       .end(function (err, res) {
-        res.body.should.have.keys(['ticket', 'expires_in', 'gmt_create']);
+        res.body.should.have.keys(['app_id', 'ticket', 'expires_in', 'gmt_create']);
         res.body.ticket.should.equal(weixin.current.ticket);
         cachedTicket = weixin.current.ticket;
         done(err);
