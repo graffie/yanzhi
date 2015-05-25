@@ -82,6 +82,11 @@ exports.create = function* (next) {
 
   var res = yield Feed.add(feed);
   feed.id = res.insertId;
+  // 确保所有的字段都返回
+  feed.lng = feed.lng || '';
+  feed.lat = feed.lat || '';
+  feed.location = feed.location || '';
+  feed.score = 0;
   this.status = 201;
   this.body = feed;
 };
@@ -100,8 +105,8 @@ exports.vote = function* (next) {
     };
     return;
   }
-  var score = this.request.body.type === 'up' ? 5 : -5;
-  feed.score = feed.score + score;
+  var score = this.request.body.type === 'up' ? 7 : -8;
+  feed.score = Math.round(((feed.score / 1000) + score) / 2 * 1000);
   var res = yield Feed.update(feedId, {score: feed.score});
   if (this.user.id) {
     yield FeedsScore.add({

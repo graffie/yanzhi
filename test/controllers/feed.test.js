@@ -277,10 +277,10 @@ describe('controllers/feed.test.js', function () {
       .expect(200)
       .end(function (err, res) {
         res.body.id.should.equal(feeds[1].id);
-        res.body.score.should.equal(-5);
+        res.body.score.should.equal(-4000);
         co(function* () {
           var feed = yield Feed.getById(res.body.id);
-          feed.score.should.equal(-5);
+          feed.score.should.equal(-4000);
           var feedScores = yield FeedsScore.getByFeed(res.body.id);
           feedScores.length.should.equal(0);
           done(err);
@@ -290,18 +290,18 @@ describe('controllers/feed.test.js', function () {
     it('should 200 when login', function (done) {
       agent
       .post('/api/feed/' + feeds[2].id + '/vote')
-      .send({type: 'down'})
+      .send({type: 'up'})
       .expect(200)
       .end(function (err, res) {
         res.body.id.should.equal(feeds[2].id);
-        res.body.score.should.equal(-5);
+        res.body.score.should.equal(3500);
         co(function* () {
           var feed = yield Feed.getById(res.body.id);
-          feed.score.should.equal(-5);
+          feed.score.should.equal(3500);
           var feedScores = yield FeedsScore.getByFeed(res.body.id);
           feedScores.length.should.equal(1);
           feedScores[0].userId.should.equal(user.id);
-          feedScores[0].score.should.equal(-5);
+          feedScores[0].score.should.equal(3500);
           done(err);
         });
       });
