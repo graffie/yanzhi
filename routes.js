@@ -31,7 +31,7 @@ module.exports = function (app) {
   app.post('/logout', account.logout);
   app.post('/join', account.join);
 
-  app.get('/sys/weixin/token', weixin.token);
+  app.get('/sys/weixin/ticket', weixin.ticket);
 
   // API
   app.get('/api/user/:userId', user.show);
