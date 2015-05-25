@@ -1,6 +1,8 @@
 import Lang from '../constants/lang'
 
-let lang = Lang[process.env.LANG || 'zh-cn']
+let lang = typeof Lang[process.env.LANG] === 'object' ?
+        Lang[process.env.LANG] : Lang['zh-cn'];
+
 
 export default function (score) {
 
