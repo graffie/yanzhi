@@ -78,8 +78,8 @@ watch-sass:
 	$(NODE_BIN)/http-server $(DIST) -s
 
 build-js:
-	@$(NODE_BIN)/browserify --require react --require react-router | $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/vendor.js
-	@$(NODE_BIN)/browserify --external react --external react-router $(JS_DIR)/index.js \
+	@$(NODE_BIN)/browserify --require react --require react-router --require moment | $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/vendor.js
+	@$(NODE_BIN)/browserify --external react --external react-router --external moment $(JS_DIR)/index.js \
 		--extension .jsx \
 		--transform babelify \
 		--transform envify \
