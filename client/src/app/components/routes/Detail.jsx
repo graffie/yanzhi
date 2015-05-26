@@ -128,7 +128,7 @@ let Detail  = React.createClass({
     // if (typeof document != undefined) {
     //   document.title = str
     // }
-    Crouton.showInfo('分享功能暂未开放。')
+    Crouton.showInfo('请使用浏览器的分享功能')
   },
 
   revertTitle() {
@@ -151,7 +151,7 @@ let Detail  = React.createClass({
         _registwx: true
       })
       document.title = bio(this.getScore(feed.score))
-      document.getElementById('wx_suck').src = feed.pic
+      document.getElementById('wx_suck_img').src = feed.pic
     }
   },
 

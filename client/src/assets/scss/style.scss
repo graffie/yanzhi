@@ -378,8 +378,10 @@ img.avatar {
 
 #wx_suck {
   display: none;
-  min-width: 351px;
-  min-height: 351px;
+  img {
+    min-width: 351px;
+    min-height: 351px;
+  }
 }
 
 .photos {
