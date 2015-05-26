@@ -85,8 +85,9 @@ let Detail  = React.createClass({
 
   onVoteChange() {
     this.setState({
-      loading: false
-    });
+      loading: false,
+      feed: Store.getFeedById(this.props.params.id)
+    })
   },
 
   handleClick(type, e) {
