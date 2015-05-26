@@ -32,3 +32,4 @@ node_modules
 nohup.out
 client/dist/index.html
 client/dist/static
+config/config.js
