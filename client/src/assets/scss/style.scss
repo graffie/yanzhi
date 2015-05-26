@@ -881,7 +881,7 @@ img.avatar {
                 color: $red;
             }
             &.up {
-              left: 37%;
+              left: 20%;
                span {
                 position: absolute;
                 left: 23%;
@@ -889,7 +889,7 @@ img.avatar {
               }
             }
             &.down {
-              right: 37%;
+              right: 20%;
               span {
                 position: absolute;
                 left: 24%;
@@ -898,18 +898,18 @@ img.avatar {
             }
             @media (max-width:768px) {
               &.up {
-                left: 33%;
+                left: 18%;
               }
               &.down {
-                right: 33%;
+                right: 18%;
               }
             }
             @media (max-width:400px) {
               &.up {
-                left: 23%;
+                left: 13%;
               }
               &.down {
-                right: 23%;
+                right: 13%;
               }
             }
             @media (max-height: 360px) {
