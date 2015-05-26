@@ -48,9 +48,9 @@ function replaceFeed(feed) {
 }
 
 function createFeed(data) {
-  feeds.push(data)
+  feeds.unshift(data)
   if (selfobj && selfobj.feeds) {
-    selfobj.feeds.push(data)
+    selfobj.feeds.unshift(data)
   }
 }
 

@@ -17,9 +17,12 @@ let Tab = React.createClass({
         case 'user':
           if (!Store.getSelf()) {
             transition.redirect('login', {tab: 'explore'})
-          } else {
-            me()
           }
+          // else {
+            // if(!Store.getSelf()) {
+              // me()
+            // }
+          // }
           break;
       }
     }
