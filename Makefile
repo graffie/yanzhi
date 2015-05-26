@@ -67,6 +67,7 @@ vendor:
 	@cp $(SRC)/assets/js/* $(DIST_STATIC)/js/
 	@cp -rf $(SRC)/assets/fonts $(DIST_STATIC)/
 	@cp -rf $(SRC)/assets/images $(DIST_STATIC)/
+	@cp -f $(SRC)/index.html $(DIST)
 
 sass:
 	@$(NODE_BIN)/node-sass --include-path $(BOURBON_ASSETS) --include-path $(EGGSHELL_ASSETS) $(SASS_DIR)/style.scss -o $(SASS_OUTPUT)
@@ -87,7 +88,7 @@ build-index-js:
 		--transform envify \
 		| $(NODE_BIN)/uglifyjs -mc > $(JS_OUTPUT)/index.js
 
-build: build-vendor-js build-index-js vendor
+build: vendor sass build-vendor-js build-index-js
 
 watch-js:
 	@mkdir -p client/dist/static/js
