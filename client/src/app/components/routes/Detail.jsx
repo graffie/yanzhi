@@ -144,6 +144,7 @@ let Detail  = React.createClass({
 
   // hack to share in wechat
   insertImg(feed) {
+    if (!feed) return
     if (typeof document != undefined) {
       this.setState({
         _registwx: true
@@ -234,24 +235,27 @@ let Detail  = React.createClass({
     return (
       <Modal show loading={this.state.loading}>
         <div className='header'>
-         <div className='image'>
-           <div><img src={feed.pic} /></div>
-         </div>
-         <div className='share'>
-           <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
-         </div>
-         <div className='vote up'>
-           <a href='#' onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
-         </div>
-        <div className='vote down'>
-           <a href='#' onClick={this.handleClick.bind(null, 'down')}><span>呵</span></a>
+          <div className='image'>
+            <div><img src={feed.pic} /></div>
           </div>
-        </div>
-        <div className='author'>
-          <a onClick={this.goToAuthor}>
-            <span>{feed.user_name}</span>
-          </a>
-          <span>{date}</span>
+          <div className='share'>
+            <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
+          </div>
+          <div className='vote up'>
+            <a href='#' onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
+          </div>
+          <div className='vote down'>
+            <a href='#' onClick={this.handleClick.bind(null, 'down')}><span>呵</span></a>
+          </div>
+          <div className='author'>
+            <div className='name'>
+              <a onClick={this.goToAuthor}><span>{feed.user_name}</span></a>
+              <span className='time'>{date}</span>
+            </div>
+            <div className='score'>
+              <span>{this.getScore(feed.score||0)}</span>
+            </div>
+          </div>
         </div>
         <div className='comments'>
           {cts}
