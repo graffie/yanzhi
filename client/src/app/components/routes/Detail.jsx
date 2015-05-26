@@ -127,7 +127,7 @@ let Detail  = React.createClass({
     // if (typeof document != undefined) {
     //   document.title = str
     // }
-
+    Crouton.showInfo('分享功能暂未开放。')
   },
 
   revertTitle() {
@@ -230,7 +230,7 @@ let Detail  = React.createClass({
     }
 
     let feed = this.state.feed || {}
-    let date = moment(feed.gmt_create).locale('zh-cn').startOf('day').fromNow()
+    let date = moment(feed.gmt_create).locale('zh-cn').startOf('minute').fromNow()
 
     return (
       <Modal show loading={this.state.loading}>
