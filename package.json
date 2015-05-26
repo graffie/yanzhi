@@ -45,7 +45,7 @@
     "mm": "~1.1.0",
     "mocha": "~2.2.5",
     "moment": "~2.10.3",
-    "node-sass": "^3.1.1",
+    "node-sass": "~3.1.2",
     "object-assign": "~2.0.0",
     "pedding": "~1.0.0",
     "random-string": "^0.1.2",
