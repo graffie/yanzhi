@@ -15,6 +15,7 @@ var workerPath = path.join(__dirname, 'worker.js');
 
 if (config.enableCluster) {
   var cluster = require('cluster');
+  var os = require('os');
 
   cluster.setupMaster({
     exec: workerPath
