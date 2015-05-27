@@ -116,12 +116,18 @@ let Upload  = React.createClass({
       })
   },
 
+  onBeforeClose() {
+    if(this.state.loading) {
+      Crouton.showInfo('正在上传照片，请稍等片刻')
+    }
+  },
+
   render() {
     return (
-      <Modal show loading={this.state.loading}>
+      <Modal show loading={this.state.loading} onBeforeClose={this.onBeforeClose}>
         <div className='upload'>
           <div className='header'>
-            <button className='button primary' onClick={this.handleImageUpload}>上传照片</button>
+            <button disabled={this.state.loading} className='button primary' onClick={this.handleImageUpload}>上传照片</button>
           </div>
           <div className='editor' id='image-container'>
             <div className='image'>
