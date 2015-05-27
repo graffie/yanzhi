@@ -263,10 +263,10 @@ let Detail  = React.createClass({
             <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
           </div>
           <div className='vote up'>
-            <a href='#' onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
+            <a href='#' disabled={this.state.loading} onClick={this.handleClick.bind(null, 'up')}><span className='icon-h'></span></a>
           </div>
           <div className='vote down'>
-            <a href='#' onClick={this.handleClick.bind(null, 'down')}><span>呵</span></a>
+            <a href='#' disabled={this.state.loading} onClick={this.handleClick.bind(null, 'down')}><span>呵</span></a>
           </div>
           <div className='author'>
             <div className='name'>
