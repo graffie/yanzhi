@@ -312,15 +312,12 @@ img.avatar {
     line-height: 140%;
     border-radius: $radius;
     position: fixed;
-    top: 0px;
     max-width: 700px;
     width: 70%;
     top: 0px;
-    left: 0px;
-    right: 0px;
-    margin: 0 auto;
+    left: 15%;
     text-align: center;
-    z-index: 99999;
+    z-index: 999;
     div {
         padding: $gutter/2;
         &.info {
@@ -945,7 +942,7 @@ img.avatar {
 
         .comments {
           margin: 0 30px;
-          padding-bottom: 80px;
+          margin-bottom: 80px;
           margin-top: 10px;
           p {
             text-align: left;
