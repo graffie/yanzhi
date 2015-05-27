@@ -1,7 +1,7 @@
 var assign = require('react/lib/Object.assign');
 var AppConstants = require('../constants/AppConstants');
 var AppDispatcher = require('../dispatchers/AppDispatcher');
-var AppAPI = require('../api/AppAPI');
+var AppAPI = require('../api/AppApi');
 var ActionTypes = AppConstants.ActionTypes;
 var lang = require('../constants/lang');
 lang = typeof lang[process.env.LANG] === 'object' ?
