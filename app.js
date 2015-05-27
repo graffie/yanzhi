@@ -33,12 +33,9 @@ app.use(parameter(app));
 app.use(middlewares.session({
   key: config.sessionKey,
   maxAge: ms('1d'),
-  path: '/'
+  path: '/',
+  store: middlewares.RedisStore(config.redis),
 }));
-
-var locals = {
-  version: config.version
-};
 
 if (config.debug) {
   if (!isTest) {
