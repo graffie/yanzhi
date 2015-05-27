@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react/addons'
 import { Navigation, State } from 'react-router'
 let {PropTypes} = React
+let {PureRenderMixin} = React.addons
 
 let PhotoItem = React.createClass({
 
@@ -23,7 +24,7 @@ let PhotoItem = React.createClass({
     }
   },
 
-  mixins: [Navigation, State],
+  mixins: [Navigation, State, PureRenderMixin],
 
   handleClick(e) {
     let obj = this.getParams()
