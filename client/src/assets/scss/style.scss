@@ -553,19 +553,17 @@ img.avatar {
   background: #FFFFFF;
   @include box-shadow(0 0 1px rgba(0,0,0,0.15));
   .items {
-    width: 60%;
+    width: 90%;
     margin: 0 auto;
     padding-top: 12px;
     text-align: center;
-    display: -webkit-box;      /* OLD - iOS 6-, Safari 3.1-6 */
-    display: -moz-box;         /* OLD - Firefox 19- (buggy but mostly works) */
-    display: -ms-flexbox;      /* TWEENER - IE 10 */
-    display: -webkit-flex;     /* NEW - Chrome */
-    display: flex;
-    -ms-justify-content: space-between; /* 间距平分 */
-    -moz-justify-content: space-between; /* 间距平分 */
-    -webkit-justify-content: space-between; /* 间距平分 */
-    justify-content:space-between;
+    .item {
+      display: inline-block;
+      width: 30%;
+      a {
+        float: none;
+      }
+    }
 
     span {
       @include font-size($large)
