@@ -49,6 +49,10 @@ api['feed'] = function (fid) {
       return request.post('/api/feed', data)
     },
 
+    remove: function() {
+      return request.delete(`/api/feed/${fid}`)
+    },
+
     vote: function (data) {
       return request.post(`/api/feed/${fid}/vote`, data)
     },

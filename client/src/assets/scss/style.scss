@@ -923,10 +923,13 @@ img.avatar {
             .name {
               font-size: 1.2em;
               margin-left: 30px;
+              .delete,
               .time {
                 font-size: 0.7em;
-                font-weight: bolder;
                 margin-left: 10px;
+              }
+              .time {
+                font-weight: bolder;
               }
             }
             .score {

@@ -13,6 +13,7 @@ const FEED_EVENT = 'feed'
 const SELF_EVENT = 'selt'
 const USER_EVENT = 'user'
 const CREATE_EVENT = 'create'
+const REMOVE_EVENT = 'remove'
 const CREATE_COMMENT_EVENT = 'createcomment'
 const VOTE_EVENT = 'vote'
 
@@ -52,6 +53,16 @@ function createFeed(data) {
   if (selfobj && selfobj.feeds) {
     selfobj.feeds.unshift(data)
   }
+}
+
+function removeFeed(fid) {
+  feeds = feeds.filter((f) => {
+    return f.id != fid
+  })
+  delete comments[fid]
+  selfobj.feeds = selfobj.feeds.filter((f) => {
+    return f.id != fid
+  })
 }
 
 var AppStore = assign({}, EventEmitter.prototype, {
@@ -195,7 +206,7 @@ var AppStore = assign({}, EventEmitter.prototype, {
     this.removeListener(CREATE_COMMENT_EVENT, cb)
   },
 
-  getCreateResult: function() {
+  getCreateResult: function () {
     return createResult
   },
 
@@ -209,6 +220,18 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   removeVoteListener: function (cb) {
     this.removeListener(VOTE_EVENT, cb)
+  },
+
+  emitRemoveFeed: function () {
+    this.emit(REMOVE_EVENT)
+  },
+
+  addRemoveFeedListener: function (cb) {
+    this.on(REMOVE_EVENT, cb)
+  },
+
+  removeRemoveFeedListener: function (cb) {
+    this.removeListener(REMOVE_EVENT, cb)
   },
 
 })
@@ -246,13 +269,18 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
       createResult = true
     case ActionTypes.CREATE_FEED_FAILED:
       return AppStore.emitCreate()
+    case ActionTypes.REMOVE_FEED_SUCCESS:
+      removeFeed(action.id)
+      AppStore.emitFeeds()
+    case ActionTypes.REMOVE_FEED_FAILED:
+      return AppStore.emitRemoveFeed()
     case ActionTypes.CREATE_COMMENT_FAILED:
     case ActionTypes.CREATE_COMMENT_SUCCESS:
       return AppStore.emitCreateComment()
     case ActionTypes.VOTE_FEED_SUCCESS:
-    case ActionTypes.VOTE_FEED_FAILED:
       replaceFeed(action.data)
       AppStore.emitFeeds()
+    case ActionTypes.VOTE_FEED_FAILED:
       return AppStore.emitVote()
   }
 })

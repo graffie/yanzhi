@@ -218,6 +218,37 @@ var AppActionCreator = {
     })
   },
 
+  removeFeed(fid) {
+    AppAPI.feed(fid).remove().then(function (res) {
+      if (res.statusCode != 200 || !res.body) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REMOVE_FEED_FAILED
+        })
+        Crouton.show({
+          message: lang.feed.create_feed_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.removeFeed.bind(null, fid)
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }else {
+        Crouton.showInfo(lang.feed.create_feed_success)
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.REMOVE_FEED_SUCCESS,
+          id: fid
+        })
+      }
+    }).catch((err) => {
+      Crouton.show(err.message)
+      AppDispatcher.handleServerAction({
+          type: ActionTypes.REMOVE_FEED_FAILED
+      })
+    })
+  },
+
   voteFeed(fid, data) {
     AppAPI.feed(fid).vote(data).then(function (res) {
       if (res.statusCode != 200 || !res.body) {

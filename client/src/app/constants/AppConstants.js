@@ -32,6 +32,10 @@ module.exports = {
     CREATE_FEED_SUCCESS: null,
     CREATE_FEED_FAILED: null,
 
+    REMOVE_FEED: null,
+    REMOVE_FEED_SUCCESS: null,
+    REMOVE_FEED_FAILED: null,
+
     CREATE_COMMENT: null,
     CREATE_COMMENT_SUCCESS: null,
     CREATE_COMMENT_FAILED: null,

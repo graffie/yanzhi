@@ -12,6 +12,8 @@ module.exports =  {
     feed: {
       upload_failed: '上传图片失败',
       upload_success: '上传图片成功',
+      create_feed_failed: '删除图片失败',
+      create_feed_success: '删除图片成功',
       list_feed_failed: '获取图片流错误',
       get_feed_failed: '获取评论失败',
       create_comment_failed: '评论图片失败',

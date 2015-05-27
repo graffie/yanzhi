@@ -6,7 +6,7 @@ import Modal from '../views/Modal'
 import Comment from '../views/Comment'
 import Store from '../../stores/AppStore'
 import bio from '../../utils/bio'
-import {Crouton, getFeed, createComment, voteFeed} from '../../actions/AppActionCreator'
+import {Crouton, getFeed, createComment, voteFeed, removeFeed} from '../../actions/AppActionCreator'
 
 import '../../utils/zh-cn'
 
@@ -54,6 +54,7 @@ let Detail  = React.createClass({
     Store.addFeedListener(this.onFeedChange)
     Store.addCreateCommentListener(this.onCreateComment)
     Store.addVoteListener(this.onVoteChange)
+    Store.addRemoveFeedListener(this.onRemoveChange)
   },
 
   componentWillUnmount() {
@@ -61,6 +62,7 @@ let Detail  = React.createClass({
     Store.removeFeedListener(this.onFeedChange)
     Store.removeCreateCommentListener(this.onCreateComment)
     Store.removeVoteListener(this.onVoteChange)
+    Store.removeRemoveFeedListener(this.onRemoveChange)
   },
 
   onFeedChange() {
@@ -88,6 +90,16 @@ let Detail  = React.createClass({
       loading: false,
       feed: Store.getFeedById(this.props.params.id)
     })
+  },
+
+  onRemoveChange() {
+    this.setState({
+      loading: false
+    })
+    let c = Store.getCommentById(this.props.params.id)
+    if (!c) {
+      this.transitionTo('tab', this.props.params)
+    }
   },
 
   handleClick(type, e) {
@@ -129,6 +141,14 @@ let Detail  = React.createClass({
     //   document.title = str
     // }
     Crouton.showInfo('请使用浏览器的分享功能')
+  },
+
+  handleDelete(e) {
+    e.preventDefault()
+    this.setState({
+      loading: true
+    })
+    removeFeed(this.props.params.id)
   },
 
   revertTitle() {
@@ -229,7 +249,7 @@ let Detail  = React.createClass({
         return <Comment {...c} key={i} />
       })
     }
-
+    let selfObj = Store.getSelf()
     let feed = this.state.feed || {}
     let date = moment(feed.gmt_create).locale('zh-cn').startOf('minute').fromNow()
 
@@ -252,6 +272,11 @@ let Detail  = React.createClass({
             <div className='name'>
               <a onClick={this.goToAuthor}><span>{feed.user_name}</span></a>
               <span className='time'>{date}</span>
+              {
+                selfObj && selfObj.id == feed.user_id ?
+                <a className='delete' onClick={this.handleDelete}><span>删除</span></a> :
+                null
+              }
             </div>
             <div className='score'>
               <span>{this.getScore(feed.score||0)}</span>
