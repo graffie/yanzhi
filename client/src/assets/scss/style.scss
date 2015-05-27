@@ -625,6 +625,10 @@ img.avatar {
         }
         &.v-close {
           top: 15px;
+          .i-close:before {
+            content: '\e606';
+            color: rgba(0, 0, 0, 0.2);
+          }
         }
     }
 
@@ -820,12 +824,13 @@ img.avatar {
           }
           .share {
             .modal--control {
-              right: 20px;
+              right: 25px;
               top: 20px;
               background: rgba(0, 0, 0, 0.2);
             }
             span {
               color: $white;
+              font-size: 1.2em;
             }
             .icon-s:before {
               content: "\e602";
@@ -1040,8 +1045,10 @@ img.avatar {
                 fill: #fff
             }
             &.v-close {
-              left: 20px;
-              top: 15px
+              left: 25px;
+              top: 20px;
+              background-color: transparent;
+              font-size: 1.85em;
             }
         }
     }
