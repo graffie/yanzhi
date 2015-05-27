@@ -805,15 +805,6 @@ img.avatar {
             width: 360px;
             height: 360px;
             margin: 0 auto;
-            @media (max-height: 360px) {
-                width: 180px;
-                height: 180px;
-            }
-                // iphone 6plus
-            @media (max-width: 450px) and (min-width: 400px) {
-                height: 420px;
-                width: 420px;
-            }
             div {
               left: 50%;
               height: inherit;
@@ -901,9 +892,6 @@ img.avatar {
                 right: 13%;
               }
             }
-            @media (max-height: 360px) {
-                top: 120px;
-            }
 
           }
         }
@@ -957,7 +945,7 @@ img.avatar {
 
         .comments {
           margin: 0 30px;
-          margin-bottom: 80px;
+          padding-bottom: 80px;
           margin-top: 10px;
           p {
             text-align: left;
