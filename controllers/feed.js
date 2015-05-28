@@ -9,11 +9,16 @@
  */
 var FeedsScore = require('../proxy/feeds_score');
 var Comment = require('../proxy/comment');
+var thunkify = require('thunkify-wrap');
 var Store = require('../common/oss');
 var Feed = require('../proxy/feed');
 var config = require('../config');
 var bytes = require('bytes');
+var mmm = require('mmmagic');
 var only = require('only');
+
+var magic = new mmm.Magic(mmm.MAGIC_MIME_TYPE);
+thunkify(magic, ['detect']);
 
 var props = [
   'pic',
@@ -68,6 +73,16 @@ exports.create = function* (next) {
   }
 
   var buf = new Buffer(attachment, 'base64');
+
+  var detectMime = yield magic.detect(buf);
+  if (typeof detectMime !== 'string' || detectMime.split('/')[0] !== 'image') {
+    this.status = 400;
+    this.body = {
+      message: 'invalid image',
+    };
+    return;
+  }
+
   var fileName = Date.now() + uid();
   var userId = this.user.id;
   var object = yield Store.put(userId + '/' + fileName, buf, {

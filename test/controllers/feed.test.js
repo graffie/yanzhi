@@ -122,7 +122,7 @@ describe('controllers/feed.test.js', function () {
       .send({foo: 'bar'})
       .expect(422, done);
     });
-    it('should 400 when invalid image type', function (done) {
+    it('should 422 when invalid image type', function (done) {
       agent
       .post('/api/feed')
       .send({
@@ -131,7 +131,7 @@ describe('controllers/feed.test.js', function () {
       })
       .expect(422, done);
     });
-    it.skip('should 400 when image too large', function (done) {
+    it.skip('should 413 when image too large', function (done) {
       var tmpLargeFile = new Buffer(bytes('11mb')).toString('base64');
       agent
       .post('/api/feed')
@@ -160,6 +160,17 @@ describe('controllers/feed.test.js', function () {
         contentType: 'image/jpg',
       })
       .expect(500, done);
+    });
+    it('should 400 when invalid image mime', function (done) {
+      var tmpInvalid = new Buffer(bytes('42kb')).toString('base64');
+      agent
+      .post('/api/feed')
+      .send({
+        attachment: tmpInvalid,
+        contentType: 'image/jpg',
+      })
+      .expect(400)
+      .expect({message: 'invalid image'}, done);
     });
     it('should 201 when png', function (done) {
       agent

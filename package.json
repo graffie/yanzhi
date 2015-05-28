@@ -23,6 +23,7 @@
     "koa-parameter": "~2.0.0",
     "mini-logger": "~1.0.0",
     "mkdirp": "~0.5.1",
+    "mmmagic": "~0.3.14",
     "multiline": "~1.0.2",
     "mysql": "~2.7.0",
     "only": "~0.0.2",
