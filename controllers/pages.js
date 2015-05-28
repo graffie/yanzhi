@@ -8,21 +8,12 @@
  * Module dependencies.
  */
 var config = require('../config');
-var path = require('path');
-var send = require('koa-send');
 
 exports.index = function* (next) {
-  yield send(this, path.join(config.rootdir, 'client/dist/index.html'));
-};
-
-exports.home = function* (next) {
-  yield this.render('home', {
+  var csrf = this.csrf;
+  yield this.render('index', {
+    version: config.version,
     current: new Date(),
-  });
-};
-
-exports.login = function* (next) {
-  yield this.render('login', {
-    current: new Date(),
+    csrf: csrf,
   });
 };

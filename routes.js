@@ -22,8 +22,6 @@ module.exports = function (app) {
 
   // 页面
   app.get('/', pages.index);
-  app.get('/home', pages.home);
-  app.get('/login', pages.login);
 
   // 登录相关的接口
   // app.post('/verify_code', account.verifyCode);
