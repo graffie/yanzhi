@@ -69,7 +69,7 @@ let Modal = React.createClass({
        <div className={cx('modal', {hide: !this.state.show})} >
          <div className='modal--content'>
            <a className='modal--control v-close' title='Close' onClick={this.handleClose}>
-             <span className='i-close'></span>
+             <span className='i-arrow-left'></span>
            </a>
            {this.props.children}
            <Loading loading={this.props.loading} position={'absolute'}/>
