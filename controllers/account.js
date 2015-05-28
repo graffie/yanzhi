@@ -28,6 +28,10 @@ exports.login = function* () {
     };
   }
 
+  if (typeof this.request.body.name === 'string') {
+    this.request.body.name = this.request.body.name.toLowerCase();
+  }
+
   var user = yield User.auth(this.request.body.name, this.request.body.password);
   if (!user) {
     return this.body = {
@@ -58,6 +62,10 @@ exports.join = function* () {
       status: 400,
       message: 'already login'
     };
+  }
+
+  if (typeof this.request.body.name === 'string') {
+    this.request.body.name = this.request.body.name.toLowerCase();
   }
 
   try {
