@@ -17,6 +17,7 @@ export default {
     return new Promise(function (resolve, reject) {
       headers = headers || {};
       headers['Content-Type'] = 'application/json';
+      headers['x-xsrf-token'] = _CSRF_TOKEN;
       xhr({
         method: method,
         json: body || {},

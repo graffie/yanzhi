@@ -16,6 +16,7 @@ var logger = require('./common/logger');
 var config = require('./config');
 var routes = require('./routes');
 var ms = require('humanize-ms');
+var csrf = require('koa-csrf');
 var path = require('path');
 var http = require('http');
 var koa = require('koa');
@@ -36,6 +37,20 @@ app.use(middlewares.session({
   path: '/',
   store: middlewares.RedisStore(config.redis),
 }));
+
+if (!isTest) {
+  csrf(app);
+  app.use(csrf.middleware);
+}
+
+middlewares.ejs(app, {
+  root: path.join(config.rootdir, 'client/dist'),
+  layout: false,
+  cache: config.viewCache,
+  debug: config.debug,
+  open: '{%',
+  close: '%}'
+});
 
 if (config.debug) {
   if (!isTest) {
@@ -60,6 +75,7 @@ app.use(transform());
 
 app.use(function* ensureUser(next) {
   this.user = this.session.user || {};
+  this.csrf = this.csrf || '';
   yield next;
 });
 
