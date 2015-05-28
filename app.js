@@ -75,7 +75,6 @@ app.use(transform());
 
 app.use(function* ensureUser(next) {
   this.user = this.session.user || {};
-  this.csrf = this.csrf || '';
   yield next;
 });
 
