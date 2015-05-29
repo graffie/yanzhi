@@ -36,11 +36,12 @@ let Login  = React.createClass({
     this.setState({
       loading: false
     });
-    if(History.length > 1) {
-      this.goBack()
-    } else {
-      this.transitionTo('tab', this.getParams())
-    }
+    // if(History.length > 1) {
+    //   this.goBack()
+    // } else {
+    //   this.transitionTo('tab', this.getParams())
+    // }
+    this.transitionTo('tab', {tab: 'user'})
   },
 
   goToSignup(e) {
