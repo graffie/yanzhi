@@ -899,23 +899,23 @@ img.avatar {
 
         .author {
             font-size: 0.9em;
-            height: $header;
+            height: $header - 10;
             background-color: rgba(253, 253, 253, 0.29);
             // color: #FDFDFD;
             width: inherit;
-            position: absolute;
-            bottom: 0;
+            // position: absolute;
+            // bottom: 0;
             div {
               display: inline-block;
-              margin-top: 12px;
+              margin-top: 10px;
             }
             .name {
               font-size: 1.2em;
-              margin-left: 30px;
+              margin-left: 15px;
               .delete,
               .time {
                 font-size: 0.7em;
-                margin-left: 10px;
+                margin-left: 8px;
               }
               .time {
                 font-weight: bolder;
@@ -945,20 +945,19 @@ img.avatar {
         }
 
         .comments {
-          margin: 0 30px;
+          margin: 0 15px;
           margin-bottom: 80px;
-          margin-top: 10px;
+          margin-top: 5px;
           p {
             text-align: left;
-
           }
           .comment {
-            margin: 0 0 10px;
-            padding: 10px 0 10px 65px;
+            // margin: 0 0 10px;
+            padding: 0px 0 0px 65px;
             position: relative;
-            border-bottom-color: rgba(0, 0, 0, 0.08);
-            border-bottom-width: 1px;
-            border-bottom-style: solid;
+            // border-bottom-color: rgba(0, 0, 0, 0.08);
+            // border-bottom-width: 1px;
+            // border-bottom-style: solid;
             &.disable {
               a {
                 color: rgba(0,0,0,0.2);
@@ -967,9 +966,8 @@ img.avatar {
             a {
               left: 1px;
               position: absolute;
-              top: 11px;
-              font-size: 0.9em;
-              max-width: 60px;
+              margin-top: 2px;
+              font-size: 0.84em;
               // color: #000;
               .avatar {
                 display: none;
@@ -979,13 +977,16 @@ img.avatar {
               }
               span {
                 display: block;
+                max-width: 60px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
               }
             }
-            body {
-              color: #000;
-              font-size: 0.8em;
-              line-height: 21px;
-              margin: 0 0 11px;
+            .body {
+              color: rgba(12, 12, 12, 0.9);
+              font-size: 0.7em;
+              // line-height: 1px;
               max-width: 80%;
               -ms-word-break: break-all;
               word-break: break-all;
