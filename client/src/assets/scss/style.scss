@@ -48,7 +48,7 @@ html, body {
 body {
   color: $black;
   position: relative;
-  font-family: "icomoon","jaf-bernino-sans","georgia","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana, "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif,;
+  font-family: "icomoon","jaf-bernino-sans","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Geneva,Verdana, "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif,;
   letter-spacing: -0.02em;
   font-weight: 400;
   font-style: normal;
@@ -255,6 +255,11 @@ img.avatar {
 
 .hide {
   display: none !important;
+}
+
+.score span,
+.time {
+  font-family: "icomoon", "georgia"
 }
 
 /* HEADER */
