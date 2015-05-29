@@ -193,6 +193,9 @@ var AppActionCreator = {
     });
     AppAPI.feed().create(data).then(function (res) {
       if (res.statusCode != 201 || !res.body) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.CREATE_FEED_FAILED
+        })
         return Crouton.show({
           message: lang.feed.upload_failed,
           autoMiss: false,
@@ -252,6 +255,9 @@ var AppActionCreator = {
   voteFeed(fid, data) {
     AppAPI.feed(fid).vote(data).then(function (res) {
       if (res.statusCode != 200 || !res.body) {
+        AppDispatcher.handleServerAction({
+          type: ActionTypes.VOTE_FEED_FAILED
+        })
         return Crouton.show({
           message: lang.feed.vote_feed_failed,
           autoMiss: false,
