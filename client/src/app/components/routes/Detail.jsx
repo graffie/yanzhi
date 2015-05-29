@@ -4,6 +4,7 @@ import moment from 'moment'
 
 import Modal from '../views/Modal'
 import Comment from '../views/Comment'
+import BottomMenu from '../views/BottomMenu'
 import Store from '../../stores/AppStore'
 import bio from '../../utils/bio'
 import {Crouton, getFeed, createComment, voteFeed, removeFeed} from '../../actions/AppActionCreator'
@@ -37,6 +38,7 @@ let Detail  = React.createClass({
     let c = Store.getCommentById(this.props.params.id)
     return {
       loading: !c,
+      smore: false, // show more menu from bottom
       _registwx: false,
       feed: Store.getFeedById(this.props.params.id),
       comments:  c || [],
@@ -240,6 +242,25 @@ let Detail  = React.createClass({
     this.transitionTo('user', {uid: this.state.feed.user_id, tab: obj.tab})
   },
 
+  showMore(e) {
+    e.preventDefault()
+    if (!this.state.smore) {
+      this.setState({
+        smore: true
+      })
+    }
+  },
+
+  onAfterDismiss() {
+    this.setState({
+      smore: false
+    })
+  },
+
+  handleReport(e) {
+    Crouton.showInfo('功能暂未开通')
+  },
+
   render() {
     let cts = null
     if (this.state.comments.length <= 0) {
@@ -252,6 +273,18 @@ let Detail  = React.createClass({
     let selfObj = Store.getSelf()
     let feed = this.state.feed || {}
     let date = moment(feed.gmt_create).locale('zh-cn').startOf('minute').fromNow()
+
+    let actions = [{
+      name: '举报',
+      listener: this.handleReport
+    }]
+
+    if (selfObj && selfObj.id == feed.user_id) {
+      actions.unshift({
+        name: '删除',
+        listener: this.handleDelete
+      })
+    }
 
     return (
       <Modal show loading={this.state.loading}>
@@ -272,11 +305,9 @@ let Detail  = React.createClass({
             <div className='name'>
               <a onClick={this.goToAuthor}><span>{feed.user_name}</span></a>
               <span className='time'>{date}</span>
-              {
-                selfObj && selfObj.id == feed.user_id ?
-                <a className='delete' onClick={this.handleDelete}><span>删除</span></a> :
-                null
-              }
+            </div>
+            <div className='more'>
+              <a onClick={this.showMore}><span className='i-more'></span></a>
             </div>
             <div className='score'>
               <span>{this.getScore(feed.score||0)}</span>
@@ -296,6 +327,10 @@ let Detail  = React.createClass({
               >发送</button>
           </div>
         </div>
+        <BottomMenu
+        show={this.state.smore}
+        actions={actions}
+        onAfterDismiss={this.onAfterDismiss}/>
       </Modal>
     )
   }
