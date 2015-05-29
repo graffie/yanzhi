@@ -173,7 +173,7 @@ let Detail  = React.createClass({
         _registwx: true
       })
       document.title = bio(this.getScore(feed.score))
-      document.getElementById('wx_suck_img').src = feed.pic
+      document.getElementById('wx_suck_img').src = feed.pic + '@!detail-img'
     }
   },
 
@@ -290,7 +290,7 @@ let Detail  = React.createClass({
       <Modal show loading={this.state.loading}>
         <div className='header'>
           <div className='image'>
-            <div><img src={feed.pic + '@!detail-img'} /></div>
+            <div><img src={feed.pic ? feed.pic + '@!detail-img': null} /></div>
           </div>
           <div className='share'>
             <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
