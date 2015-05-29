@@ -385,9 +385,9 @@ img.avatar {
   z-index: 102;
   background-color: rgba(0, 0, 0, 0.5);
   &.buttom {
-    position: absolute;
+    position: fixed;
     bottom: 0;
-    width: inherit;
+    width: 100%;
   }
   .actions {
     width: 80%;
@@ -528,6 +528,20 @@ img.avatar {
 }
 
 .person {
+  .setting {
+    position: fixed;
+    right: 20px;
+    top: 20px;
+    z-index: 10;
+    a {
+      display: block;
+      text-align: center;
+      font-size: 1.4em;
+    }
+    .i-cog:before {
+      content: "\e609"
+    }
+  }
   .header {
     // padding-bottom: 45px;
     width: 100%;

@@ -65,6 +65,30 @@ var AppActionCreator = {
     });
   },
 
+  logout() {
+    AppAPI.user().logout().then(function (res) {
+      if (res.statusCode != 200) {
+        return Crouton.show({
+          message: lang.user.logout_failed,
+          autoMiss: false,
+          buttons: [{
+            name: lang.button.retry,
+            listener: AppActionCreator.logout
+          }, {
+            name: lang.button.ignore
+          }]
+        })
+      }
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.USER_LOGOUT_SUCCESS
+      })
+    }).catch((err) => {
+      AppDispatcher.handleServerAction({
+        type: ActionTypes.USER_LOGOUT_FAILED
+      });
+    });
+  },
+
   signup(data) {
     AppAPI.user().signup(data).then(function (res) {
       if (res.body && res.body.status != 200) {

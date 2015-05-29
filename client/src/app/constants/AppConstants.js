@@ -17,6 +17,10 @@ module.exports = {
     USER_LOGIN_SUCCESS: null,
     USER_LOGIN_FAILED: null,
 
+    USER_LOGOUT: null,
+    USER_LOGOUT_SUCCESS: null,
+    USER_LOGOUT_FAILED: null,
+
     GET_USER: null,
     GET_USER_SUCCESS: null,
     GET_USER_FAILED: null,

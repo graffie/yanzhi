@@ -21,6 +21,10 @@ api['user'] = function (uid) {
       return request.post('/join', data)
     },
 
+    logout: function() {
+      return request.post('/logout')
+    },
+
     login: function (data) {
       return request.post('/login', data)
     }

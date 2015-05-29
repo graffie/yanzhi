@@ -8,6 +8,7 @@ const CHANGE_EVENT = 'change'
 const CROUTON_EVENT = 'crouton'
 const SIGNUP_EVENT = 'signup'
 const LOGIN_EVENT = 'login'
+const LOGOUT_EVENT = 'logout'
 const FEEDS_EVENT = 'feeds'
 const FEED_EVENT = 'feed'
 const SELF_EVENT = 'selt'
@@ -23,6 +24,10 @@ var comments = {}
 var selfobj = null
 var user = {}
 var createResult = false
+
+function logout() {
+  selfobj = null
+}
 
 function getFeedById(fid) {
   for (let i = feeds.length - 1; i >= 0; i--) {
@@ -116,6 +121,18 @@ var AppStore = assign({}, EventEmitter.prototype, {
 
   removeLoginListener: function (cb) {
     this.removeListener(LOGIN_EVENT, cb)
+  },
+
+  emitLogout: function () {
+    this.emit(LOGOUT_EVENT)
+  },
+
+  addLogoutListener: function (cb) {
+    this.on(LOGOUT_EVENT, cb)
+  },
+
+  removeLogoutListener: function (cb) {
+    this.removeListener(LOGOUT_EVENT, cb)
   },
 
   emitFeeds: function () {
@@ -249,6 +266,10 @@ AppStore.dispatchToken = AppDispatcher.register(function (playload) {
     case ActionTypes.USER_LOGIN_SUCCESS:
     case ActionTypes.USER_LOGIN_FAILED:
       return AppStore.emitLogin()
+    case ActionTypes.USER_LOGOUT_SUCCESS:
+    // case ActionTypes.USER_LOGOUT_FAILED:
+      logout()
+      return AppStore.emitLogout()
     case ActionTypes.GET_FEEDS_SUCCESS:
       feeds = feeds.concat(action.data)
       return AppStore.emitFeeds()
