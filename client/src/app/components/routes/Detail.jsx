@@ -290,7 +290,7 @@ let Detail  = React.createClass({
       <Modal show loading={this.state.loading}>
         <div className='header'>
           <div className='image'>
-            <div><img src={feed.pic} /></div>
+            <div><img src={feed.pic + '@!detail-img'} /></div>
           </div>
           <div className='share'>
             <a className='modal--control' onClick={this.handleShare}><span className='icon-s'></span></a>
