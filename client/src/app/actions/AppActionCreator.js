@@ -325,7 +325,7 @@ var AppActionCreator = {
         })
       } else {
         AppActionCreator.getFeed(fid).then(() => {
-          Crouton.showInfo(lang.feed.create_comment_success)
+          // Crouton.showInfo(lang.feed.create_comment_success)
           AppDispatcher.handleServerAction({
             type: ActionTypes.CREATE_COMMENT_SUCCESS
           })
