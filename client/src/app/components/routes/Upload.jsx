@@ -119,7 +119,9 @@ let Upload  = React.createClass({
   onBeforeClose() {
     if(this.state.loading) {
       Crouton.showInfo('正在上传照片，请稍等片刻')
+      return false
     }
+    return true
   },
 
   render() {
