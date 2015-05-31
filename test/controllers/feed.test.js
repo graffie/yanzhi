@@ -122,14 +122,14 @@ describe('controllers/feed.test.js', function () {
       .send({foo: 'bar'})
       .expect(422, done);
     });
-    it('should 422 when invalid image type', function (done) {
+    it('should 400 when invalid attachment', function (done) {
       agent
       .post('/api/feed')
       .send({
-        attachment: MOCK_JPG,
-        contentType: 'image/gif',
+        attachment: MOCK_BASE64 + MOCK_BASE64,
       })
-      .expect(422, done);
+      .expect(400)
+      .expect({message: 'invalid attachment'}, done);
     });
     it.skip('should 413 when image too large', function (done) {
       var tmpLargeFile = new Buffer(bytes('11mb')).toString('base64');
@@ -137,7 +137,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: tmpLargeFile,
-        contentType: 'image/jpg',
       })
       .expect(413, done);
     });
@@ -147,7 +146,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: MOCK_JPG,
-        contentType: 'image/jpg',
       })
       .expect(500, done);
     });
@@ -157,7 +155,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: MOCK_JPG,
-        contentType: 'image/jpg',
       })
       .expect(500, done);
     });
@@ -167,7 +164,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: tmpInvalid,
-        contentType: 'image/jpg',
       })
       .expect(400)
       .expect({message: 'invalid image'}, done);
@@ -177,7 +173,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: MOCK_PNG,
-        contentType: 'image/png',
         content: 'unittest_feed_01',
         location: '杭州市西湖区',
       })
@@ -197,7 +192,6 @@ describe('controllers/feed.test.js', function () {
       .post('/api/feed')
       .send({
         attachment: MOCK_JPG,
-        contentType: 'image/jpg',
         content: 'unittest_feed_02',
         lat: '32.321',
         location: '杭州市江干区',
@@ -214,15 +208,13 @@ describe('controllers/feed.test.js', function () {
         done(err);
       })
     });
-    it('should 201 and remove image base64 header', function (done) {
+    it('should 201 and strip image base64 header', function (done) {
       agent
       .post('/api/feed')
       .send({
         attachment: MOCK_BASE64,
-        contentType: 'image/jpeg',
         content: 'unittest_feed_03',
         lat: '32.123',
-        location: '长沙市开福区',
       })
       .expect(201)
       .end(function (err, res) {
@@ -231,7 +223,7 @@ describe('controllers/feed.test.js', function () {
         res.body.user_name.should.equal(user.name);
         res.body.content.should.equal('unittest_feed_03');
         res.body.lat.should.equal('32.123');
-        res.body.location.should.equal('长沙市开福区');
+        res.body.location.should.equal('');
         res.body.pic.should.startWith('http://' + config.imageStore);
         done(err);
       })
