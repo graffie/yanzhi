@@ -81,7 +81,7 @@ describe('controllers/account.test.js', function () {
       request(app)
       .post('/login')
       .send({
-        name: user.name,
+        name: user.name.toUpperCase(),
         password: user.password,
         redirect: 'http://www.taobao.com/hehe'
       })
@@ -170,7 +170,7 @@ describe('controllers/account.test.js', function () {
       request(app)
       .post('/join')
       .send({
-        name: userName,
+        name: userName.toUpperCase(),
         password: '123',
         redirect: '/user/123'
       })

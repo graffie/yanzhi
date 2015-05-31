@@ -56,7 +56,6 @@ function uid() {
 exports.create = function* (next) {
   this.verifyParams({
     attachment: 'string',
-    contentType: ['image/png', 'image/jpg', 'image/jpeg'],
     content: {type: 'string', required: false},
     lng: {type: 'string', required: false},
     lat: {type: 'string', required: false},
@@ -65,11 +64,19 @@ exports.create = function* (next) {
 
   var body = this.request.body;
   var attachment = body.attachment;
-  var contentType = body.contentType;
-  var meta = 'data:' + contentType + ';base64,';
 
-  if (attachment.substring(0, meta.length) === meta) {
-    attachment = attachment.slice(meta.length);
+  // Strip image meta
+  attachment = attachment.split(',');
+  if (attachment.length === 1) {
+    attachment = attachment[0];
+  } else if (attachment.length === 2) {
+    attachment = attachment[1];
+  } else {
+    this.status = 400;
+    this.body = {
+      message: 'invalid attachment',
+    };
+    return;
   }
 
   var buf = new Buffer(attachment, 'base64');
@@ -86,7 +93,7 @@ exports.create = function* (next) {
   var fileName = Date.now() + uid();
   var userId = this.user.id;
   var object = yield Store.put(userId + '/' + fileName, buf, {
-    mime: contentType,
+    mime: detectMime,
     meta: { uid: userId }
   });
 
