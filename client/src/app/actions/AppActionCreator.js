@@ -293,7 +293,7 @@ var AppActionCreator = {
           }]
         })
       } else {
-        Crouton.showInfo(lang.feed.vote_feed_success);
+        // Crouton.showInfo(lang.feed.vote_feed_success);
         AppDispatcher.handleServerAction({
           type: ActionTypes.VOTE_FEED_SUCCESS,
           data: res.body

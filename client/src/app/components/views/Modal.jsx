@@ -9,7 +9,10 @@ let Modal = React.createClass({
 
   propTypes: {
     onBeforeClose: React.PropTypes.func,
-    onAfterClose: React.PropTypes.func
+    onAfterClose: React.PropTypes.func,
+    isHehe: React.PropTypes.bool,
+    loading: React.PropTypes.bool,
+    show: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -72,7 +75,7 @@ let Modal = React.createClass({
              <span className='i-arrow-left'></span>
            </a>
            {this.props.children}
-           <Loading loading={this.props.loading} position={'absolute'}/>
+           <Loading loading={this.props.loading} position={'absolute'} isHehe={this.props.isHehe}/>
         </div>
       </div>
     )

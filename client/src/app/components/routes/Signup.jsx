@@ -108,7 +108,7 @@ let Signup  = React.createClass({
             </div>
             <div className='control link'>已有账号，<a href='#' onClick={this.goToLogin}>点击登录</a></div>
           </div>
-          <div className='form'>
+          <div className='form tips'>
             <div className='control tips'>
               <p>用户名可以是中文！</p>
             </div>

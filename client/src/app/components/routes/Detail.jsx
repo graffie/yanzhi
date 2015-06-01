@@ -38,6 +38,7 @@ let Detail  = React.createClass({
     let c = Store.getCommentById(this.props.params.id)
     return {
       loading: !c,
+      isHehe: false,
       smore: false, // show more menu from bottom
       _registwx: false,
       feed: Store.getFeedById(this.props.params.id),
@@ -109,7 +110,10 @@ let Detail  = React.createClass({
     // if (!Store.getSelf()) {
     //   return this.transitionTo('login', this.props.params)
     // }
-    this.setLoading(true);
+    this.setState({
+      loading: true,
+      isHehe: (type === 'down')
+    })
     let obj = {
       type: type
     };
@@ -287,7 +291,7 @@ let Detail  = React.createClass({
     }
 
     return (
-      <Modal show loading={this.state.loading}>
+      <Modal show loading={this.state.loading} isHehe={this.state.isHehe}>
         <div className='header'>
           <div className='image'>
             <div><img src={feed.pic ? feed.pic + '@!detail-img': null} /></div>
