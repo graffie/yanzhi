@@ -71,7 +71,7 @@ let Modal = React.createClass({
     return (
        <div className={cx('modal', {hide: !this.state.show})} >
          <div className='modal--content'>
-           <a className='modal--control v-close' title='Close' onClick={this.handleClose}>
+           <a ref='close' className='modal--control v-close' title='Close' onClick={this.handleClose}>
              <span className='i-arrow-left'></span>
            </a>
            {this.props.children}

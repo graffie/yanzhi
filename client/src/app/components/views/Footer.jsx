@@ -3,6 +3,7 @@ import {Navigation, State} from 'react-router'
 
 import cache from '../../utils/cache'
 import Store from '../../stores/AppStore'
+import guide from '../../utils/guide'
 
 let Footer = React.createClass({
 
@@ -19,6 +20,12 @@ let Footer = React.createClass({
     return obj
   },
 
+  componentDidMount() {
+    if (this.isActive('tab', this.getParams())) {
+      guide.show('photo', this.refs.photo.getDOMNode())
+    }
+  },
+
   handlePhotoUpload(e) {
     e.preventDefault()
 
@@ -31,12 +38,12 @@ let Footer = React.createClass({
   },
 
   handleFileClick(e) {
-
-    if (!Store.getSelf()) {
-      e.preventDefault()
-      return this.transitionTo('login', this.getRoute())
+    if (guide.hide('photo')) {
+      if (!Store.getSelf()) {
+        e.preventDefault()
+        return this.transitionTo('login', this.getRoute())
+      }
     }
-
   },
 
   render() {
@@ -46,7 +53,7 @@ let Footer = React.createClass({
           <div className='item first'>
             <a href='javascript:;' onClick={this.handleClick.bind(null, 'explore')}><span className='icon-f'></span></a>
           </div>
-          <div className='item second'>
+          <div ref='photo' className='item second'>
             <a href='javascript:;' ><span className='icon-i'></span></a>
             <input type='file' accept='image/*' capture='camera' onClick={this.handleFileClick} onChange={this.handlePhotoUpload}/>
           </div>

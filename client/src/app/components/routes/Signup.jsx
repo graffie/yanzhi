@@ -84,7 +84,8 @@ let Signup  = React.createClass({
   render() {
     return (
       <Modal show loading={this.state.loading}>
-        <div className='login'>
+        <div className='signup'>
+          <h1>注册</h1>
           <div className='form'>
             <div className='field'>
               <div className='control'>

@@ -797,8 +797,15 @@ img.avatar {
             }
           }
         }
-
+        .signup,
         .login {
+          h1 {
+            text-align: center;
+            width: 100%;
+            position: absolute;
+            top: 15px;
+            color: $blue;
+          }
           .form {
             width: 70%;
             top: 50%;
@@ -909,6 +916,7 @@ img.avatar {
               right: 25px;
               top: 20px;
               background: rgba(0, 0, 0, 0.2);
+              z-index: 100;
             }
             span {
               color: $white;
@@ -1152,6 +1160,76 @@ img.avatar {
             }
         }
     }
+}
+
+// Guide
+.highlight {
+  position: relative;
+  z-index: 203 !important;
+  -moz-transform: scale(1.2) !important;
+  -ms-transform: scale(1.2) !important;
+  -webkit-transform: scale(1.2) !important;
+  transform: scale(1.2) !important;
+}
+.guide {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  background-color: rgba(10, 10, 10, 0.5);
+
+  .guide-box {
+    .guide-highlight {
+      z-index: 201;
+      height: 80px;
+      width: 80px;
+      border-radius: 50%;
+      border-width: 1px;
+      border-color: #2196F3;
+      background: rgba(255, 255, 255, 0.9);
+
+      &.back {
+        margin-top: -5px;
+      }
+
+      &.photo {
+
+      }
+    }
+
+    .guide-content {
+      z-index: 201;
+      color: rgba(230,230,230,0.9);
+      margin-top: 10px;
+      margin-left: 10px;
+      span{
+        font-weight: bolder;
+        font-size: 1.01em;
+      }
+    }
+
+
+    &.photo {
+      bottom: -12px;
+      position: absolute;
+      width: 100%;
+      .guide-highlight {
+        margin: 0 auto;
+      }
+      .guide-content {
+        position: absolute;
+        bottom: 100px;
+        width: 100%;
+        text-align: center;
+        span {
+          font-size: 1.01em !important;
+        }
+      }
+    }
+
+  }
 }
 
 // flower loading

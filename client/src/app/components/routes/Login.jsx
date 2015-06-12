@@ -80,6 +80,7 @@ let Login  = React.createClass({
     return (
       <Modal show loading={this.state.loading}>
         <div className='login'>
+          <h1>登录</h1>
           <div className='form'>
             <div className='field'>
               <div className='control'>

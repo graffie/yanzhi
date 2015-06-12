@@ -7,6 +7,7 @@ import Comment from '../views/Comment'
 import BottomMenu from '../views/BottomMenu'
 import Store from '../../stores/AppStore'
 import bio from '../../utils/bio'
+import guide from '../../utils/guide'
 import {Crouton, getFeed, createComment, voteFeed, removeFeed} from '../../actions/AppActionCreator'
 
 import '../../utils/zh-cn'
@@ -58,6 +59,12 @@ let Detail  = React.createClass({
     Store.addCreateCommentListener(this.onCreateComment)
     Store.addVoteListener(this.onVoteChange)
     Store.addRemoveFeedListener(this.onRemoveChange)
+  },
+
+  componentDidMount() {
+    if (this.isActive('item', this.props.params)) {
+      guide.show('back', this.refs.modal.refs.close.getDOMNode())
+    }
   },
 
   componentWillUnmount() {
@@ -265,6 +272,10 @@ let Detail  = React.createClass({
     Crouton.showInfo('功能暂未开通')
   },
 
+  onBeforeClose() {
+    return guide.hide('back')
+  },
+
   render() {
     let cts = null
     if (this.state.comments.length <= 0) {
@@ -291,7 +302,7 @@ let Detail  = React.createClass({
     }
 
     return (
-      <Modal show loading={this.state.loading} isHehe={this.state.isHehe}>
+      <Modal ref='modal' show loading={this.state.loading} isHehe={this.state.isHehe} onBeforeClose={this.onBeforeClose}>
         <div className='header'>
           <div className='image'>
             <div><img src={feed.pic ? feed.pic + '@!detail-img': null} /></div>
