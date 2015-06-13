@@ -29,7 +29,6 @@ class Guide {
       }
     }
     if (typeof j == 'number') {
-      console.log(this.steps[j], j)
       this.steps[j].element = el
       el.className += ' highlight'
       el.parentNode.appendChild(this.template(this.steps[j]))
