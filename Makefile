@@ -65,6 +65,7 @@ vendor:
 	@mkdir -p $(DIST_STATIC)/css && mkdir -p $(DIST_STATIC)/js
 	@cp $(SRC)/assets/css/* $(DIST_STATIC)/css
 	@cp $(SRC)/assets/js/* $(DIST_STATIC)/js/
+	@cp -rf $(SRC)/assets/favicons $(DIST_STATIC)/
 	@cp -rf $(SRC)/assets/fonts $(DIST_STATIC)/
 	@cp -rf $(SRC)/assets/images $(DIST_STATIC)/
 	@cp -f $(SRC)/index.html $(DIST)
