@@ -21,7 +21,7 @@ let Footer = React.createClass({
   },
 
   componentDidMount() {
-    if (this.isActive('tab', this.getParams())) {
+    if (this.isActive('app') || this.isActive('tab', this.getParams())) {
       guide.show('photo', this.refs.photo.getDOMNode())
     }
   },
